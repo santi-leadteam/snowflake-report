@@ -3,23 +3,30 @@ import json
 import os
 from datetime import datetime, date
 
-# ── Credentials (loaded from env vars in GitHub Actions, hardcoded for local test) ──
-ACCOUNT  = os.getenv("SF_ACCOUNT",   "MINDBODYORG-PLAYLIST_DATA_MART_SWEAT440")
-USER     = os.getenv("SF_USER",      "SWEAT440")
-PASSWORD = os.getenv("SF_PASSWORD",  "myPq3?GfF08ulJCtvCB!poJP1vQHWD")
-ROLE     = os.getenv("SF_ROLE",      "SYSADMIN")
-WAREHOUSE= os.getenv("SF_WAREHOUSE", "COMPUTE_WH")
-DATABASE = os.getenv("SF_DATABASE",  "MARKETING_REPORTS")
-SCHEMA   = os.getenv("SF_SCHEMA",    "PUBLIC")
+# ── Credentials (from GitHub Secrets / env vars) ──────────────────────────────
+ACCOUNT   = os.getenv("SF_ACCOUNT",   "mindbodyorg-playlist_data_mart_sweat440")
+USER      = os.getenv("SF_USER",      "SWEAT440")
+TOKEN     = os.getenv("SF_TOKEN")     # Programmatic Access Token from GitHub Secret
+ROLE      = os.getenv("SF_ROLE",      "SYSADMIN")
+WAREHOUSE = os.getenv("SF_WAREHOUSE", "COMPUTE_WH")
+DATABASE  = os.getenv("SF_DATABASE",  "MARKETING_REPORTS")
+SCHEMA    = os.getenv("SF_SCHEMA",    "PUBLIC")
 
 def json_serial(obj):
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
     raise TypeError(f"Type {type(obj)} not serializable")
 
+# ── Connect using PAT ─────────────────────────────────────────────────────────
 conn = snowflake.connector.connect(
-    account=ACCOUNT, user=USER, password=PASSWORD,
-    role=ROLE, warehouse=WAREHOUSE, database=DATABASE, schema=SCHEMA
+    account=ACCOUNT,
+    user=USER,
+    token=TOKEN,
+    authenticator="oauth",
+    role=ROLE,
+    warehouse=WAREHOUSE,
+    database=DATABASE,
+    schema=SCHEMA
 )
 cur = conn.cursor()
 
