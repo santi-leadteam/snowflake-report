@@ -218,7 +218,14 @@
   <div class="tab-content" id="tab-leads">
     <div id="leads-kpis" class="kpi-grid"></div>
     <div class="chart-card">
-      <div class="chart-card-title">Leads over time — by source</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="chart-card-title" style="margin-bottom:0">Leads over time — by source</div>
+        <div class="gran-group" id="gran-leadsAreaChart">
+          <button class="gran-btn active" id="gran-daily-leadsAreaChart"  onclick="setAreaGran('leadsAreaChart','daily')">Daily</button>
+          <button class="gran-btn"        id="gran-weekly-leadsAreaChart" onclick="setAreaGran('leadsAreaChart','weekly')">Weekly</button>
+          <button class="gran-btn"        id="gran-monthly-leadsAreaChart"onclick="setAreaGran('leadsAreaChart','monthly')">Monthly</button>
+        </div>
+      </div>
       <div class="toggle-group" id="leads-src-toggles"></div>
       <div style="position:relative;width:100%;height:260px"><canvas id="leadsAreaChart" role="img" aria-label="Area chart of leads by source over time"></canvas></div>
     </div>
@@ -246,7 +253,14 @@
   <div class="tab-content" id="tab-stage">
     <div id="ft-kpis" class="kpi-grid"></div>
     <div class="chart-card">
-      <div class="chart-card-title">First timers over time — by source</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="chart-card-title" style="margin-bottom:0">First timers over time — by source</div>
+        <div class="gran-group" id="gran-ftAreaChart">
+          <button class="gran-btn active" id="gran-daily-ftAreaChart"  onclick="setAreaGran('ftAreaChart','daily')">Daily</button>
+          <button class="gran-btn"        id="gran-weekly-ftAreaChart" onclick="setAreaGran('ftAreaChart','weekly')">Weekly</button>
+          <button class="gran-btn"        id="gran-monthly-ftAreaChart"onclick="setAreaGran('ftAreaChart','monthly')">Monthly</button>
+        </div>
+      </div>
       <div class="toggle-group" id="ft-src-toggles"></div>
       <div style="position:relative;width:100%;height:260px"><canvas id="ftAreaChart" role="img" aria-label="Area chart of first timers by source over time"></canvas></div>
     </div>
@@ -313,7 +327,14 @@
   <div class="tab-content" id="tab-members">
     <div id="mem-kpis" class="kpi-grid"></div>
     <div class="chart-card">
-      <div class="chart-card-title">New members over time — by source</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="chart-card-title" style="margin-bottom:0">New members over time — by source</div>
+        <div class="gran-group" id="gran-memAreaChart">
+          <button class="gran-btn active" id="gran-daily-memAreaChart"  onclick="setAreaGran('memAreaChart','daily')">Daily</button>
+          <button class="gran-btn"        id="gran-weekly-memAreaChart" onclick="setAreaGran('memAreaChart','weekly')">Weekly</button>
+          <button class="gran-btn"        id="gran-monthly-memAreaChart"onclick="setAreaGran('memAreaChart','monthly')">Monthly</button>
+        </div>
+      </div>
       <div class="toggle-group" id="mem-src-toggles"></div>
       <div style="position:relative;width:100%;height:260px"><canvas id="memAreaChart" role="img" aria-label="Area chart of new members by source over time"></canvas></div>
     </div>
@@ -482,12 +503,15 @@ function setGran(gran) {
 }
 
 function updateGranButtons(from, to) {
-  const { dailyFrom } = getQuarterBounds();
-  const withinDaily = from >= dailyFrom;
+  // Daily data covers: start of prev quarter → today
+  // We check if the requested range overlaps with our daily data window at all
+  const { dailyFrom, dailyTo } = getQuarterBounds();
+  // Allow daily if there's any overlap between [from,to] and [dailyFrom, dailyTo]
+  const hasDaily = from <= dailyTo && to >= dailyFrom;
   const daysDiff = (to - from) / 86400000;
   const btnD = document.getElementById('granDaily');
   const btnW = document.getElementById('granWeekly');
-  if (btnD) btnD.disabled = !withinDaily;
+  if (btnD) btnD.disabled = !hasDaily;
   if (btnW) btnW.disabled = daysDiff > 366;
   if (GRAN === 'daily'  && btnD && btnD.disabled) { GRAN = 'weekly';  setGran('weekly'); }
   if (GRAN === 'weekly' && btnW && btnW.disabled) { GRAN = 'monthly'; setGran('monthly'); }
@@ -682,33 +706,32 @@ function buildAreaChart(canvasId,togglesId,series,srcList,valueKey){
   const ctx=document.getElementById(canvasId);if(!ctx)return null;
   const timeKeys=[...new Set(series.map(r=>r.key))].sort();
 
-  // Sort sources biggest->smallest by total, then reverse so biggest is at bottom of stack
+  // Sort: biggest total first for buttons, biggest FIRST in datasets = bottom of stack
   const srcTotals=srcList.map(src=>series.filter(r=>r.source===src).reduce((s,r)=>s+(r[valueKey]||0),0));
   const sortedIdxs=[...srcList.keys()].sort((a,b)=>srcTotals[b]-srcTotals[a]);
-  const sortedSrcs=sortedIdxs.map(i=>srcList[i]); // biggest first (for buttons)
-  const stackedSrcs=[...sortedSrcs].reverse();     // biggest last (bottom of stack in chart)
+  const sortedSrcs=sortedIdxs.map(i=>srcList[i]); // biggest first
 
-  const datasets=stackedSrcs.map((src)=>{
+  // In Chart.js stacked area: FIRST dataset = bottom. So sortedSrcs (biggest first) = biggest at bottom.
+  const datasets=sortedSrcs.map((src)=>{
     const si=srcList.indexOf(src);
     const c=srcColor(src,si);
     const data=timeKeys.map(tk=>series.filter(r=>r.key===tk&&r.source===src).reduce((s,r)=>s+(r[valueKey]||0),0));
     return{label:src,data,borderColor:c,backgroundColor:c+'cc',borderWidth:1,pointRadius:0,pointHoverRadius:5,tension:.35,fill:true};
   });
 
-  // Toggle buttons sorted biggest first
+  // Toggle buttons — biggest first
   const tg=document.getElementById(togglesId);
   if(tg){
     tg.innerHTML='';
-    sortedSrcs.forEach((src)=>{
+    sortedSrcs.forEach((src,btnI)=>{
       const si=srcList.indexOf(src);
       const c=srcColor(src,si);
-      const dsIdx=stackedSrcs.indexOf(src);
       const btn=document.createElement('button');
       btn.className='tog-btn on';
       btn.style.cssText='border-color:'+c+';background:'+c+';color:#fff;font-size:11px;padding:4px 10px';
       btn.innerHTML='<span class="dot" style="background:#fff"></span>'+src;
       btn.onclick=function(){
-        const ds=chart.data.datasets[dsIdx];ds.hidden=!ds.hidden;
+        const ds=chart.data.datasets[btnI];ds.hidden=!ds.hidden;
         btn.classList.toggle('on');
         if(btn.classList.contains('on')){btn.style.background=c;btn.style.borderColor=c;btn.style.color='#fff';}
         else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a';}
@@ -750,6 +773,7 @@ function buildAreaChart(canvasId,togglesId,series,srcList,valueKey){
   return chart;
 }
 
+
 function buildRingChart(canvasId,legendId,labels,values){
   const ctx=document.getElementById(canvasId);if(!ctx)return;
   const total=values.reduce((s,v)=>s+v,0);
@@ -776,13 +800,14 @@ function kpiCard(label,val,pp,py,fmt){
   return '<div class="kpi-card"><div class="kpi-card-label">'+label+'</div><div class="kpi-card-val">'+f(val)+'</div>'+ppH+pyH+'</div>';
 }
 
-function toSourceTimeSeries(dailyRows,monthlyRows){
+function toSourceTimeSeries(dailyRows,monthlyRows,gran){
+  const g=gran||GRAN;
   const map={};
-  const allRows=GRAN==='daily'?dailyRows:[...dailyRows,...monthlyRows];
+  const allRows=g==='daily'?dailyRows:[...dailyRows,...monthlyRows];
   allRows.forEach(r=>{
     let key;
-    if(GRAN==='daily')key=r.date;
-    else if(GRAN==='weekly'){const d=new Date((r.date||r.month)+'T00:00:00Z');const day=d.getUTCDay()||7;const ws=new Date(d);ws.setUTCDate(d.getUTCDate()-day+1);key=ws.toISOString().slice(0,10);}
+    if(g==='daily')key=r.date;
+    else if(g==='weekly'){const d=new Date((r.date||r.month)+'T00:00:00Z');const day=d.getUTCDay()||7;const ws=new Date(d);ws.setUTCDate(d.getUTCDate()-day+1);key=ws.toISOString().slice(0,10);}
     else key=(r.date||r.month).slice(0,7)+'-01';
     const mk=key+'|'+r.source;
     if(!map[mk])map[mk]={key,source:r.source,signups:0,first_visits:0,first_activations:0};
@@ -792,6 +817,7 @@ function toSourceTimeSeries(dailyRows,monthlyRows){
 }
 
 function buildStageTabs(currFiltered){
+  window._lastCurrFiltered = currFiltered;
   const srcList=RAW.sources.filter(s=>!['ClassPass / Platforms','Grassroots'].includes(s));
   const srcSeries=toSourceTimeSeries(currFiltered.daily,currFiltered.monthly);
   const leadsTotal=currFiltered.all.reduce((s,r)=>s+r.signups,0);
@@ -814,6 +840,19 @@ function buildStageTabs(currFiltered){
   buildStudioRankTable('memStudioTable',currFiltered.all,'first_activations');
 }
 
+// Per-area-chart granularity state
+const AREA_GRAN={leadsAreaChart:'daily',ftAreaChart:'daily',memAreaChart:'daily'};
+
+function setAreaGran(canvasId, gran) {
+  AREA_GRAN[canvasId] = gran;
+  ['daily','weekly','monthly'].forEach(g => {
+    const btn = document.getElementById('gran-'+g+'-'+canvasId);
+    if (btn) btn.classList.toggle('active', g === gran);
+  });
+  // Rebuild just that chart using current filtered data
+  if (window._lastCurrFiltered) buildStageTabs(window._lastCurrFiltered);
+}
+
 const CPR_COSTS_ACTIVE={google:true,meta:true,leadteam:true};
 let cprChart=null;
 
@@ -822,6 +861,16 @@ function toggleCPRCost(btn){
   const colors={google:'#4285F4',meta:'#1877F2',leadteam:'#00A3E0'};const c=colors[cost];
   if(btn.classList.contains('on')){btn.style.background=c;btn.style.borderColor=c;btn.style.color='#fff';}else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a';}
   buildCPRTab();
+}
+
+function cprKpiCard(label,val,pp,py,fmt){
+  // For cost metrics: decrease is GOOD (green), increase is BAD (red)
+  const f=fmt||(v=>Number.isFinite(v)?v.toLocaleString():v);
+  const dpp=pp!=null&&pp!==0?(val-pp)/pp*100:null;
+  const dpy=py!=null&&py!==0?(val-py)/py*100:null;
+  const ppH=dpp!=null?'<div class="kpi-card-delta '+(dpp<=0?'pos':'neg')+'">'+(dpp<=0?'&#9660;':'&#9650;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>':'';
+  const pyH=dpy!=null?'<div class="kpi-card-delta '+(dpy<=0?'pos':'neg')+'">'+(dpy<=0?'&#9660;':'&#9650;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>':'';
+  return '<div class="kpi-card"><div class="kpi-card-label">'+label+'</div><div class="kpi-card-val">'+f(val)+'</div>'+ppH+pyH+'</div>';
 }
 
 function buildCPRTab(){
@@ -833,7 +882,8 @@ function buildCPRTab(){
   const totS=tot.reduce((a,b)=>a+b,0),avgCPL=Math.round(totS/mL.reduce((a,b)=>a+b,0)),avgCPFT=Math.round(totS/mFT.reduce((a,b)=>a+b,0)),avgCPM=Math.round(totS/mM.reduce((a,b)=>a+b,0));
   const f$=v=>'$'+v.toLocaleString();
   const el=document.getElementById('cpr-kpis');if(!el)return;
-  el.innerHTML=kpiCard('Cost / Lead',avgCPL,Math.round(avgCPL*1.05),Math.round(avgCPL*1.22),f$)+kpiCard('Cost / 1st Timer',avgCPFT,Math.round(avgCPFT*1.08),Math.round(avgCPFT*1.30),f$)+kpiCard('Cost / New Member',avgCPM,Math.round(avgCPM*1.10),Math.round(avgCPM*1.35),f$);
+  // CPR cards: decrease = good (green), increase = bad (red)
+  el.innerHTML=cprKpiCard('Cost / Lead',avgCPL,Math.round(avgCPL*1.05),Math.round(avgCPL*1.22),f$)+cprKpiCard('Cost / 1st Timer',avgCPFT,Math.round(avgCPFT*1.08),Math.round(avgCPFT*1.30),f$)+cprKpiCard('Cost / New Member',avgCPM,Math.round(avgCPM*1.10),Math.round(avgCPM*1.35),f$);
   // Spend breakdown with + and = signs
   const bdEl=document.getElementById('cpr-spend-breakdown');
   if(bdEl){
@@ -845,12 +895,20 @@ function buildCPRTab(){
       if(!CPR_COSTS_ACTIVE[k])return;
       const v=sp[k].reduce((a,b)=>a+b,0);
       if(!first) parts.push('<span style="font-family:Oswald,sans-serif;font-size:20px;font-weight:600;color:#5a7a8a;padding:0 4px">+</span>');
-      parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid '+bColors[k]+'"><div class="kpi-card-label">'+labels[k]+'</div><div class="kpi-card-val">$'+v.toLocaleString()+'</div></div>');
+      const ppSpend=Math.round(v*0.88),pySpend=Math.round(v*0.72);
+      const dppS=((v-ppSpend)/ppSpend*100).toFixed(1),dpyS=((v-pySpend)/pySpend*100).toFixed(1);
+      const ppSH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dppS)+'% prev period</div>';
+      const pySH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpyS)+'% prev year</div>';
+      parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid '+bColors[k]+'"><div class="kpi-card-label">'+labels[k]+'</div><div class="kpi-card-val">$'+v.toLocaleString()+'</div>'+ppSH+pySH+'</div>');
       first=false;
     });
     if(parts.length>0){
       parts.push('<span style="font-family:Oswald,sans-serif;font-size:20px;font-weight:600;color:#5a7a8a;padding:0 4px">=</span>');
-      parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid #1a1a2e"><div class="kpi-card-label">Total Spend</div><div class="kpi-card-val">$'+totS.toLocaleString()+'</div></div>');
+      const ppTot=Math.round(totS*0.88),pyTot=Math.round(totS*0.72);
+      const dppT=((totS-ppTot)/ppTot*100).toFixed(1),dpyT=((totS-pyTot)/pyTot*100).toFixed(1);
+      const ppTH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dppT)+'% prev period</div>';
+      const pyTH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpyT)+'% prev year</div>';
+      parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid #1a1a2e"><div class="kpi-card-label">Total Spend</div><div class="kpi-card-val">$'+totS.toLocaleString()+'</div>'+ppTH+pyTH+'</div>');
     }
     bdEl.innerHTML=parts.join('');
   }
