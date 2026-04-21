@@ -403,7 +403,18 @@ function switchTab(id, btn) {
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
   document.getElementById('navTabs').classList.remove('open');
-  if (id === 'members') {} // already built by applyFilters
+  // Rebuild charts after tab is visible (Chart.js needs visible canvas to measure dimensions)
+  if (['leads','stage','members'].includes(id)) {
+    if (window._lastCurrFiltered) {
+      buildStageTabs(
+        window._lastCurrFiltered,
+        window._lastPpFiltered,
+        window._lastPyFiltered,
+        window._lastPpLabel,
+        window._lastPyLabel
+      );
+    }
+  }
   if (id === 'cpr')    buildCPRTab();
   if (id === 'meta')   buildMetaTab();
   if (id === 'google') buildGoogleTab();
@@ -608,8 +619,8 @@ function applyFilters() {
   const {ppFrom,ppTo,pyFrom,pyTo} = computeWindows(from,to);
   function filterAll(f,t) {
     return {
-      daily:   filterRows(RAW.daily_detail,   f, t, studios, sources),
-      monthly: filterRows(RAW.monthly_detail, f, t, studios, sources),
+      daily:   filterRows(RAW.daily_detail   || [], f, t, studios, sources),
+      monthly: filterRows(RAW.monthly_detail || [], f, t, studios, sources),
       get all() { return [...this.daily,...this.monthly]; }
     };
   }
@@ -716,6 +727,21 @@ function buildAreaChart(canvasId, togglesId, series, srcList, valueKey){
   if (_areaCharts[canvasId]) {
     _areaCharts[canvasId].destroy();
     _areaCharts[canvasId] = null;
+  }
+
+  // Show "no data" if series is empty
+  const wrap = ctx.parentElement;
+  const existing = wrap && wrap.querySelector('.no-data-msg');
+  if (existing) existing.remove();
+  if (!series || series.length === 0) {
+    if (wrap) {
+      const msg = document.createElement('div');
+      msg.className = 'no-data-msg';
+      msg.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:#5a7a8a;font-family:Oswald,sans-serif;font-style:italic;font-size:13px;text-transform:uppercase;letter-spacing:1px';
+      msg.textContent = 'No data for selected filters';
+      wrap.appendChild(msg);
+    }
+    return null;
   }
 
   const timeKeys = [...new Set(series.map(r => r.key))].sort();
@@ -1075,7 +1101,25 @@ function getMock() {
       });
     });
   });
-  return { studios, sources, monthly_detail: rows };
+  // Daily: last 90 days split across studios/sources
+  const daily = [];
+  const today = new Date();
+  for (let i = 89; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    const dateStr = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    studios.forEach((st, si) => {
+      sources.forEach((sr, ri) => {
+        const base = 3 + si * 0.5 + ri * 0.3;
+        daily.push({ date:dateStr, studio:st, source:sr,
+          signups:           Math.round(base * (0.8 + Math.random() * 0.4)),
+          first_visits:      Math.round(base * (0.4 + Math.random() * 0.2)),
+          first_activations: Math.round(base * (0.12 + Math.random() * 0.08)),
+          first_sales:       Math.round(base * (0.05 + Math.random() * 0.04)),
+        });
+      });
+    });
+  }
+  return { studios, sources, daily_detail: daily, monthly_detail: rows };
 }
 
 loadData();
