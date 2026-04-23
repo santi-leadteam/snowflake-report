@@ -293,6 +293,8 @@ const firstOfThisMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
 const lastOfPrevMonth  = new Date(firstOfThisMonth.getTime() - 86400000);
 const firstOfPrevMonth = new Date(lastOfPrevMonth.getFullYear(), lastOfPrevMonth.getMonth(), 1);
 // Format as YYYY-MM-DD in local time (not UTC) to avoid off-by-one
+document.getElementById('fFrom').value = localDateStr(firstOfPrevMonth);
+document.getElementById('fTo').value   = localDateStr(lastOfPrevMonth);
 
 
 async function loadData() {
