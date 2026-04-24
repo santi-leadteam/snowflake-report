@@ -375,8 +375,7 @@ function buildFunnel(curr, prev, pyear, ppLabel, pyLabel) {
     const dpy = calcDelta(s.curr,s.py);
     const ppHTML = dpp!==null ? `<span class="delta ${dpp>=0?'pos':'neg'}" title="vs ${ppLabel}">${dpp>=0?'▲':'▼'} ${Math.abs(dpp).toFixed(1)}% prev period</span>` : `<span class="delta neu"> prev period</span>`;
     const pyHTML = dpy!==null ? `<span class="delta ${dpy>=0?'pos':'neg'}" title="vs ${pyLabel}">${dpy>=0?'▲':'▼'} ${Math.abs(dpy).toFixed(1)}% prev year</span>`   : `<span class="delta neu"> prev year</span>`;
-    const helpTexts = {'Leads':'A new user created for a SWEAT440 studio in MBO. Uses lead creation date.','First Timers':'A person who attended their first ever class at a specific SWEAT440 location. Uses first class date.','New Members':'A person who activated their first ever recurring membership at a specific SWEAT440 location. Uses membership activation date.'};
-    return `<div><div style="display:flex;align-items:center;margin-bottom:6px"><div class="funnel-stage-label" style="margin-bottom:0">${s.label}</div><span class="help-icon" onclick="this.classList.toggle('open')">?<span class="help-box">${helpTexts[s.label]||''}</span></span></div><div class="funnel-row"><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:${w}%;background:${s.color}"></div></div><div class="funnel-num">${s.curr.toLocaleString()}</div><div class="funnel-deltas">${ppHTML}${pyHTML}</div></div></div>`;
+    return `<div><div class="funnel-stage-label">${s.label}</div><div class="funnel-row"><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:${w}%;background:${s.color}"></div></div><div class="funnel-num">${s.curr.toLocaleString()}</div><div class="funnel-deltas">${ppHTML}${pyHTML}</div></div></div>`;
   }).join('');
 }
 
@@ -646,13 +645,6 @@ function buildGoogleTab(){
 }
 
 
-
-// Close help tooltips on outside click
-document.addEventListener('click', e => {
-  if (!e.target.closest('.help-icon')) {
-    document.querySelectorAll('.help-icon.open').forEach(el => el.classList.remove('open'));
-  }
-});
 
 loadData();
 </script>
