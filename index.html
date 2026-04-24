@@ -158,9 +158,9 @@
       <div class="chart-card-title">Cost sources</div>
       <div class="cpr-filter" id="cprCostFilter">
         <span style="font-family:'Oswald',sans-serif;font-style:italic;font-size:12px;color:#5a7a8a;text-transform:uppercase;letter-spacing:1px">Include:</span>
-        <button class="cpr-tog on" data-cost="google"   onclick="toggleCPRCost(this)" style="border-color:#4285F4;background:#4285F4">Google Ads</button>
+        <button class="cpr-tog on" data-cost="google"   onclick="toggleCPRCost(this)" style="border-color:#34A853;background:#34A853">Google Ads</button>
         <button class="cpr-tog on" data-cost="meta"     onclick="toggleCPRCost(this)" style="border-color:#1877F2;background:#1877F2">Meta Ads</button>
-        <button class="cpr-tog on" data-cost="leadteam" onclick="toggleCPRCost(this)" style="border-color:#00A3E0;background:#00A3E0">Leadteam Fee</button>
+        <button class="cpr-tog on" data-cost="leadteam" onclick="toggleCPRCost(this)" style="border-color:#FF6B35;background:#FF6B35">Leadteam Fee</button>
       </div>
     </div>
     <div id="cpr-spend-breakdown" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px"></div>
@@ -365,8 +365,8 @@ function applyFilters() {
 function buildFunnel(curr, prev, pyear, ppLabel, pyLabel) {
   const stages = [
     {label:'Leads',       curr:curr.leads,prev:prev.leads,py:pyear.leads,color:'#00A3E0'},
-    {label:'First Timers',curr:curr.ft,   prev:prev.ft,   py:pyear.ft,   color:'#00C9A7'},
-    {label:'New Members', curr:curr.mem,  prev:prev.mem,  py:pyear.mem,  color:'#9aab00'},
+    {label:'First Timers',curr:curr.ft,   prev:prev.ft,   py:pyear.ft,   color:'#00FFC2'},
+    {label:'New Members', curr:curr.mem,  prev:prev.mem,  py:pyear.mem,  color:'#DDFF00'},
   ];
   const max = Math.max(...stages.map(s=>s.curr),1);
   document.getElementById('funnelBars').innerHTML = stages.map(s => {
@@ -564,7 +564,7 @@ let cprChart=null;
 
 function toggleCPRCost(btn){
   const cost=btn.dataset.cost;CPR_COSTS_ACTIVE[cost]=!CPR_COSTS_ACTIVE[cost];btn.classList.toggle('on');
-  const colors={google:'#4285F4',meta:'#1877F2',leadteam:'#00A3E0'};const c=colors[cost];
+  const colors={google:'#34A853',meta:'#1877F2',leadteam:'#FF6B35'};const c=colors[cost];
   if(btn.classList.contains('on')){btn.style.background=c;btn.style.borderColor=c;btn.style.color='#fff';}else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a';}
   buildCPRTab();
 }
@@ -611,7 +611,7 @@ function buildCPRTab(){
   }
   if(cprChart){cprChart.destroy();cprChart=null;}
   const ctx=document.getElementById('cprChart');if(!ctx)return;
-  cprChart=new Chart(ctx,{type:'line',data:{labels:months,datasets:[{label:'Cost/Lead',data:cpl,borderColor:'#00A3E0',borderWidth:2.5,pointRadius:4,tension:.4,fill:false},{label:'Cost/1st Timer',data:cpft,borderColor:'#00C9A7',borderWidth:2.5,pointRadius:4,tension:.4,fill:false,borderDash:[6,3]},{label:'Cost/New Member',data:cpm,borderColor:'#9aab00',borderWidth:2.5,pointRadius:4,tension:.4,fill:false,borderDash:[2,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': $'+c.parsed.y.toLocaleString()}}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',callback:v=>'$'+v},position:'left'}}}});
+  cprChart=new Chart(ctx,{type:'line',data:{labels:months,datasets:[{label:'Cost/Lead',data:cpl,borderColor:'#00A3E0',borderWidth:2.5,pointRadius:4,tension:.4,fill:false},{label:'Cost/1st Timer',data:cpft,borderColor:'#00FFC2',borderWidth:2.5,pointRadius:4,tension:.4,fill:false},{label:'Cost/New Member',data:cpm,borderColor:'#DDFF00',borderWidth:2.5,pointRadius:4,tension:.4,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': $'+c.parsed.y.toLocaleString()}}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',callback:v=>'$'+v},position:'left'}}}});
 }
 
 
