@@ -31,7 +31,7 @@
 <div class="controls-bar">
   <button class="controls-toggle" id="ctrlToggle" onclick="toggleControls()">Filters ▾</button>
   <div class="controls-inner" id="ctrlInner">
-    <span class="ctrl-label" style="display:none">Studio</span>
+    <span class="ctrl-label">Studio</span>
     <div class="multi-select" id="studioDropdown">
       <button class="ms-trigger" onclick="toggleDropdown('studio')">
         <span id="studioLabel">All Studios</span><span class="ms-arrow">▾</span>
@@ -311,10 +311,9 @@ async function loadData() {
   document.getElementById('fFrom').value = localDateStr(_firstOfPrev);
   document.getElementById('fTo').value   = localDateStr(_lastOfPrev);
 
-  // Franchisee view: lock to specific studios, hide studio selector
-  document.getElementById('studioDropdown').style.display = 'none';
-  document.querySelector('[for="studioDropdown"], .ctrl-label')?.style && 
-    (document.querySelector('.ctrl-label').style.display = 'none');
+  // Franchisee view: show only Brickell and Miami Beach in studio filter
+  const franchiseeExcluded = RAW.studios.filter(s => !FRANCHISEE_STUDIOS.includes(s));
+  buildMultiSelect('studioMenu', 'studioLabel', RAW.studios, franchiseeExcluded);
   buildMultiSelect('sourceMenu', 'sourceLabel', RAW.sources, DEFAULT_EXCL_SOURCES);
   setGran('daily');
 
@@ -344,7 +343,7 @@ async function loadData() {
 
 function applyFilters() {
   if (!RAW) return;
-  const studios = FRANCHISEE_STUDIOS; // locked for franchisee view
+  const studios = getSelected('studioMenu');
   const sources  = getSelected('sourceMenu');
   const fromStr = document.getElementById('fFrom').value;
   const toStr   = document.getElementById('fTo').value;
