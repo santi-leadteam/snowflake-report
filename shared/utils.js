@@ -15,18 +15,18 @@ const SRC_COLORS = ['#00A3E0','#00C9A7','#9aab00','#f4a021','#e05a5a','#7c5cbf',
   '#00bcd4','#8bc34a','#ff7043','#5c6bc0','#26a69a','#ef5350','#ab47bc','#78909c'];
 
 const SRC_COLOR_MAP = {
-  'Business Mode':          '#00A3E0',
-  'Google Ads':             '#4285F4',
-  'Local Listings':         '#00BCD4',
+  'Website (unattributed)': '#2ECC71',
+  'Business Mode':          '#E74C3C',
   'Meta Ads':               '#1877F2',
-  'MindBody App':           '#FF6B35',
-  'N/A':                    '#607D8B',
-  'Other':                  '#9E9E9E',
-  'Print Ads / Signs':      '#FF9800',
-  'SWEAT440 App':           '#9C27B0',
-  'Social Media Organic':   '#E040FB',
-  'Website (unattributed)': '#00C9A7',
-  'Word of Mouth':          '#F44336',
+  'SWEAT440 App':           '#F39C12',
+  'N/A':                    '#7F8C8D',
+  'MindBody App':           '#8E44AD',
+  'Google Ads':             '#E91E63',
+  'Local Listings':         '#16A085',
+  'Other':                  '#BDC3C7',
+  'Social Media Organic':   '#D35400',
+  'Word of Mouth':          '#27AE60',
+  'Print Ads / Signs':      '#2980B9',
 };
 
 // ── Default exclusions (can be overridden per dashboard) ───────────────────
