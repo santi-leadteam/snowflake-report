@@ -7,10 +7,10 @@ function _applyFilters() {
 }
 
 
-// ── Chart instance registry ────────────────────────────────────────────────
+// -- Chart instance registry ------------------------------------------------
 const _areaCharts = {};
 
-// ── Source color map ───────────────────────────────────────────────────────
+// -- Source color map -------------------------------------------------------
 const SRC_COLORS = ['#00A3E0','#00C9A7','#9aab00','#f4a021','#e05a5a','#7c5cbf',
   '#00bcd4','#8bc34a','#ff7043','#5c6bc0','#26a69a','#ef5350','#ab47bc','#78909c'];
 
@@ -29,7 +29,7 @@ const SRC_COLOR_MAP = {
   'Print Ads / Signs':      '#2980B9',
 };
 
-// ── Default exclusions (can be overridden per dashboard) ───────────────────
+// -- Default exclusions (can be overridden per dashboard) -------------------
 const DEFAULT_EXCL_SOURCES = ['ClassPass / Platforms','Grassroots'];
 const DEFAULT_EXCL_STUDIOS = [
   'SWEAT440 Dallas - Prestonwood','SWEAT440 Herriman','SWEAT440 Naples - Mercato',
@@ -47,6 +47,54 @@ function toggleDropdown(id) {
 document.addEventListener('click', e => {
   if (!e.target.closest('.multi-select')) document.querySelectorAll('.ms-menu').forEach(m => m.classList.remove('open'));
 });
+
+function buildSourceSelect(menuId, labelId, items, defaultExcluded) {
+  const NON_MARKETING = ['ClassPass / Platforms', 'Grassroots'];
+  const menu = document.getElementById(menuId);
+  if (!menu) return;
+  menu.innerHTML = '';
+
+  // Select All
+  const allDiv = document.createElement('div');
+  allDiv.className = 'ms-item ms-select-all';
+  allDiv.innerHTML = `<input type="checkbox" id="${menuId}_all"> <label for="${menuId}_all" style="cursor:pointer">Select all</label>`;
+  menu.appendChild(allDiv);
+  const div0 = document.createElement('div'); div0.className = 'ms-divider'; menu.appendChild(div0);
+
+  const marketingItems    = items.filter(i => !NON_MARKETING.includes(i));
+  const nonMarketingItems = items.filter(i =>  NON_MARKETING.includes(i));
+
+  function addItems(arr) {
+    arr.forEach(item => {
+      const div = document.createElement('div'); div.className = 'ms-item';
+      const checked = !defaultExcluded.includes(item);
+      const safeId = `ms_${menuId}_${item.replace(/[^a-z0-9]/gi,'_')}`;
+      div.innerHTML = `<input type="checkbox" id="${safeId}" value="${item}" ${checked?'checked':''}> <label for="${safeId}" style="cursor:pointer">${item}</label>`;
+      div.querySelector('input').addEventListener('change', () => { syncSelectAll(menuId); updateLabel(menuId, labelId, items); _applyFilters(); });
+      menu.appendChild(div);
+    });
+  }
+
+  // Non-Marketing Sources first (unchecked by default)
+  const catNon = document.createElement('div');
+  catNon.className = 'ms-category'; catNon.textContent = 'Non-Marketing Sources';
+  menu.appendChild(catNon);
+  addItems(nonMarketingItems);
+
+  // Marketing Sources
+  const catMarketing = document.createElement('div');
+  catMarketing.className = 'ms-category'; catMarketing.textContent = 'Marketing Sources';
+  menu.appendChild(catMarketing);
+  addItems(marketingItems);
+
+  const allChk = document.getElementById(menuId+'_all');
+  syncSelectAll(menuId);
+  allChk.addEventListener('change', () => {
+    menu.querySelectorAll('input[value]').forEach(c => c.checked = allChk.checked);
+    updateLabel(menuId, labelId, items); _applyFilters();
+  });
+  updateLabel(menuId, labelId, items);
+}
 
 function buildMultiSelect(menuId, labelId, items, defaultExcluded) {
   const menu = document.getElementById(menuId);
@@ -282,7 +330,11 @@ function buildRingChart(canvasId,legendId,labels,values){
   const colors=labels.map((l,i)=>srcColor(l,i));
   _areaCharts[canvasId]=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:'#fff',borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},cutout:'65%'}});
   const leg=document.getElementById(legendId);
-  if(leg)leg.innerHTML=labels.map((l,i)=>{const pct=total?(values[i]/total*100).toFixed(1):0;return '<div class="ring-legend-item"><span class="ring-legend-dot" style="background:'+colors[i]+'"></span><span>'+l+'</span><span style="margin-left:auto;font-weight:600;color:#1a1a2e">'+pct+'%</span></div>';}).join('');
+  if(leg)leg.innerHTML=labels.map((l,i)=>{
+    const pct=total?(values[i]/total*100).toFixed(1):0;
+    const vol=values[i].toLocaleString();
+    return '<div class="ring-legend-item"><span class="ring-legend-dot" style="background:'+colors[i]+'"></span><span class="ring-legend-label">'+l+'</span><span class="ring-legend-vol">'+vol+'</span><span class="ring-legend-pct">'+pct+'%</span></div>';
+  }).join('');
 }
 
 function buildStudioRankTable(tableId,rows,valueKey){
@@ -293,12 +345,31 @@ function buildStudioRankTable(tableId,rows,valueKey){
   tbody.innerHTML=sorted.map(([studio,val])=>{const pct=total?(val/total*100).toFixed(1):0;const bw=total?Math.round(val/total*80):0;return '<tr><td><span class="bar-mini" style="width:'+bw+'px"></span>'+studio.replace('SWEAT440 ','')+'</td><td class="num">'+val.toLocaleString()+'</td><td class="pct">'+pct+'%</td></tr>';}).join('');
 }
 
+// Partial period warning state — set by applyFilters, applied to ALL cards
+let _partialPeriod = {pp: false, py: false};
+
+function _isFullMonths(from, to) {
+  if (!from || !to) return false;
+  const f = typeof from === 'string' ? new Date(from+'T00:00:00Z') : from;
+  const t = typeof to   === 'string' ? new Date(to  +'T00:00:00Z') : to;
+  const firstOfMonth = f.getUTCDate() === 1;
+  const lastDay = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth()+1, 0)).getUTCDate();
+  const lastOfMonth = t.getUTCDate() === lastDay;
+  return firstOfMonth && lastOfMonth;
+}
+
 function kpiCard(label,val,pp,py,fmt){
   const f=fmt||(v=>Number.isFinite(v)?v.toLocaleString():v);
   const dpp=pp!=null&&pp!==0?(val-pp)/pp*100:null;
   const dpy=py!=null&&py!==0?(val-py)/py*100:null;
-  const ppH=dpp!=null?'<div class="kpi-card-delta '+(dpp>=0?'pos':'neg')+'">'+(dpp>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>':'';
-  const pyH=dpy!=null?'<div class="kpi-card-delta '+(dpy>=0?'pos':'neg')+'">'+(dpy>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>':'';
+  const warnPP='<div class="kpi-card-delta neu" title="Select complete calendar months for period comparisons">⚠ partial period</div>';
+  const warnPY='<div class="kpi-card-delta neu" title="Select complete calendar months for year-over-year comparisons">⚠ partial period</div>';
+  const ppH = _partialPeriod.pp
+    ? (dpp!=null ? warnPP : '')
+    : (dpp!=null?'<div class="kpi-card-delta '+(dpp>=0?'pos':'neg')+'">'+(dpp>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>':'');
+  const pyH = _partialPeriod.py
+    ? (dpy!=null ? warnPY : '')
+    : (dpy!=null?'<div class="kpi-card-delta '+(dpy>=0?'pos':'neg')+'">'+(dpy>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>':'');
   return '<div class="kpi-card"><div class="kpi-card-label">'+label+'</div><div class="kpi-card-val">'+f(val)+'</div>'+ppH+pyH+'</div>';
 }
 
@@ -319,12 +390,17 @@ function toSourceTimeSeries(dailyRows,monthlyRows,gran){
 }
 
 function cprKpiCard(label,val,pp,py,fmt){
-  // For cost metrics: decrease is GOOD (green), increase is BAD (red)
   const f=fmt||(v=>Number.isFinite(v)?v.toLocaleString():v);
   const dpp=pp!=null&&pp!==0?(val-pp)/pp*100:null;
   const dpy=py!=null&&py!==0?(val-py)/py*100:null;
-  const ppH=dpp!=null?'<div class="kpi-card-delta '+(dpp<=0?'pos':'neg')+'">'+(dpp<=0?'&#9660;':'&#9650;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>':'';
-  const pyH=dpy!=null?'<div class="kpi-card-delta '+(dpy<=0?'pos':'neg')+'">'+(dpy<=0?'&#9660;':'&#9650;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>':'';
+  const warnPP='<div class="kpi-card-delta neu" title="Select complete calendar months for period comparisons">⚠ partial period</div>';
+  const warnPY='<div class="kpi-card-delta neu" title="Select complete calendar months for year-over-year comparisons">⚠ partial period</div>';
+  const ppH=_partialPeriod.pp
+    ? (dpp!=null ? warnPP : '')
+    : (dpp!=null?'<div class="kpi-card-delta '+(dpp<=0?'pos':'neg')+'">'+(dpp<=0?'&#9660;':'&#9650;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>':'');
+  const pyH=_partialPeriod.py
+    ? (dpy!=null ? warnPY : '')
+    : (dpy!=null?'<div class="kpi-card-delta '+(dpy<=0?'pos':'neg')+'">'+(dpy<=0?'&#9660;':'&#9650;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>':'');
   return '<div class="kpi-card"><div class="kpi-card-label">'+label+'</div><div class="kpi-card-val">'+f(val)+'</div>'+ppH+pyH+'</div>';
 }
 

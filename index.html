@@ -15,13 +15,38 @@
 <nav class="nav">
   <div class="nav-logo"><img src="logo.png" alt="SWEAT440"/></div>
   <div class="nav-tabs" id="navTabs">
-    <button class="nav-tab active" onclick="switchTab('funnel',this)">Funnel</button>
-    <button class="nav-tab" onclick="switchTab('leads',this)">Leads</button>
-    <button class="nav-tab" onclick="switchTab('stage',this)">First Timers</button>
-    <button class="nav-tab" onclick="switchTab('members',this)">New Members</button>
-    <button class="nav-tab" onclick="switchTab('cpr',this)">CPR</button>
-    <button class="nav-tab" onclick="switchTab('meta',this)">Meta Ads</button>
-    <button class="nav-tab" onclick="switchTab('google',this)">Google Ads</button>
+
+    <button class="nav-tab active" onclick="switchTab('summary',this)">Summary</button>
+
+    <div class="nav-group">
+      <button class="nav-tab nav-group-label" onclick="toggleNavGroup('funnel-group',this)">Funnel ▾</button>
+      <div class="nav-submenu" id="funnel-group">
+        <button class="nav-tab nav-sub" onclick="switchTab('funnel',this)">All Stages</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('leads',this)">Leads</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('stage',this)">First Timers</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('members',this)">Members</button>
+      </div>
+    </div>
+
+    <button class="nav-tab" onclick="switchTab('cpr',this)">Blended CPR</button>
+
+    <div class="nav-group">
+      <button class="nav-tab nav-group-label" onclick="toggleNavGroup('paid-group',this)">Paid Channels ▾</button>
+      <div class="nav-submenu" id="paid-group">
+        <button class="nav-tab nav-sub" onclick="switchTab('meta',this)">Meta Ads</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('google',this)">Google Ads</button>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-tab nav-group-label" onclick="toggleNavGroup('organic-group',this)">Organic Channels ▾</button>
+      <div class="nav-submenu" id="organic-group">
+        <button class="nav-tab nav-sub" onclick="switchTab('website',this)">Website</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('gbp',this)">Google Business Profile</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('instagram',this)">Instagram</button>
+      </div>
+    </div>
+
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="Toggle navigation">
     <span></span><span></span><span></span>
@@ -57,7 +82,15 @@
 </div>
 
 <div class="main">
-  <div class="tab-content active" id="tab-funnel">
+  <div class="tab-content active" id="tab-summary">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">📊</div>
+      <div class="placeholder-title">Summary</div>
+      <div class="placeholder-sub">High-level overview across all channels — coming soon</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-funnel">
     <div class="chart-card">
       <div class="chart-card-title">Conversion funnel</div>
       <div class="funnel-wrap" id="funnelBars"></div>
@@ -150,48 +183,9 @@
         </div>
       </div>
     </div>
-  </div>
+  </div><!-- end tab-stage -->
 
-  <!-- CPR TAB -->
-  <div class="tab-content" id="tab-cpr">
-    <div class="chart-card" style="margin-bottom:20px">
-      <div class="chart-card-title">Cost sources</div>
-      <div class="cpr-filter" id="cprCostFilter">
-        <span style="font-family:'Oswald',sans-serif;font-style:italic;font-size:12px;color:#5a7a8a;text-transform:uppercase;letter-spacing:1px">Include:</span>
-        <button class="cpr-tog on" data-cost="google"   onclick="toggleCPRCost(this)" style="border-color:#34A853;background:#34A853">Google Ads</button>
-        <button class="cpr-tog on" data-cost="meta"     onclick="toggleCPRCost(this)" style="border-color:#1877F2;background:#1877F2">Meta Ads</button>
-        <button class="cpr-tog on" data-cost="leadteam" onclick="toggleCPRCost(this)" style="border-color:#FF6B35;background:#FF6B35">Leadteam Fee</button>
-      </div>
-    </div>
-    <div id="cpr-spend-breakdown" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px"></div>
-    <div class="kpi-grid" id="cpr-kpis"></div>
-    <div class="chart-card">
-      <div class="chart-card-title">Cost per result  over time</div>
-      <div class="toggle-group" id="cpr-toggles">
-        <button class="tog-btn on" data-ds="0" onclick="toggleCPRds(this,0)" style="border-color:#00A3E0;background:#00A3E0;color:#000"><span class="dot" style="background:#000"></span>Cost / Lead</button>
-        <button class="tog-btn on" data-ds="1" onclick="toggleCPRds(this,1)" style="border-color:#00FFC2;background:#00FFC2;color:#000"><span class="dot" style="background:#000"></span>Cost / First Timer</button>
-        <button class="tog-btn on" data-ds="2" onclick="toggleCPRds(this,2)" style="border-color:#DDFF00;background:#DDFF00;color:#000"><span class="dot" style="background:#000"></span>Cost / New Member</button>
-
-      </div>
-      <div style="position:relative;width:100%;height:260px"><canvas id="cprChart" role="img" aria-label="Line chart of cost per result over time"></canvas></div>
-    </div>
-  </div>
-
-  <!-- META ADS TAB -->
-  <div class="tab-content" id="tab-meta">
-    <div class="kpi-grid" id="meta-kpis"></div>
-    <div class="chart-card">
-      <div class="chart-card-title">Active ads</div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="meta-ads-table">
-          <thead><tr><th>Ad</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Spend</th><th class="num">Leads</th><th class="num">CPL</th><th class="num">Status</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- NEW MEMBERS TAB -->
+<!-- NEW MEMBERS TAB -->
   <div class="tab-content" id="tab-members">
     <div id="mem-kpis" class="kpi-grid three"></div>
     <div class="chart-card">
@@ -226,6 +220,56 @@
     </div>
   </div>
 
+  <!-- CPR TAB -->
+  <div class="tab-content" id="tab-cpr">
+    <div class="chart-card" style="margin-bottom:20px">
+      <div class="chart-card-title">Cost sources</div>
+      <div class="cpr-filter" id="cprCostFilter">
+        <span style="font-family:'Oswald',sans-serif;font-style:italic;font-size:12px;color:#5a7a8a;text-transform:uppercase;letter-spacing:1px">Include:</span>
+        <button class="cpr-tog on" data-cost="google"   onclick="toggleCPRCost(this)" style="border-color:#34A853;background:#34A853">Google Ads</button>
+        <button class="cpr-tog on" data-cost="meta"     onclick="toggleCPRCost(this)" style="border-color:#1877F2;background:#1877F2">Meta Ads</button>
+        <button class="cpr-tog on" data-cost="leadteam" onclick="toggleCPRCost(this)" style="border-color:#FF6B35;background:#FF6B35">Leadteam Fee</button>
+      </div>
+      <div id="cpr-warning" style="display:none;margin-top:10px;padding:10px 12px;background:#fff8e1;border-left:3px solid #f59e0b;border-radius:4px;font-size:12px;color:#92400e;line-height:1.5"></div>
+    </div>
+    <div id="cpr-spend-breakdown" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px"></div>
+    <div class="kpi-grid" id="cpr-kpis"></div>
+    <div class="chart-card">
+      <div class="chart-card-title">Cost per result  over time</div>
+      <div class="toggle-group" id="cpr-toggles">
+        <button class="tog-btn on" data-ds="0" onclick="toggleCPRds(this,0)" style="border-color:#00A3E0;background:#00A3E0;color:#000"><span class="dot" style="background:#000"></span>Blended CPL</button>
+        <button class="tog-btn on" data-ds="1" onclick="toggleCPRds(this,1)" style="border-color:#00FFC2;background:#00FFC2;color:#000"><span class="dot" style="background:#000"></span>Blended CPFT</button>
+        <button class="tog-btn on" data-ds="2" onclick="toggleCPRds(this,2)" style="border-color:#DDFF00;background:#DDFF00;color:#000"><span class="dot" style="background:#000"></span>Blended CPM</button>
+
+      </div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="cprChart" role="img" aria-label="Line chart of cost per result over time"></canvas></div>
+    </div>
+  </div>
+
+  <!-- META ADS TAB -->
+  <div class="tab-content" id="tab-meta">
+    <div class="kpi-grid" id="meta-kpis"></div>
+    <div class="chart-card">
+      <div class="chart-card-title">Active ads</div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="meta-ads-table">
+          <thead><tr><th>Ad</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Spend</th><th class="num">Leads</th><th class="num">CPL</th><th class="num">Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  
+
+    <div class="chart-card" style="margin-top:20px">
+      <div class="chart-card-title" style="margin-bottom:12px">Brand Awareness</div>
+      <div class="placeholder-tab" style="min-height:120px">
+        <div class="placeholder-icon" style="font-size:24px">📢</div>
+        <div class="placeholder-sub">Reach, impressions, frequency and brand lift campaigns — coming soon</div>
+      </div>
+    </div>
+  </div>
+  <!-- end tab-meta -->
+
   <!-- GOOGLE ADS TAB -->
   <div class="tab-content" id="tab-google">
     <div class="kpi-grid" id="google-kpis" style="grid-template-columns:repeat(3,1fr)"></div>
@@ -249,13 +293,46 @@
         </div>
       </div>
     </div>
+
+    <div class="chart-card" style="margin-top:20px">
+      <div class="chart-card-title" style="margin-bottom:12px">Brand Awareness</div>
+      <div class="placeholder-tab" style="min-height:120px">
+        <div class="placeholder-icon" style="font-size:24px">🏷️</div>
+        <div class="placeholder-sub">Display, YouTube and brand search campaigns — coming soon</div>
+      </div>
+    </div>
   </div>
+
+  <div class="tab-content" id="tab-website">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">🌐</div>
+      <div class="placeholder-title">Website</div>
+      <div class="placeholder-sub">Website traffic and conversion analytics — coming soon</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-gbp">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">📍</div>
+      <div class="placeholder-title">Google Business Profile</div>
+      <div class="placeholder-sub">Local search visibility, calls and direction requests — coming soon</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-instagram">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">📸</div>
+      <div class="placeholder-title">Instagram</div>
+      <div class="placeholder-sub">Organic Instagram reach, engagement and profile visits — coming soon</div>
+    </div>
+  </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="shared/utils.js"></script>
 <script>
-// ── Dashboard state ───────────────────────────────────────────────────────
+// -- Dashboard state -------------------------------------------------------
 let RAW = null;
 let trendChart = null;
 let GRAN = 'weekly';
@@ -265,6 +342,13 @@ const AREA_GRAN = {leadsAreaChart:'weekly', ftAreaChart:'weekly', memAreaChart:'
 function switchTab(id, btn) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  // Open parent group if clicking a sub-item
+  if (btn && btn.closest('.nav-submenu')) {
+    document.querySelectorAll('.nav-submenu').forEach(g => g.classList.remove('open'));
+    document.querySelectorAll('.nav-group-label').forEach(b => b.classList.remove('open'));
+    btn.closest('.nav-submenu').classList.add('open');
+    btn.closest('.nav-group').querySelector('.nav-group-label').classList.add('open');
+  }
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
   document.getElementById('navTabs').classList.remove('open');
@@ -272,7 +356,7 @@ function switchTab(id, btn) {
   if (['leads','stage','members'].includes(id) && window._lastCurrFiltered) {
     buildStageTabs(window._lastCurrFiltered, window._lastPpFiltered, window._lastPyFiltered, window._lastPpLabel, window._lastPyLabel);
   }
-  if (id === 'cpr')    buildCPRTab();
+  if (id === 'cpr')    { buildCPRTab(); checkCPRWarning(); }
   if (id === 'meta')   buildMetaTab();
   if (id === 'google') buildGoogleTab();
 }
@@ -307,7 +391,7 @@ async function loadData() {
   document.getElementById('fTo').value   = localDateStr(_today);
 
   buildMultiSelect('studioMenu', 'studioLabel', RAW.studios, DEFAULT_EXCL_STUDIOS);
-  buildMultiSelect('sourceMenu', 'sourceLabel', RAW.sources, DEFAULT_EXCL_SOURCES);
+  buildSourceSelect('sourceMenu', 'sourceLabel', RAW.sources, DEFAULT_EXCL_SOURCES);
   setGran('weekly');
 
   // If default date range has no data, fall back to last available month in dataset
@@ -343,6 +427,19 @@ function applyFilters() {
   const from = fromStr ? new Date(fromStr+'T00:00:00Z') : new Date(RAW.monthly_detail[0]?.month+'T00:00:00Z');
   const to   = toStr   ? new Date(toStr+'T23:59:59Z')   : new Date();
   updateGranButtons(from, to);
+
+  // Partial period rules — applied universally to ALL cards in ALL tabs
+  // Prev year: only show if range = complete calendar months
+  // Prev period: only show if range = complete calendar months
+  //             OR if the to-date is within 45 days of today (recent partial = unreliable)
+  const fullMonths  = typeof _isFullMonths === 'function' ? _isFullMonths(from, to) : true;
+  const daysToToday = (new Date() - to) / 86400000;
+  const recentPartial = !fullMonths && daysToToday < 45;
+
+  if (typeof _partialPeriod !== 'undefined') {
+    _partialPeriod.py = !fullMonths;          // prev year: full months only, always
+    _partialPeriod.pp = !fullMonths;          // prev period: same — full months only
+  }
   const {ppFrom,ppTo,pyFrom,pyTo} = computeWindows(from,to);
   function filterAll(f,t) {
     return {
@@ -358,6 +455,7 @@ function applyFilters() {
     `${fmtDate(ppFrom)} – ${fmtDate(ppTo)}`, `${fmtDate(pyFrom)} – ${fmtDate(pyTo)}`);
   buildTrend(toTimeSeries(curr.daily, curr.monthly));
   // Always build all tabs  all are rendered (just hidden via opacity/height)
+  if (typeof checkCPRWarning === 'function') checkCPRWarning();
   buildStageTabs(curr, pp, py, fmtDate(ppFrom)+' – '+fmtDate(ppTo), fmtDate(pyFrom)+' – '+fmtDate(pyTo));
 }
 
@@ -373,8 +471,12 @@ function buildFunnel(curr, prev, pyear, ppLabel, pyLabel) {
     const w = Math.max(2,(s.curr/max)*100);
     const dpp = calcDelta(s.curr,s.prev);
     const dpy = calcDelta(s.curr,s.py);
-    const ppHTML = dpp!==null ? `<span class="delta ${dpp>=0?'pos':'neg'}" title="vs ${ppLabel}">${dpp>=0?'▲':'▼'} ${Math.abs(dpp).toFixed(1)}% prev period</span>` : `<span class="delta neu"> prev period</span>`;
-    const pyHTML = dpy!==null ? `<span class="delta ${dpy>=0?'pos':'neg'}" title="vs ${pyLabel}">${dpy>=0?'▲':'▼'} ${Math.abs(dpy).toFixed(1)}% prev year</span>`   : `<span class="delta neu"> prev year</span>`;
+    const ppHTML = _partialPeriod.pp
+      ? (dpp!==null ? '<span class="delta neu" title="Select complete calendar months">⚠ partial period</span>' : '<span class="delta neu">— prev period</span>')
+      : (dpp!==null ? `<span class="delta ${dpp>=0?'pos':'neg'}" title="vs ${ppLabel}">${dpp>=0?'▲':'▼'} ${Math.abs(dpp).toFixed(1)}% prev period</span>` : '<span class="delta neu">— prev period</span>');
+    const pyHTML = _partialPeriod.py
+      ? (dpy!==null ? '<span class="delta neu" title="Select complete calendar months">⚠ partial period</span>' : '<span class="delta neu">— prev year</span>')
+      : (dpy!==null ? `<span class="delta ${dpy>=0?'pos':'neg'}" title="vs ${pyLabel}">${dpy>=0?'▲':'▼'} ${Math.abs(dpy).toFixed(1)}% prev year</span>` : '<span class="delta neu">— prev year</span>');
     return `<div><div class="funnel-stage-label">${s.label}</div><div class="funnel-row"><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:${w}%;background:${s.color}"></div></div><div class="funnel-num">${s.curr.toLocaleString()}</div><div class="funnel-deltas">${ppHTML}${pyHTML}</div></div></div>`;
   }).join('');
 }
@@ -473,8 +575,8 @@ function buildStageTabs(currFiltered, ppFiltered, pyFiltered, ppLabel, pyLabel){
     const fmt = v => typeof v==='number' ? v.toFixed(1)+'%' : v;
     const dpp = ppRate != null ? (curr - ppRate) / ppRate * 100 : null;
     const dpy = pyRate != null ? (curr - pyRate) / pyRate * 100 : null;
-    const ppH = dpp!=null ? '<div class="kpi-card-delta '+(dpp>=0?'pos':'neg')+'">'+(dpp>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>' : '';
-    const pyH = dpy!=null ? '<div class="kpi-card-delta '+(dpy>=0?'pos':'neg')+'">'+(dpy>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>'   : '';
+    const ppH = _partialPeriod.pp ? (dpp!=null ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '') : (dpp!=null ? '<div class="kpi-card-delta '+(dpp>=0?'pos':'neg')+'">'+(dpp>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>' : '');
+    const pyH = _partialPeriod.py ? (dpy!=null ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '') : (dpy!=null ? '<div class="kpi-card-delta '+(dpy>=0?'pos':'neg')+'">'+(dpy>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>' : '');
     return '<div class="kpi-card"><div class="kpi-card-label">'+label+'</div><div class="kpi-card-val">'+curr.toFixed(1)+'%</div>'+ppH+pyH+'</div>';
   }
 
@@ -567,6 +669,7 @@ function toggleCPRCost(btn){
   const colors={google:'#34A853',meta:'#1877F2',leadteam:'#FF6B35'};const c=colors[cost];
   if(btn.classList.contains('on')){btn.style.background=c;btn.style.borderColor=c;btn.style.color='#fff';}else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a';}
   buildCPRTab();
+  checkCPRWarning();
 }
 
 
@@ -577,10 +680,9 @@ function buildCPRTab(){
   const tot=months.map((_,i)=>{let s=0;if(CPR_COSTS_ACTIVE.google)s+=sp.google[i];if(CPR_COSTS_ACTIVE.meta)s+=sp.meta[i];if(CPR_COSTS_ACTIVE.leadteam)s+=sp.leadteam[i];return s;});
   const cpl=tot.map((s,i)=>mL[i]?Math.round(s/mL[i]):0),cpft=tot.map((s,i)=>mFT[i]?Math.round(s/mFT[i]):0),cpm=tot.map((s,i)=>mM[i]?Math.round(s/mM[i]):0);
   const totS=tot.reduce((a,b)=>a+b,0),avgCPL=Math.round(totS/mL.reduce((a,b)=>a+b,0)),avgCPFT=Math.round(totS/mFT.reduce((a,b)=>a+b,0)),avgCPM=Math.round(totS/mM.reduce((a,b)=>a+b,0));
-  const f$=v=>'$'+v.toLocaleString();
-  const el=document.getElementById('cpr-kpis');if(!el)return;
+  const f$=v=>'$'+v.toLocaleString(); const el=document.getElementById('cpr-kpis');if(!el){return;}
   // CPR cards: decrease = good (green), increase = bad (red)
-  el.innerHTML=cprKpiCard('Cost / Lead',avgCPL,Math.round(avgCPL*1.05),Math.round(avgCPL*1.22),f$)+cprKpiCard('Cost / 1st Timer',avgCPFT,Math.round(avgCPFT*1.08),Math.round(avgCPFT*1.30),f$)+cprKpiCard('Cost / New Member',avgCPM,Math.round(avgCPM*1.10),Math.round(avgCPM*1.35),f$);
+  el.innerHTML=cprKpiCard('Blended CPL',avgCPL,Math.round(avgCPL*1.05),Math.round(avgCPL*1.22),f$)+cprKpiCard('Blended CPFT',avgCPFT,Math.round(avgCPFT*1.08),Math.round(avgCPFT*1.30),f$)+cprKpiCard('Blended CPM',avgCPM,Math.round(avgCPM*1.10),Math.round(avgCPM*1.35),f$);
   // Spend breakdown with + and = signs
   const bdEl=document.getElementById('cpr-spend-breakdown');
   if(bdEl){
@@ -594,8 +696,8 @@ function buildCPRTab(){
       if(!first) parts.push('<span style="font-family:Oswald,sans-serif;font-size:20px;font-weight:600;color:#5a7a8a;padding:0 4px">+</span>');
       const ppSpend=Math.round(v*0.88),pySpend=Math.round(v*0.72);
       const dppS=((v-ppSpend)/ppSpend*100).toFixed(1),dpyS=((v-pySpend)/pySpend*100).toFixed(1);
-      const ppSH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dppS)+'% prev period</div>';
-      const pySH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpyS)+'% prev year</div>';
+      const ppSH = _partialPeriod.pp ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '<div class="kpi-card-delta neu">&#9650; '+Math.abs(dppS)+'% prev period</div>';
+      const pySH = _partialPeriod.py ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpyS)+'% prev year</div>';
       parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid '+bColors[k]+'"><div class="kpi-card-label">'+labels[k]+'</div><div class="kpi-card-val">$'+v.toLocaleString()+'</div>'+ppSH+pySH+'</div>');
       first=false;
     });
@@ -603,23 +705,22 @@ function buildCPRTab(){
       parts.push('<span style="font-family:Oswald,sans-serif;font-size:20px;font-weight:600;color:#5a7a8a;padding:0 4px">=</span>');
       const ppTot=Math.round(totS*0.88),pyTot=Math.round(totS*0.72);
       const dppT=((totS-ppTot)/ppTot*100).toFixed(1),dpyT=((totS-pyTot)/pyTot*100).toFixed(1);
-      const ppTH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dppT)+'% prev period</div>';
-      const pyTH='<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpyT)+'% prev year</div>';
+      const ppTH = _partialPeriod.pp ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '<div class="kpi-card-delta neu">&#9650; '+Math.abs(dppT)+'% prev period</div>';
+      const pyTH = _partialPeriod.py ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpyT)+'% prev year</div>';
       parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid #1a1a2e"><div class="kpi-card-label">Total Spend</div><div class="kpi-card-val">$'+totS.toLocaleString()+'</div>'+ppTH+pyTH+'</div>');
     }
     bdEl.innerHTML=parts.join('');
   }
   if(cprChart){cprChart.destroy();cprChart=null;}
   const ctx=document.getElementById('cprChart');if(!ctx)return;
-  cprChart=new Chart(ctx,{type:'line',data:{labels:months,datasets:[{label:'Cost/Lead',data:cpl,borderColor:'#00A3E0',borderWidth:2.5,pointRadius:4,tension:.4,fill:false},{label:'Cost/1st Timer',data:cpft,borderColor:'#00FFC2',borderWidth:2.5,pointRadius:4,tension:.4,fill:false},{label:'Cost/New Member',data:cpm,borderColor:'#DDFF00',borderWidth:2.5,pointRadius:4,tension:.4,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': $'+c.parsed.y.toLocaleString()}}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',callback:v=>'$'+v},position:'left'}}}});
+  cprChart=new Chart(ctx,{type:'line',data:{labels:months,datasets:[{label:'Cost/Lead',data:cpl,borderColor:'#00A3E0',borderWidth:2.5,pointRadius:4,tension:.4,fill:false},{label:'Blended CPFT',data:cpft,borderColor:'#00FFC2',borderWidth:2.5,pointRadius:4,tension:.4,fill:false},{label:'Blended CPA',data:cpm,borderColor:'#DDFF00',borderWidth:2.5,pointRadius:4,tension:.4,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': $'+c.parsed.y.toLocaleString()}}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',callback:v=>'$'+v},position:'left'}}}});
 }
 
 
 function toggleCPRds(btn,i){if(!cprChart)return;const ds=cprChart.data.datasets[i];ds.hidden=!ds.hidden;btn.classList.toggle('on');const cols=['#00A3E0','#00FFC2','#DDFF00','#888'];if(btn.classList.contains('on')){btn.style.background=cols[i];btn.style.borderColor=cols[i];btn.style.color='#000';}else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a';}cprChart.update();}
 
 
-function buildMetaTab(){
-  const el=document.getElementById('meta-kpis');if(!el)return;
+function buildMetaTab(){ const el=document.getElementById('meta-kpis');if(!el){return;}
   el.innerHTML=kpiCard('Total Spend',18420,16800,12300,v=>'$'+v.toLocaleString())+kpiCard('Impressions','1.24M',null,null,v=>v)+kpiCard('Clicks',38450,34200,24100)+kpiCard('Cost per Lead',12.40,13.20,16.80,v=>'$'+v.toFixed(2));
   const ads=[{name:'Summer Sweat  Video',type:'Video',status:'active',imp:'284K',clk:'9,200',ctr:'3.24%',spend:'$4,120',leads:'332',cpl:'$12.41'},{name:'Transform in 45  Carousel',type:'Carousel',status:'active',imp:'196K',clk:'6,800',ctr:'3.47%',spend:'$3,850',leads:'298',cpl:'$12.92'},{name:'New Studio Open  Image',type:'Image',status:'active',imp:'152K',clk:'4,900',ctr:'3.22%',spend:'$2,980',leads:'241',cpl:'$12.37'},{name:'Free Trial Offer',type:'Image',status:'active',imp:'118K',clk:'3,750',ctr:'3.18%',spend:'$2,310',leads:'187',cpl:'$12.35'},{name:'Member Testimonial  Video',type:'Video',status:'paused',imp:'89K',clk:'2,400',ctr:'2.70%',spend:'$1,960',leads:'142',cpl:'$13.80'},{name:'Referral Program',type:'Carousel',status:'paused',imp:'72K',clk:'1,980',ctr:'2.75%',spend:'$1,560',leads:'118',cpl:'$13.22'},{name:'HIIT Challenge  Reel',type:'Video',status:'active',imp:'65K',clk:'2,100',ctr:'3.23%',spend:'$1,640',leads:'131',cpl:'$12.52'}];
   const tb=document.querySelector('#meta-ads-table tbody');if(!tb)return;
@@ -645,6 +746,66 @@ function buildGoogleTab(){
 }
 
 
+
+// Open Summary nav group by default
+(function(){
+  const g = document.getElementById('summary-group');
+  const b = g && g.closest('.nav-group').querySelector('.nav-group-label');
+  if(g) g.classList.add('open');
+  if(b) b.classList.add('open');
+})();
+
+function toggleNavGroup(groupId, btn) {
+  const submenu = document.getElementById(groupId);
+  const isOpen  = submenu.classList.contains('open');
+  document.querySelectorAll('.nav-submenu').forEach(s => s.classList.remove('open'));
+  document.querySelectorAll('.nav-group-label').forEach(b => b.classList.remove('group-open'));
+  if (!isOpen) {
+    submenu.classList.add('open');
+    btn.classList.add('group-open');
+  }
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.nav-group')) {
+    document.querySelectorAll('.nav-submenu').forEach(s => s.classList.remove('open'));
+    document.querySelectorAll('.nav-group-label').forEach(b => b.classList.remove('group-open'));
+  }
+});
+
+function checkCPRWarning() {
+  const warn = document.getElementById('cpr-warning');
+  if (!warn) return;
+
+  const paidOnly  = (CPR_COSTS_ACTIVE.google || CPR_COSTS_ACTIVE.meta) && !CPR_COSTS_ACTIVE.leadteam;
+  const allCosts  = CPR_COSTS_ACTIVE.google && CPR_COSTS_ACTIVE.meta && CPR_COSTS_ACTIVE.leadteam;
+
+  // Get selected sources
+  const selSources = typeof getSelected === 'function' ? (getSelected('sourceMenu') || []) : [];
+  const paidSources  = ['Meta Ads','Google Ads'];
+  const mktgSources  = ['Website (unattributed)','Business Mode','Meta Ads','Google Ads',
+                        'SWEAT440 App','MindBody App','Social Media Organic','Local Listings',
+                        'Word of Mouth','Print Ads / Signs','N/A','Other'];
+  const nonPaidSelected = selSources.some(s => !paidSources.includes(s));
+  const allMktgSelected = mktgSources.every(s => selSources.includes(s));
+
+  let msg = '';
+
+  // Warning 1: only paid costs selected but non-ad lead sources included
+  if (paidOnly && nonPaidSelected) {
+    msg = '⚠️ You are only seeing Ad spend (Google/Meta), but your lead sources include non-ad channels. This will understate your cost per result. Please verify your Source filter.';
+  }
+  // Warning 2: all costs selected but not all marketing sources
+  else if (allCosts && selSources.length > 0 && !allMktgSelected) {
+    msg = '⚠️ You are including all cost sources but some marketing lead sources are deselected. Your cost per result may be overstated. Please verify your Source filter.';
+  }
+
+  if (msg) {
+    warn.textContent = msg;
+    warn.style.display = 'block';
+  } else {
+    warn.style.display = 'none';
+  }
+}
 
 loadData();
 </script>

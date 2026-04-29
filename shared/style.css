@@ -5,16 +5,16 @@
   :root{--s-deep:#0084B5;--c-leads:#00A3E0;--c-ft:#00C9A7;--c-mem:#9aab00}
   body{font-family:'Open Sans',sans-serif;background:#f4f9fd;color:#1a1a2e;min-height:100vh} .oswald{font-family:'Oswald',sans-serif;font-style:italic;text-transform:uppercase}
 
-  .nav{background:var(--s-deep);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200}
+  .nav{background:var(--s-deep);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:10000;overflow:visible}
   .nav-logo img{height:30px;display:block;filter:brightness(0) invert(1)}
-  .nav-tabs{display:flex;gap:2px}
+  .nav-tabs{display:flex;gap:2px;overflow:visible;position:relative}
   .nav-tab{background:none;border:none;color:rgba(255,255,255,.65);font-family:'Oswald',sans-serif;font-style:italic;font-size:13px;font-weight:500;padding:8px 13px;border-radius:6px;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.5px}
   .nav-tab:hover{color:#fff;background:rgba(255,255,255,.1)}
   .nav-tab.active{color:#fff;background:rgba(255,255,255,.2)}
   .hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px}
   .hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px}
 
-  .controls-bar{background:#fff;border-bottom:0.5px solid #dde8ef;position:relative;z-index:150}
+  .controls-bar{background:#fff;border-bottom:0.5px solid #dde8ef;position:relative;z-index:10}
   .controls-toggle{display:none;width:100%;background:none;border:none;color:#5a7a8a;font-size:12px;font-weight:600;font-family:'Open Sans',sans-serif;text-align:left;padding:10px 20px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
   .controls-inner{max-width:1200px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
   .ctrl-label{font-family:'Oswald',sans-serif;font-style:italic;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:#5a7a8a;white-space:nowrap}
@@ -120,9 +120,15 @@
     .ring-canvas-wrap{width:140px;height:140px}
   }
   @media(max-width:768px){
-    .nav-tabs{display:none;position:absolute;top:60px;left:0;right:0;background:var(--s-deep);flex-direction:column;padding:8px 0;z-index:199;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+    .nav-tabs{display:none;position:absolute;top:60px;left:0;right:0;background:var(--s-deep);flex-direction:column;padding:8px 0;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.2);overflow:visible}
     .nav-tabs.open{display:flex}
-    .nav-tab{border-radius:0;padding:13px 20px;font-size:13px}
+    .nav-tab{border-radius:0;padding:13px 20px;font-size:13px;width:100%;text-align:left}
+    .nav-group{width:100%;height:auto;display:flex;flex-direction:column;position:static}
+    .nav-group-label{width:100%;text-align:left;display:block;position:static}
+    .nav-submenu{all:unset;display:none;flex-direction:column;width:100%;background:rgba(0,0,0,.18)}
+    .nav-submenu.open{display:flex}
+    .nav-sub{all:unset;box-sizing:border-box;padding:10px 20px 10px 36px;font-family:'Oswald',sans-serif;font-style:italic;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.8);cursor:pointer;display:block;width:100%}
+    .nav-sub:hover{background:rgba(255,255,255,.1);color:#fff}
     .hamburger{display:flex}
     .controls-toggle{display:block}
     .controls-inner{display:none;flex-direction:column;align-items:stretch;gap:10px;padding:12px 20px}
@@ -141,3 +147,33 @@
 .help-icon:hover .help-box,.help-icon.open .help-box{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
 .help-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(6px);background:#1a1a2e;color:#fff;font-family:'Open Sans',sans-serif;font-size:11px;font-weight:400;font-style:normal;text-transform:none;letter-spacing:0;line-height:1.5;padding:10px 12px;border-radius:8px;width:240px;white-space:normal;text-align:left;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.25)}
 .help-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a2e}
+/* ── Multi-select category labels ──────────────────────────────────────── */
+.ms-category{padding:6px 12px 3px;font-family:'Oswald',sans-serif;font-style:italic;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:#a0b8c8;pointer-events:none;user-select:none}
+
+
+
+
+/* ── Nav groups & submenus (desktop) ────────────────────────────────────── */
+.nav-group{position:relative;height:100%;display:flex;align-items:center}
+.nav-group-label{padding-right:8px}
+.nav-group-label.group-open{background:rgba(255,255,255,.15)}
+.nav-submenu{display:none;position:absolute;top:100%;left:0;background:#005f8a;border-radius:0 0 8px 8px;min-width:180px;z-index:9999;padding:4px 0;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.nav-submenu.open{display:block}
+.nav-sub{display:block;width:100%;text-align:left;padding:8px 16px;font-size:11px;white-space:nowrap;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-family:'Oswald',sans-serif;font-style:italic;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.nav-sub:hover,.nav-sub.active{background:rgba(255,255,255,.15);color:#fff}
+
+/* ── Placeholder tabs ──────────────────────────────────────────────────── */
+.placeholder-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;gap:12px;color:#a0b8c8}
+.placeholder-icon{font-size:48px;line-height:1}
+.placeholder-title{font-family:'Oswald',sans-serif;font-style:italic;font-size:22px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#1a1a2e}
+.placeholder-sub{font-family:'Open Sans',sans-serif;font-size:13px;color:#5a7a8a;text-align:center;max-width:320px}
+
+/* ── Nav sub-group labels (e.g. "Meta Ads" heading inside Paid Channels) ── */
+.nav-sub-group-label{padding:8px 16px 3px;font-family:'Oswald',sans-serif;font-style:italic;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.45);pointer-events:none;user-select:none}
+.nav-sub-indent{padding-left:28px!important}
+
+/* ── Ring legend with volume column ───────────────────────────────────── */
+.ring-legend-item{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:5px;padding:3px 0;font-size:11px;color:#5a7a8a}
+.ring-legend-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ring-legend-vol{text-align:right;font-weight:600;color:#5a7a8a;font-size:10px;min-width:40px}
+.ring-legend-pct{text-align:right;font-weight:700;color:#1a1a2e;min-width:36px}
