@@ -576,6 +576,7 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
         "by_studio_media_type": [],
     }
 
+    ad_first_seen: dict[str, str] = {}  # populated below if daily window is valid
     if daily_start > daily_end:
         log.info(f"  daily series: ventana vacía (start={daily_start} > end={daily_end}), skip.")
     else:
@@ -627,6 +628,11 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
             d = row.get("date_start")
             if not d:
                 continue
+
+            # Record earliest date this ad had spend
+            if safe_float(row.get("spend")) > 0:
+                if ad_id not in ad_first_seen or d < ad_first_seen[ad_id]:
+                    ad_first_seen[ad_id] = d
 
             spend       = safe_float(row.get("spend"))
             impressions = int(safe_float(row.get("impressions")))
@@ -787,6 +793,7 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
             "purchases":    purchases,
             "thumbnail_url": thumb,
             "library_url":  f"https://www.facebook.com/ads/library/?id={ad_id}",
+            "first_seen":   ad_first_seen.get(ad_id),
         })
 
     # Sort by leads desc, then spend desc
