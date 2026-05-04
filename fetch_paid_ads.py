@@ -710,6 +710,89 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
             f"{len(daily_series['by_media_type'])} media×day"
         )
 
+    # ── ads — per-ad row for the Active Ads table in index.html ──────────
+    # All data already computed above — zero extra API calls.
+    # ad_insights:     aggregated metrics per ad_id (whole campaign window)
+    # ads:             list_ads() result → status per ad_id
+    # creative_by_ad:  thumbnail_url / object_type per ad_id
+    # ad_dims:         studio_code, audience, pillar, concept, media_type per ad_id
+
+    # Build status map from list_ads() result
+    status_by_ad: dict[str, str] = {
+        ad["id"]: ad.get("status", "UNKNOWN")
+        for ad in ads
+        if ad.get("id")
+    }
+
+    # Aggregate ad_insights to one row per ad_id (campaign totals, not daily)
+    ad_metrics: dict[str, dict] = {}
+    for ins in ad_insights:
+        ad_id = ins.get("ad_id")
+        if not ad_id:
+            continue
+        if ad_id not in ad_metrics:
+            ad_metrics[ad_id] = {
+                "ad_id":       ad_id,
+                "name":        ins.get("ad_name", ""),
+                "spend":       0.0,
+                "impressions": 0,
+                "clicks":      0,
+                "leads":       0,
+                "trials":      0,
+                "purchases":   0,
+            }
+        m = ad_metrics[ad_id]
+        m["spend"]       += safe_float(ins.get("spend"))
+        m["impressions"] += int(safe_float(ins.get("impressions")))
+        m["clicks"]      += int(safe_float(ins.get("clicks")))
+        m["leads"]       += leads_of(ins)
+        m["trials"]      += trials_of(ins)
+        m["purchases"]   += purchases_of(ins)
+
+    ads_out = []
+    for ad_id, m in ad_metrics.items():
+        dims     = ad_dims.get(ad_id, {})
+        creative = creative_by_ad.get(ad_id, {})
+
+        # thumbnail_url: video ads return it directly; static ads use image_url
+        thumb = (
+            creative.get("thumbnail_url")
+            or creative.get("image_url")
+            or ""
+        )
+
+        spend       = round(m["spend"], 2)
+        impressions = m["impressions"]
+        clicks      = m["clicks"]
+        leads       = m["leads"]
+        trials      = m["trials"]
+        purchases   = m["purchases"]
+
+        ads_out.append({
+            "ad_id":        ad_id,
+            "name":         m["name"],
+            "status":       status_by_ad.get(ad_id, "UNKNOWN"),
+            "media_type":   dims.get("media_type", "Other"),
+            "studio_code":  dims.get("studio_code"),
+            "audience":     dims.get("audience"),
+            "concept":      dims.get("concept"),
+            "spend":        spend,
+            "impressions":  impressions,
+            "clicks":       clicks,
+            "ctr":          round(clicks / impressions * 100, 2) if impressions else 0,
+            "leads":        leads,
+            "cpl":          round(spend / leads, 2) if leads else 0,
+            "trials":       trials,
+            "cpt":          round(spend / trials, 2) if trials else 0,
+            "purchases":    purchases,
+            "thumbnail_url": thumb,
+            "library_url":  f"https://www.facebook.com/ads/library/?id={ad_id}",
+        })
+
+    # Sort by leads desc, then spend desc
+    ads_out.sort(key=lambda x: (-x["leads"], -x["spend"]))
+    log.info(f"  ads_out: {len(ads_out)} ad rows")
+
     return {
         "display_name": c["display_name"],
         "period_label": c["period_label"],
