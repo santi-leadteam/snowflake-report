@@ -1,0 +1,11 @@
+google-api-python-client>=2.149.0
+google-auth>=2.35.0
+google-auth-oauthlib>=1.2.1
+google-analytics-data>=0.18.14
+gspread>=6.1.4
+facebook-business>=20.0.2
+google-ads>=30.0.0
+protobuf>=5.29.1
+python-dotenv>=1.0.1
+requests>=2.32.3
+snowflake-connector-python>=3.12.0

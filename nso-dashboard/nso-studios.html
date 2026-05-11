@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SWEAT440 — NSO Studios Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared/style.css"/>
+<style>
+/* Summary-specific styles */
+.summary-studio-select{margin-bottom:20px}
+.summary-studio-select select{font-family:'Oswald',sans-serif;font-size:14px;padding:8px 16px;border-radius:8px;font-style:italic;text-transform:uppercase;letter-spacing:.5px}
+.timeline-wrap{background:#fff;border:0.5px solid #dde8ef;border-radius:12px;padding:20px 22px;margin-bottom:20px}
+.timeline-title{font-family:'Oswald',sans-serif;font-style:italic;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#5a7a8a;margin-bottom:12px}
+.timeline-bar{position:relative;height:28px;background:#f0f6fa;border-radius:14px;overflow:visible;margin-bottom:8px}
+.timeline-fill{height:100%;border-radius:14px;background:linear-gradient(90deg,#00A3E0,#00C9A7);transition:width .6s ease;position:relative;min-width:8px}
+.timeline-marker{position:absolute;top:-6px;width:2px;height:40px;background:#1a1a2e;opacity:.3}
+.timeline-marker-label{position:absolute;top:36px;font-size:9px;color:#5a7a8a;font-weight:600;white-space:nowrap;transform:translateX(-50%)}
+.timeline-marker.co .timeline-marker-label{color:#f4a021;font-weight:700}
+.timeline-marker.go .timeline-marker-label{color:#e05a5a;font-weight:700}
+.timeline-current{position:absolute;top:-2px;right:-6px;width:12px;height:12px;border-radius:50%;background:#00C9A7;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:2}
+.timeline-weeks{display:flex;justify-content:space-between;font-size:9px;color:#8aaabb;margin-top:4px}
+.summary-kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.summary-card{background:#fff;border:0.5px solid #dde8ef;border-radius:12px;padding:18px 20px}
+.summary-card-section{font-family:'Oswald',sans-serif;font-style:italic;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:1.5px;color:#5a7a8a;margin-bottom:14px}
+.sk-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}
+.sk-label{font-size:11px;color:#5a7a8a;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.sk-vals{text-align:right}
+.sk-actual{font-size:22px;font-weight:700;color:#1a1a2e;line-height:1}
+.sk-goal{font-size:11px;color:#8aaabb;margin-top:2px}
+.sk-check{color:#0a8a4a;font-weight:700;margin-left:4px}
+.sk-miss{color:#d32f2f;font-weight:700;margin-left:4px}
+.sk-progress{height:6px;background:#f0f6fa;border-radius:3px;margin-top:4px;overflow:hidden}
+.sk-progress-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.open-countdown{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.open-days{font-family:'Oswald',sans-serif;font-size:48px;font-weight:700;color:#00A3E0;line-height:1}
+.open-label{font-family:'Oswald',sans-serif;font-style:italic;font-size:14px;font-weight:600;text-transform:uppercase;color:#e05a5a;letter-spacing:1px;margin-bottom:4px}
+.open-date{font-size:11px;color:#5a7a8a}
+@media(max-width:768px){.summary-kpis{grid-template-columns:1fr}}
+.sc-table td:first-child,.sc-table th:first-child{position:sticky;left:0;background:#fff;z-index:1;border-right:1.5px solid #dde8ef}
+.sc-table thead th:first-child{background:#f4f9fd}
+.sc-cell-good{background:#e8faf0!important;color:#0a8a4a}
+.sc-cell-warn{background:#fff8e1!important;color:#b8860b}
+.sc-cell-bad{background:#ffeaea!important;color:#c0392b}
+.sc-cell-cur{background:#e8f4fd!important}
+/* Social posts table (Instagram / Facebook) */
+.soc-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.soc-row{display:grid;gap:10px;padding:9px 12px;border-bottom:1px solid #edf3f7;align-items:center}
+.soc-row:last-child{border-bottom:none}
+.soc-row:not(.soc-th):hover{background:#f9fbfd}
+.soc-row.soc-th{background:#f4f9fd;border-bottom:2px solid #dde8ef}
+.soc-row.soc-ig{grid-template-columns:70px 68px 1fr 62px 55px 65px 65px}
+.soc-row.soc-fb{grid-template-columns:70px 68px 1fr 65px 65px}
+.soc-cell{font-size:12.5px;color:#5a7a8a;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soc-cell:first-child,.soc-cell.soc-left{text-align:left;color:#1a4d6e}
+.soc-row.soc-th .soc-cell:nth-child(3){text-align:left}
+.soc-th .soc-cell{font-size:10px;font-weight:700;color:#8aaabb;text-transform:uppercase;letter-spacing:.07em;cursor:pointer;user-select:none;font-family:'Oswald',sans-serif}
+.soc-th .soc-cell:hover,.soc-th .soc-cell.sorted{color:#00A3E0}
+.soc-cell.sc{color:#00A3E0;font-weight:600}
+.soc-thumb{width:60px;height:60px;border-radius:8px;object-fit:cover;border:1px solid #dde8ef;display:block}
+.soc-thumb-ph{width:60px;height:60px;border-radius:8px;background:#f0f6fa;border:1px solid #dde8ef;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#8aaabb}
+.soc-caption{font-size:12px;color:#1a4d6e;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4;text-align:left}
+.soc-caption a{color:#1a4d6e;text-decoration:none}.soc-caption a:hover{color:#00A3E0;text-decoration:underline}
+.soc-date{font-size:11px;color:#8aaabb;font-weight:600}
+.soc-studio-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;font-family:'Oswald',sans-serif;letter-spacing:.04em;margin-top:3px}
+@media(max-width:640px){.soc-row.soc-ig{grid-template-columns:56px 56px 1fr 48px 48px}.soc-row.soc-ig .soc-cell:nth-child(n+6){display:none}.soc-row.soc-ig.soc-th .soc-cell:nth-child(n+6){display:none}.soc-row.soc-fb{grid-template-columns:56px 56px 1fr}.soc-row.soc-fb .soc-cell:nth-child(n+4){display:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo"><img src="logo.png" alt="SWEAT440"/></div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" onclick="switchTab('summary',this)">Summary</button>
+    <button class="nav-tab" onclick="switchTab('scorecard',this)">Scorecard</button>
+    <button class="nav-tab" onclick="switchTab('funnel',this)">Funnel</button>
+    <button class="nav-tab" onclick="switchTab('leads',this)">Leads</button>
+    <button class="nav-tab" onclick="switchTab('members',this)">Sales</button>
+    <button class="nav-tab" onclick="switchTab('meta',this)">Meta Ads</button>
+    <button class="nav-tab" onclick="switchTab('facebook',this)">Facebook</button>
+    <button class="nav-tab" onclick="switchTab('instagram',this)">Instagram</button>
+    <button class="nav-tab" onclick="switchTab('google',this)">Google Ads</button>
+    <button class="nav-tab" onclick="switchTab('ga4',this)">GA4</button>
+    <button class="nav-tab" onclick="switchTab('gbp',this)">GBP</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="controls-bar">
+  <button class="controls-toggle" id="ctrlToggle" onclick="toggleControls()">Filters ▾</button>
+  <div class="controls-inner" id="ctrlInner">
+    <span class="ctrl-label">Studio</span>
+    <div class="multi-select" id="studioDropdown">
+      <button class="ms-trigger" onclick="_toggleDD('studio')"><span id="studioLabel">All NSO Studios</span><span class="ms-arrow">▾</span></button>
+      <div class="ms-menu" id="studioMenu"></div>
+    </div>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-label">Source</span>
+    <div class="multi-select" id="sourceDropdown">
+      <button class="ms-trigger" onclick="_toggleDD('source')"><span id="sourceLabel">All Sources</span><span class="ms-arrow">▾</span></button>
+      <div class="ms-menu" id="sourceMenu"></div>
+    </div>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-label">Date range</span>
+    <div class="ctrl-date">
+      <input type="date" id="fFrom" onchange="applyFilters()"/>
+      <span style="font-size:12px;color:#5a7a8a">→</span>
+      <input type="date" id="fTo" onchange="applyFilters()"/>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SUMMARY TAB -->
+  <div class="tab-content active" id="tab-summary">
+    <div class="summary-studio-select" style="display:none">
+      <select id="summaryStudio" onchange="renderSummary()"></select>
+    </div>
+    <div id="summaryContent"></div>
+  </div>
+
+  <!-- SCORECARD TAB -->
+  <div class="tab-content" id="tab-scorecard">
+    <div id="scorecard-content"></div>
+  </div>
+
+  <!-- FUNNEL TAB -->
+  <div class="tab-content" id="tab-funnel">
+    <div class="chart-card"><div class="chart-card-title">Conversion Funnel — NSO Studios</div><div class="funnel-wrap" id="funnelBars"></div></div>
+    <div class="chart-card"><div class="chart-card-title">Funnel Over Time</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="toggle-group" style="margin-bottom:0">
+          <button class="tog-btn on" onclick="toggleDs(this,0)" style="border-color:#00A3E0;background:#00A3E0;color:#fff"><span class="dot" style="background:#fff"></span>Leads</button>
+          <button class="tog-btn on" onclick="toggleDs(this,1)" style="border-color:#9aab00;background:#9aab00;color:#fff"><span class="dot" style="background:#fff"></span>Sales</button>
+
+        </div>
+        <div class="gran-group">
+          <button class="gran-btn active" id="granDaily" onclick="setGran('daily')">Daily</button>
+          <button class="gran-btn" id="granWeekly" onclick="setGran('weekly')">Weekly</button>
+          <button class="gran-btn" id="granMonthly" onclick="setGran('monthly')">Monthly</button>
+        </div>
+      </div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="trendChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- LEADS -->
+  <div class="tab-content" id="tab-leads">
+    <div id="leads-kpis" class="kpi-grid three"></div>
+    <div class="chart-card"><div class="chart-card-title">Leads Over Time by Source</div>
+      <div class="toggle-group" id="leads-toggles"></div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="leadsChart"></canvas></div>
+    </div>
+    <div class="two-col">
+      <div class="chart-card"><div class="chart-card-title">Source Participation</div><div class="ring-wrap"><div class="ring-canvas-wrap"><canvas id="leadsRing" height="180" width="180"></canvas></div><div class="ring-legend" id="leadsRingLeg"></div></div></div>
+      <div class="chart-card"><div class="chart-card-title">Studio Ranking — Leads</div><div style="overflow-x:auto"><table class="data-table" id="leadsRankTbl"><thead><tr><th>Studio</th><th class="num">Leads</th><th class="num">%</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+  </div>
+
+  <!-- META ADS -->
+  <div class="tab-content" id="tab-meta">
+    <div id="meta-content"></div>
+  </div>
+
+  <!-- FACEBOOK PAGE -->
+  <div class="tab-content" id="tab-facebook">
+    <div id="facebook-content"></div>
+  </div>
+
+  <!-- INSTAGRAM -->
+  <div class="tab-content" id="tab-instagram">
+    <div id="instagram-content"></div>
+  </div>
+
+  <!-- GOOGLE ADS -->
+  <div class="tab-content" id="tab-google">
+    <div id="google-content"></div>
+  </div>
+
+  <!-- GA4 -->
+  <div class="tab-content" id="tab-ga4">
+    <div id="ga4-content"></div>
+  </div>
+
+  <!-- GBP -->
+  <div class="tab-content" id="tab-gbp">
+    <div id="gbp-content"></div>
+  </div>
+
+  <!-- SALES -->
+  <div class="tab-content" id="tab-members">
+    <div id="mem-kpis" class="kpi-grid three"></div>
+    <div class="chart-card"><div class="chart-card-title">Sales Over Time by Source</div>
+      <div class="toggle-group" id="mem-toggles"></div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="memChart"></canvas></div>
+    </div>
+    <div class="two-col">
+      <div class="chart-card"><div class="chart-card-title">Source Participation</div><div class="ring-wrap"><div class="ring-canvas-wrap"><canvas id="memRing" height="180" width="180"></canvas></div><div class="ring-legend" id="memRingLeg"></div></div></div>
+      <div class="chart-card"><div class="chart-card-title">Studio Ranking — Sales</div><div style="overflow-x:auto"><table class="data-table" id="memRankTbl"><thead><tr><th>Studio</th><th class="num">Sales</th><th class="num">%</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   NSO STUDIOS DASHBOARD — Self-contained
+   ══════════════════════════════════════════════════════════════════════════ */
+const NSO=['SWEAT440 Dallas - Prestonwood','SWEAT440 Herriman','SWEAT440 Naples - Mercato','SWEAT440 Pinecrest - Palmetto Bay','SWEAT440 Reston'];
+const EXCL_SRC=['ClassPass / Platforms','Grassroots','N/A'];
+const SRC_CMAP={'Business Mode':'#00A3E0','Google Ads':'#4285F4','Local Listings':'#00BCD4','Meta Ads':'#1877F2','MindBody App':'#FF6B35','N/A':'#607D8B','Other':'#9E9E9E','Print Ads / Signs':'#FF9800','SWEAT440 App':'#9C27B0','Social Media Organic':'#E040FB','Website (unattributed)':'#00C9A7','Word of Mouth':'#F44336','ClassPass / Platforms':'#26a69a','Grassroots':'#8bc34a'};
+const SRC_COLS=['#00A3E0','#00C9A7','#9aab00','#f4a021','#e05a5a','#7c5cbf','#00bcd4','#8bc34a','#ff7043','#5c6bc0','#26a69a','#ef5350'];
+function srcC(s,i){return SRC_CMAP[s]||SRC_COLS[i%SRC_COLS.length]}
+
+let RAW=null,SC=null,GRAN='daily',trendChart=null,NSO_SALES=null,NSO_SALES_ROWS=[],GBP_RAW=null;const _ch={};
+let _sumView='cum',_sumStudio=null;
+const TODAY=new Date(),fom=new Date(TODAY.getFullYear(),TODAY.getMonth(),1),lpm=new Date(fom.getTime()-864e5),fpm=new Date(lpm.getFullYear(),lpm.getMonth(),1);
+function lds(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+document.getElementById('fFrom').value=lds(fpm);document.getElementById('fTo').value=lds(lpm);
+
+function toggleNav(){document.getElementById('navTabs').classList.toggle('open')}
+function toggleControls(){const e=document.getElementById('ctrlInner');e.classList.toggle('open');document.getElementById('ctrlToggle').textContent=e.classList.contains('open')?'Filters ▴':'Filters ▾'}
+function switchTab(id,btn){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');document.getElementById('navTabs').classList.remove('open');if(id==='summary')renderSummary();else if(id==='scorecard')renderScorecard();else if(id==='gbp')renderGBP();else if(id==='ga4')renderGA4();else if(id==='meta')renderMeta();else if(id==='google')renderGoogle();else if(id==='facebook')renderFacebook();else if(id==='instagram')renderInstagram();else applyFilters()}
+
+/* Multi-select */
+function _toggleDD(id){document.querySelectorAll('.ms-menu').forEach(m=>{if(m.id!==id+'Menu')m.classList.remove('open')});document.getElementById(id+'Menu').classList.toggle('open')}
+document.addEventListener('click',e=>{if(!e.target.closest('.multi-select'))document.querySelectorAll('.ms-menu').forEach(m=>m.classList.remove('open'))});
+function _buildMS(mid,lid,items,excl){const m=document.getElementById(mid);m.innerHTML='';const ad=document.createElement('div');ad.className='ms-item ms-select-all';ad.innerHTML=`<input type=checkbox id=${mid}_all> <label for=${mid}_all style=cursor:pointer>Select all</label>`;m.appendChild(ad);const sep=document.createElement('div');sep.className='ms-divider';m.appendChild(sep);items.forEach(it=>{const d=document.createElement('div');d.className='ms-item';const ch=!excl.includes(it);const si=`ms_${mid}_${it.replace(/[^a-z0-9]/gi,'_')}`;d.innerHTML=`<input type=checkbox id="${si}" value="${it}" ${ch?'checked':''}> <label for="${si}" style=cursor:pointer>${it}</label>`;d.querySelector('input').addEventListener('change',()=>{_syncA(mid);_updL(mid,lid,items);applyFilters()});m.appendChild(d)});const ac=document.getElementById(mid+'_all');_syncA(mid);ac.addEventListener('change',()=>{m.querySelectorAll('input[value]').forEach(c=>c.checked=ac.checked);_updL(mid,lid,items);applyFilters()});_updL(mid,lid,items)}
+function _syncA(mid){const m=document.getElementById(mid);const all=[...m.querySelectorAll('input[value]')];const ac=document.getElementById(mid+'_all');const n=all.filter(c=>c.checked).length;ac.checked=n===all.length;ac.indeterminate=n>0&&n<all.length}
+function _updL(mid,lid,items){const ch=[...document.getElementById(mid).querySelectorAll('input[value]:checked')].map(c=>c.value);const l=document.getElementById(lid);if(ch.length===0)l.textContent='None';else if(ch.length===items.length)l.textContent='All';else if(ch.length<=2)l.textContent=ch.map(s=>s.replace('SWEAT440 ','')).join(', ');else l.textContent=ch.length+' selected'}
+function _getSel(mid){return[...document.getElementById(mid).querySelectorAll('input[value]:checked')].map(c=>c.value)}
+
+/* Data helpers */
+function grd(r){return new Date((r.date||r.month)+'T00:00:00Z')}
+function fR(arr,f,t,st,sr){return arr.filter(r=>{const d=grd(r);if(f&&d<f)return false;if(t&&d>t)return false;if(st&&!st.includes(r.studio))return false;if(sr&&!sr.includes(r.source))return false;return true})}
+function sR(rows){return rows.reduce((a,r)=>{a.leads+=r.signups||0;a.ft+=r.first_visits||0;a.mem+=r.first_sales||0;return a},{leads:0,ft:0,mem:0})}
+function cW(f,t){const ms=t-f;const pp2=new Date(f.getTime()-864e5);const pp1=new Date(pp2.getTime()-ms);const py1=new Date(f);py1.setFullYear(py1.getFullYear()-1);const py2=new Date(t);py2.setFullYear(py2.getFullYear()-1);return{ppFrom:pp1,ppTo:pp2,pyFrom:py1,pyTo:py2}}
+function cD(c,p){return p?(c-p)/p*100:null}
+function fmD(d){return d.toLocaleString('en-US',{month:'short',year:'numeric'})}
+function fmDay(iso){return new Date(iso+'T00:00:00Z').toLocaleString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})}
+function fmMo(iso){return new Date(iso+'T00:00:00Z').toLocaleString('en-US',{month:'short',year:'2-digit',timeZone:'UTC'})}
+function toTS(d,m){const map={};if(GRAN==='daily'){d.forEach(r=>{if(!map[r.date])map[r.date]={key:r.date,label:fmDay(r.date),signups:0,first_visits:0,first_sales:0};map[r.date].signups+=r.signups||0;map[r.date].first_visits+=r.first_visits||0;map[r.date].first_sales+=r.first_sales||0})}else if(GRAN==='weekly'){[...d,...m].forEach(r=>{const dt=new Date((r.date||r.month)+'T00:00:00Z');const dy=dt.getUTCDay()||7;const ws=new Date(dt);ws.setUTCDate(dt.getUTCDate()-dy+1);const k=ws.toISOString().slice(0,10);if(!map[k])map[k]={key:k,label:fmDay(k),signups:0,first_visits:0,first_sales:0};map[k].signups+=r.signups||0;map[k].first_visits+=r.first_visits||0;map[k].first_sales+=r.first_sales||0})}else{[...d,...m].forEach(r=>{const k=(r.date||r.month).slice(0,7)+'-01';if(!map[k])map[k]={key:k,label:fmMo(k),signups:0,first_visits:0,first_sales:0};map[k].signups+=r.signups||0;map[k].first_visits+=r.first_visits||0;map[k].first_sales+=r.first_sales||0})}return Object.values(map).sort((a,b)=>a.key.localeCompare(b.key))}
+function toSrcTS(d,m){const map={};d.forEach(r=>{const mk=r.date+'|'+r.source;if(!map[mk])map[mk]={key:r.date,source:r.source,signups:0,first_visits:0,first_sales:0};map[mk].signups+=r.signups||0;map[mk].first_visits+=r.first_visits||0;map[mk].first_sales+=r.first_sales||0});return Object.values(map).sort((a,b)=>a.key.localeCompare(b.key))}
+function kpiCard(l,v,pp,py){const dpp=cD(v,pp),dpy=cD(v,py);const ppH=dpp!=null?`<div class="kpi-card-delta ${dpp>=0?'pos':'neg'}">${dpp>=0?'▲':'▼'} ${Math.abs(dpp).toFixed(1)}% prev period</div>`:'';const pyH=dpy!=null?`<div class="kpi-card-delta ${dpy>=0?'pos':'neg'}">${dpy>=0?'▲':'▼'} ${Math.abs(dpy).toFixed(1)}% prev year</div>`:'';return`<div class="kpi-card"><div class="kpi-card-label">${l}</div><div class="kpi-card-val">${v.toLocaleString()}</div>${ppH}${pyH}</div>`}
+
+function setGran(g){GRAN=g;['daily','weekly','monthly'].forEach(x=>{const b=document.getElementById('gran'+x.charAt(0).toUpperCase()+x.slice(1));if(b)b.classList.toggle('active',x===g)});applyFilters()}
+function toggleDs(btn,i){if(!trendChart)return;const ds=trendChart.data.datasets[i];ds.hidden=!ds.hidden;btn.classList.toggle('on');const cs=['#00A3E0','#00C9A7','#9aab00'];if(btn.classList.contains('on')){btn.style.background=cs[i];btn.style.borderColor=cs[i];btn.style.color='#fff'}else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a'}trendChart.update()}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SUMMARY TAB
+   ══════════════════════════════════════════════════════════════════════════ */
+function renderSummary(){
+  if(!SC||!SC.studios||!SC.studios.length)return;
+  const sel=document.getElementById('summaryStudio');
+  const studio=SC.studios.find(s=>s.code===sel.value)||SC.studios[0];
+  const w=studio.weeks,cw=studio.current_week,tgt=studio.targets;
+  const cur=w[cw]||{};const prev=cw>0?w[cw-1]:{};
+  const totalWeeks=studio.go_week||w.length-1;
+  const pct=Math.min(100,Math.round(cw/totalWeeks*100));
+  const weeksLeft=totalWeeks-cw;
+  const presPct=tgt.presales_count?Math.min(100,Math.round((cur.presales_count||0)/tgt.presales_count*100)):0;
+
+  const r=52,circ=+(2*Math.PI*r).toFixed(2),dash=+(circ*(1-pct/100)).toFixed(2);
+
+  let h='';
+
+  // Full-width timeline bar
+  h+=`<div class="timeline-wrap"><div class="timeline-title">Presale Timeline — ${studio.name}</div>`;
+  h+=`<div class="timeline-bar"><div class="timeline-fill" style="width:${pct}%"><div class="timeline-current"></div></div>`;
+  if(studio.co_week){const coPct=Math.round(studio.co_week/totalWeeks*100);h+=`<div class="timeline-marker co" style="left:${coPct}%"><div class="timeline-marker-label">C/O</div></div>`}
+  h+=`<div class="timeline-marker go" style="left:100%"><div class="timeline-marker-label">OPEN</div></div>`;
+  h+=`</div><div class="timeline-weeks"><span>Week 0</span><span>W${cw} (current)</span><span>W${totalWeeks}</span></div></div>`;
+
+  h+=`<div class="summary-kpis">`;
+
+  // Card 1 — To Open (circular progress clock)
+  h+=`<div class="summary-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">`;
+  h+=`<div class="summary-card-section">To Open</div>`;
+  h+=`<svg width="160" height="160" viewBox="0 0 120 120" style="margin:4px auto">
+    <defs>
+      <linearGradient id="pgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00A3E0"/>
+        <stop offset="100%" stop-color="#00C9A7"/>
+      </linearGradient>
+    </defs>
+    <circle cx="60" cy="60" r="${r}" fill="none" stroke="#f0f6fa" stroke-width="10"/>
+    <circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#pgGrad)" stroke-width="10"
+      stroke-dasharray="${circ}" stroke-dashoffset="${dash}"
+      stroke-linecap="round" transform="rotate(-90 60 60)"
+      style="transition:stroke-dashoffset .6s ease"/>
+    <text x="60" y="52" text-anchor="middle" font-family="Oswald,sans-serif" font-size="26" font-weight="700" fill="#1a1a2e">${weeksLeft*7}</text>
+    <text x="60" y="68" text-anchor="middle" font-family="Oswald,sans-serif" font-size="9" font-style="italic" fill="#e05a5a">DAYS TO OPEN</text>
+    <text x="60" y="82" text-anchor="middle" font-family="Open Sans,sans-serif" font-size="9" fill="#8aaabb">W${cw} of ${totalWeeks} · ${pct}%</text>
+  </svg>`;
+  h+=`</div>`;
+
+  // Card 2 — Last Week
+  const lastLeads=(cur.total_leads||0)-(prev.total_leads||0);
+  const lastPresales=(cur.presales_count||0)-(prev.presales_count||0);
+  const wkLeadGoal=tgt.total_leads?Math.round(tgt.total_leads/totalWeeks):0;
+  const wkPresaleGoal=tgt.presales_count?Math.round(tgt.presales_count/totalWeeks):0;
+  h+=`<div class="summary-card"><div class="summary-card-section">Last Week (W${cw})</div>`;
+  h+=skRow('Leads',lastLeads,wkLeadGoal,'#00A3E0');
+  h+=skRow('Presales',lastPresales,wkPresaleGoal,'#00C9A7');
+  if(cur.blended_cpl)h+=skValRow('CPL','$'+cur.blended_cpl.toFixed(0),tgt.blended_cpl);
+  if(cur.blended_cpa)h+=skValRow('CPA','$'+cur.blended_cpa.toFixed(0),tgt.blended_cpa);
+  h+=`</div>`;
+
+  // Card 3 — Total to Date
+  h+=`<div class="summary-card"><div class="summary-card-section">Total to Date</div>`;
+  h+=skRow('Leads',cur.total_leads||0,tgt.total_leads||0,'#00A3E0');
+  h+=skRow('Presales',cur.presales_count||0,tgt.presales_count||0,'#00C9A7');
+  if(cur.blended_cpl)h+=skValRow('CPL','$'+cur.blended_cpl.toFixed(0),tgt.blended_cpl);
+  if(cur.blended_cpa)h+=skValRow('CPA','$'+cur.blended_cpa.toFixed(0),tgt.blended_cpa);
+  h+=skRow('Est. RMR','$'+(cur.estimated_day1_rmr||0).toLocaleString(),'$'+(tgt.estimated_day1_rmr||0).toLocaleString(),'#f4a021',true);
+  h+=skRow('Mktg Spend','$'+(cur.total_marketing_spend||0).toLocaleString(),null,'#5a7a8a',true);
+  h+=`</div>`;
+
+  h+=`</div>`;
+
+  // Charts
+  _sumStudio=studio;_sumView='cum';
+  h+=`<div class="chart-card"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px"><div class="chart-card-title" style="margin-bottom:0">Presales</div><div class="gran-group"><button class="gran-btn active" id="sumCumBtn" onclick="setSumView('cum')">Cumulative</button><button class="gran-btn" id="sumWeekBtn" onclick="setSumView('weekly')">Weekly</button></div></div><div style="position:relative;width:100%;height:300px"><canvas id="sumChartCanvas"></canvas></div></div>`;
+
+  document.getElementById('summaryContent').innerHTML=h;
+  setTimeout(()=>{drawCumChart(studio)},50);
+}
+
+function skRow(label,actual,goal,color,noCheck){
+  const numActual=typeof actual==='string'?actual:actual.toLocaleString();
+  const numGoal=goal!=null?(typeof goal==='string'?goal:goal.toLocaleString()):null;
+  const met=!noCheck&&typeof actual==='number'&&typeof goal==='number'&&actual>=goal;
+  const miss=!noCheck&&typeof actual==='number'&&typeof goal==='number'&&actual<goal;
+  let h=`<div class="sk-row"><div><div class="sk-label">${label}</div></div><div class="sk-vals"><div class="sk-actual">${numActual}`;
+  if(met)h+=`<span class="sk-check">✓</span>`;
+  h+=`</div>`;
+  if(numGoal!=null)h+=`<div class="sk-goal">Goal: ${numGoal}</div>`;
+  h+=`</div></div>`;
+  if(typeof actual==='number'&&typeof goal==='number'&&goal>0){
+    const p=Math.min(100,Math.round(actual/goal*100));
+    h+=`<div class="sk-progress"><div class="sk-progress-fill" style="width:${p}%;background:${color}"></div></div>`;
+  }
+  return h;
+}
+
+function skValRow(label,actual,benchmark){
+  const bStr=typeof benchmark==='string'?benchmark:(benchmark!=null?'$'+benchmark:'');
+  return`<div class="sk-row" style="margin-top:8px"><div class="sk-label">${label}</div><div class="sk-vals"><div class="sk-actual" style="font-size:18px">${actual}</div>${bStr?`<div class="sk-goal">Target: ${bStr}</div>`:''}</div></div>`;
+}
+
+function drawCumChart(studio){
+  const ctx=document.getElementById('sumChartCanvas');if(!ctx)return;
+  if(_ch.sum){_ch.sum.destroy();_ch.sum=null}
+  const w=studio.weeks.filter((_,i)=>i<=Math.max(studio.current_week+2,studio.go_week||0));
+  const labels=w.map(x=>x.week.replace('WEEK ','W'));
+  const presD=w.map(x=>x.presales_count||0);
+  const t300=w.map((_,i)=>Math.round(300/12*i));
+  const t440=w.map((_,i)=>Math.round(440/16*i));
+  _ch.sum=new Chart(ctx,{type:'line',data:{labels,datasets:[
+    {label:'Presales',data:presD,borderColor:'#5b9bd5',borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.3,fill:false},
+    {label:'300 in 12 Weeks',data:t300,borderColor:'#ed7d31',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,fill:false},
+    {label:'440 in 16 Weeks',data:t440,borderColor:'#ffc000',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,fill:false},
+  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom',labels:{font:{family:'Oswald',size:12,style:'italic'},usePointStyle:true,padding:16}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#5a7a8a',maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'}}}}});
+}
+
+function drawWeeklyChart(studio){
+  const ctx=document.getElementById('sumChartCanvas');if(!ctx)return;
+  if(_ch.sum){_ch.sum.destroy();_ch.sum=null}
+  const w=studio.weeks.filter((_,i)=>i<=Math.max(studio.current_week+2,studio.go_week||0));
+  const labels=w.map(x=>x.week.replace('WEEK ','W'));
+  const presD=w.map(x=>x.presales_count||0);
+  const delta=presD.map((v,i)=>i===0?0:Math.max(0,v-presD[i-1]));
+  const pace300=w.map(()=>25);
+  const pace440=w.map(()=>28);
+  _ch.sum=new Chart(ctx,{type:'bar',data:{labels,datasets:[
+    {label:'Presales',data:delta,backgroundColor:'#5b9bd544',borderColor:'#5b9bd5',borderWidth:1,type:'bar',order:2},
+    {label:'300 in 12 Weeks',data:pace300,borderColor:'#ed7d31',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,fill:false,type:'line',order:1},
+    {label:'440 in 16 Weeks',data:pace440,borderColor:'#ffc000',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,fill:false,type:'line',order:1},
+  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom',labels:{font:{family:'Oswald',size:12,style:'italic'},usePointStyle:true,padding:16}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#5a7a8a',maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'},min:0}}}});
+}
+
+function setSumView(v){
+  _sumView=v;
+  const cb=document.getElementById('sumCumBtn'),wb=document.getElementById('sumWeekBtn');
+  if(cb)cb.classList.toggle('active',v==='cum');
+  if(wb)wb.classList.toggle('active',v==='weekly');
+  if(_sumStudio){if(v==='cum')drawCumChart(_sumStudio);else drawWeeklyChart(_sumStudio)}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHART BUILDERS (Funnel, Area, Ring, Rank)
+   ══════════════════════════════════════════════════════════════════════════ */
+function buildTrend(s){const isMob=window.innerWidth<=768;const ls=s.map(m=>m.label),ld=s.map(m=>m.signups||0),md=s.map(m=>m.first_sales||0);if(trendChart){const hd=trendChart.data.datasets.map(d=>d.hidden);trendChart.data.labels=ls;trendChart.data.datasets[0].data=ld;trendChart.data.datasets[1].data=md;trendChart.data.datasets.forEach((d,i)=>d.hidden=hd[i]);trendChart.update();return}trendChart=new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:ls,datasets:[{label:'Leads',data:ld,borderColor:'#00A3E0',borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.4,fill:false},{label:'Sales',data:md,borderColor:'#9aab00',borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.4,fill:false,borderDash:[2,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',autoSkip:true,maxTicksLimit:isMob?5:12,maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'}}}}})}
+function buildArea(id,tid,series,srcList,vk){const ctx=document.getElementById(id);if(!ctx)return;if(_ch[id]){_ch[id].destroy();_ch[id]=null}const tk=[...new Set(series.map(r=>r.key))].sort();const st=srcList.map(s=>series.filter(r=>r.source===s).reduce((a,r)=>a+(r[vk]||0),0));const sorted=[...srcList.keys()].sort((a,b)=>st[b]-st[a]).map(i=>srcList[i]);const ds=sorted.map(s=>{const c=srcC(s,srcList.indexOf(s));return{label:s,data:tk.map(t=>series.filter(r=>r.key===t&&r.source===s).reduce((a,r)=>a+(r[vk]||0),0)),borderColor:c,backgroundColor:c+'cc',borderWidth:1,pointRadius:0,tension:.35,fill:true}});const isMob=window.innerWidth<=768;_ch[id]=new Chart(ctx,{type:'line',data:{labels:tk.map(k=>fmDay(k)),datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#5a7a8a',autoSkip:true,maxTicksLimit:isMob?5:12,maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'},stacked:true,min:0}}}});const tg=document.getElementById(tid);if(tg){tg.innerHTML='';sorted.forEach((s,bi)=>{const c=srcC(s,srcList.indexOf(s));const btn=document.createElement('button');btn.className='tog-btn on';btn.style.cssText='border-color:'+c+';background:'+c+';color:#fff;font-size:11px;padding:4px 10px';btn.innerHTML='<span class="dot" style="background:#fff"></span>'+s;btn.onclick=function(){const ch=_ch[id];if(!ch)return;ch.data.datasets[bi].hidden=!ch.data.datasets[bi].hidden;this.classList.toggle('on');if(this.classList.contains('on')){this.style.background=c;this.style.borderColor=c;this.style.color='#fff'}else{this.style.background='#f4f9fd';this.style.borderColor='#c0d4df';this.style.color='#5a7a8a'}ch.update()};tg.appendChild(btn)})}}
+function buildRing(cid,lid,rows,vk){const byS={};rows.forEach(r=>{byS[r.source]=(byS[r.source]||0)+(r[vk]||0)});const sorted=Object.entries(byS).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);const labels=sorted.map(s=>s[0]),values=sorted.map(s=>s[1]);const ctx=document.getElementById(cid);if(!ctx)return;if(_ch[cid]){_ch[cid].destroy();_ch[cid]=null}const total=values.reduce((s,v)=>s+v,0);const colors=labels.map((l,i)=>srcC(l,i));_ch[cid]=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:'#fff',borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},cutout:'65%'}});const leg=document.getElementById(lid);if(leg)leg.innerHTML=labels.map((l,i)=>{const p=total?(values[i]/total*100).toFixed(1):0;return`<div class="ring-legend-item"><span class="ring-legend-dot" style="background:${colors[i]}"></span><span>${l}</span><span style="margin-left:auto;font-weight:600;color:#1a1a2e">${p}%</span></div>`}).join('')}
+function buildRank(tid,rows,vk){const tb=document.querySelector('#'+tid+' tbody');if(!tb)return;const byS={};rows.forEach(r=>{byS[r.studio]=(byS[r.studio]||0)+(r[vk]||0)});const sorted=Object.entries(byS).sort((a,b)=>b[1]-a[1]);const total=sorted.reduce((s,[,v])=>s+v,0);tb.innerHTML=sorted.map(([st,v])=>{const p=total?(v/total*100).toFixed(1):0;const bw=total?Math.round(v/total*80):0;return`<tr><td><span class="bar-mini" style="width:${bw}px"></span>${st.replace('SWEAT440 ','')}</td><td class="num">${v.toLocaleString()}</td><td class="pct">${p}%</td></tr>`}).join('')}
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+function buildFunnel(c,p,y,ppL,pyL){const stages=[{l:'Leads',c:c.leads,p:p.leads,y:y.leads,col:'#00A3E0'},{l:'Sales',c:c.mem,p:p.mem,y:y.mem,col:'#9aab00'}];const mx=Math.max(...stages.map(s=>s.c),1);document.getElementById('funnelBars').innerHTML=stages.map(s=>{const w=Math.max(2,s.c/mx*100);const dpp=cD(s.c,s.p),dpy=cD(s.c,s.y);const ppH=dpp!=null?`<span class="delta ${dpp>=0?'pos':'neg'}">${dpp>=0?'▲':'▼'} ${Math.abs(dpp).toFixed(1)}% prev period</span>`:'<span class="delta neu">—</span>';const pyH=dpy!=null?`<span class="delta ${dpy>=0?'pos':'neg'}">${dpy>=0?'▲':'▼'} ${Math.abs(dpy).toFixed(1)}% prev year</span>`:'<span class="delta neu">—</span>';return`<div><div class="funnel-stage-label">${s.l}</div><div class="funnel-row"><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:${w}%;background:${s.col}"></div></div><div class="funnel-num">${s.c.toLocaleString()}</div><div class="funnel-deltas">${ppH}${pyH}</div></div></div>`}).join('')}
+
+function applyFilters(){
+  if(!RAW)return;
+  const st=_getSel('studioMenu'),sr=_getSel('sourceMenu');
+  const fs=document.getElementById('fFrom').value,ts=document.getElementById('fTo').value;
+  const from=fs?new Date(fs+'T00:00:00Z'):null,to=ts?new Date(ts+'T23:59:59Z'):new Date();
+  const wins=from&&to?cW(from,to):{ppFrom:null,ppTo:null,pyFrom:null,pyTo:null};
+  function fa(f,t){return{daily:fR(RAW.daily_detail||[],f,t,st,sr),monthly:fR(RAW.monthly_detail||[],f,t,st,sr),get all(){return[...this.daily,...this.monthly]}}}
+  const curr=fa(from,to),pp=wins.ppFrom?fa(wins.ppFrom,wins.ppTo):{daily:[],monthly:[],all:[]},py=wins.pyFrom?fa(wins.pyFrom,wins.pyTo):{daily:[],monthly:[],all:[]};
+  const cS=sR(curr.all),pS=sR(pp.all),yS=sR(py.all);
+  buildFunnel(cS,pS,yS);
+  buildTrend(toTS(curr.daily,curr.monthly));
+  const srcList=sr||[];
+  document.getElementById('leads-kpis').innerHTML=kpiCard('Total Leads',cS.leads,pS.leads,yS.leads);
+  buildArea('leadsChart','leads-toggles',toSrcTS(curr.daily,curr.monthly),srcList,'signups');
+  buildRing('leadsRing','leadsRingLeg',curr.all,'signups');buildRank('leadsRankTbl',curr.all,'signups');
+  const sCurr=fR(NSO_SALES_ROWS,from,to,st,sr);
+  const sPP=wins.ppFrom?fR(NSO_SALES_ROWS,wins.ppFrom,wins.ppTo,st,sr):[];
+  const sPY=wins.pyFrom?fR(NSO_SALES_ROWS,wins.pyFrom,wins.pyTo,st,sr):[];
+  const smC=sCurr.reduce((a,r)=>a+(r.first_sales||0),0);
+  const smP=sPP.reduce((a,r)=>a+(r.first_sales||0),0);
+  const smY=sPY.reduce((a,r)=>a+(r.first_sales||0),0);
+  document.getElementById('mem-kpis').innerHTML=kpiCard('Total Sales',smC,smP||null,smY||null);
+  buildArea('memChart','mem-toggles',toSrcTS(sCurr,[]),srcList,'first_sales');
+  buildRing('memRing','memRingLeg',sCurr,'first_sales');buildRank('memRankTbl',sCurr,'first_sales');
+  if(document.getElementById('tab-meta').classList.contains('active'))renderMeta();
+  if(document.getElementById('tab-ga4').classList.contains('active'))renderGA4();
+  if(document.getElementById('tab-gbp').classList.contains('active'))renderGBP();
+  if(document.getElementById('tab-facebook').classList.contains('active'))renderFacebook();
+  if(document.getElementById('tab-instagram').classList.contains('active'))renderInstagram();
+  if(document.getElementById('tab-scorecard').classList.contains('active'))renderScorecard();
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NSO WEEKLY SCORECARD — dynamic, merges nso_scorecard_data.json + data.json
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Parse "M/D - M/D" or "Label M/D - M/D" date strings → {start,end} YYYY-MM-DD */
+function _parseWkDates(s){
+  const m=[...s.matchAll(/(\d{1,2})\/(\d{1,2})/g)];
+  if(m.length<2)return null;
+  const fmt=(mo,dy)=>`2026-${String(mo).padStart(2,'0')}-${String(dy).padStart(2,'0')}`;
+  // Use last two matches so label-embedded dates (e.g. "Move to $129 on 3/3 3/2 - 3/8") don't shift the range
+  const s0=m[m.length-2],s1=m[m.length-1];
+  return{start:fmt(s0[1],s0[2]),end:fmt(s1[1],s1[2])};
+}
+
+/* Aggregate data.json rows for a studio within a date range */
+function _wkData(studioFull,dateStart,dateEnd){
+  if(!RAW||!dateStart)return null;
+  const rows=(RAW.daily_detail||[]).filter(r=>
+    r.studio===studioFull && r.date>=dateStart && r.date<=dateEnd);
+  if(!rows.length)return null;
+  const nl=rows.reduce((a,r)=>a+(r.signups||0),0);
+  const np=rows.reduce((a,r)=>a+(r.first_sales||0),0);
+  const gl=rows.filter(r=>r.source==='Grassroots').reduce((a,r)=>a+(r.signups||0),0);
+  return{nl,np,cr:nl>0?np/nl:null,gl};
+}
+
+function scKpi(label,val,target,fmt,targetLabel,auto){
+  const fv=val!=null?fmt(val):'—';
+  const pct=target&&val!=null?Math.min(100,Math.round(val/target*100)):null;
+  const tl=targetLabel||(target!=null?fmt(target):null);
+  const bar=pct!=null?`<div style="height:4px;background:#f0f6fa;border-radius:2px;margin-top:8px"><div style="height:100%;width:${pct}%;background:${pct>=100?'#0a8a4a':pct>=70?'#f4a021':'#e05a5a'};border-radius:2px"></div></div>`:'';
+  const badge=auto?`<span style="font-size:9px;background:#e8f4fd;color:#0077bb;border-radius:3px;padding:1px 5px;margin-left:4px;font-family:Oswald,sans-serif;letter-spacing:.03em">AUTO</span>`:'';
+  return`<div class="kpi-card"><div class="kpi-card-label">${label}${badge}</div><div class="kpi-card-val">${fv}</div>${tl?`<div style="font-size:11px;color:#8aaabb;margin-top:2px">Target: ${tl}</div>`:''} ${bar}</div>`;
+}
+
+function renderScorecard(){
+  const el=document.getElementById('scorecard-content');if(!el)return;
+  if(!SC||!SC.studios||!SC.studios.length){
+    el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">Scorecard data not available.</div>';
+    return;
+  }
+
+  // Use global studio filter — pick first selected studio that has scorecard data
+  const selStudios=_getSel('studioMenu');
+  const sc=(selStudios.length?SC.studios.find(s=>selStudios.includes(s.full_name)):null)||SC.studios[0];
+
+  const studioFull=sc.full_name;
+  const cw=sc.current_week||0;
+  const tgt=sc.targets||{};
+
+  // Build week list using date_start/date_end ISO fields from JSON
+  const weeks=sc.weeks.map((w,i)=>{
+    const wn=parseInt(String(w.week).replace(/[^0-9]/g,''))||0;
+    const ds=w.date_start||null, de=w.date_end||null;
+    const auto=(ds&&de)?_wkData(studioFull,ds,de):null;
+    const prevW=i>0?sc.weeks[i-1]:null;
+    const scNl=auto?auto.nl:((w.total_leads||0)-(prevW?prevW.total_leads||0:0));
+    const scNp=auto?auto.np:((w.presales_count||0)-(prevW?prevW.presales_count||0:0));
+    const np_val = w.presales_week??( auto?auto.np:Math.max(0,scNp) );
+    const nl_val = auto?auto.nl:Math.max(0,scNl);
+    return{
+      w:wn, date:w.date_range||'', isCur:wn===cw,
+      // auto-filled from data.json when available
+      nl:nl_val,
+      np:np_val,
+      cr:nl_val>0?np_val/nl_val:null,
+      gl:auto?auto.gl:null,
+      // from scorecard JSON (MART_SALES_DETAILS)
+      tl:w.total_leads||0,
+      pc:w.presales_count||0,
+      canc:w.cancellations_week??null,
+      rmr:w.estimated_day1_rmr||0,
+      ts:w.total_marketing_spend||0,
+      cpl:w.blended_cpl||null,
+      cpa:w.blended_cpa||null,
+      ig:w.ig_new_followers??null,
+      // manual only — not in any data source yet
+      ev:null, gp:null,
+      hasAuto:!!auto,
+      ds:ds, de:de,
+    };
+  }).filter(w=>w.w<=cw+1);  // only show past + 1 future week
+
+  const cur=weeks.find(w=>w.w===cw)||weeks[weeks.length-1]||{};
+
+  let h='';
+
+  // KPI summary cards
+  h+=`<div class="kpi-grid">`;
+  h+=scKpi('Presales',cur.pc||null,tgt.presales_count,v=>v.toLocaleString());
+  h+=scKpi('Total Leads',cur.tl||null,tgt.total_leads,v=>v.toLocaleString());
+  h+=scKpi('Est. Day-1 RMR',cur.rmr||null,tgt.estimated_day1_rmr,v=>'$'+Math.round(v).toLocaleString());
+  h+=scKpi('Total Spend',cur.ts||null,null,v=>'$'+Math.round(v).toLocaleString());
+  h+=scKpi('Blended CPL',cur.cpl!=null?parseFloat(cur.cpl)||cur.cpl:null,null,v=>typeof v==='number'?'$'+v.toFixed(2):v,'Target: '+tgt.blended_cpl);
+  h+=scKpi('Blended CPA',cur.cpa!=null?parseFloat(cur.cpa)||cur.cpa:null,null,v=>typeof v==='number'?'$'+v.toFixed(2):v,'Target: '+tgt.blended_cpa);
+  h+=`</div>`;
+
+  // Legend
+  h+=`<div style="display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap">`;
+  h+=`<span style="font-size:11px;color:#0077bb"><span style="background:#e8f4fd;border-radius:3px;padding:1px 5px;font-family:Oswald;letter-spacing:.03em">AUTO</span> Auto-filled from data.json</span>`;
+  h+=`<span style="font-size:11px;color:#5a7a8a">📋 From scorecard (manual)</span>`;
+  h+=`<span style="font-size:11px;color:#b0c0cc">— Not available yet</span>`;
+  h+=`</div>`;
+
+  // Weekly KPI table definitions
+  const reqLeads=tgt.total_leads&&sc.go_week?+(tgt.total_leads/sc.go_week).toFixed(1):null;
+  const reqPresales=tgt.presales_count&&sc.go_week?+(tgt.presales_count/sc.go_week).toFixed(1):null;
+  const wkDefs=[
+    {label:'New Leads',     src:'auto', req:reqLeads,  key:'nl', fmt:v=>v!=null?v:'—',color:true},
+    {label:'New Presales',  src:'auto', req:reqPresales,key:'np', fmt:v=>v!=null?v:'—',color:true},
+    {label:'Conversion Rate',src:'auto',req:.35,       key:'cr', fmt:v=>v!=null?(v*100).toFixed(1)+'%':'—',color:false},
+    {label:'Grassroots Leads',src:'auto',req:40,       key:'gl', fmt:v=>v!=null?v:'—',color:true},
+    {label:'Total Leads (cum.)',src:'sc',  req:null,    key:'tl', fmt:v=>v||'—',color:false},
+    {label:'Presales (cum.)',   src:'sc', req:null,    key:'pc', fmt:v=>v||'—',color:false},
+    {label:'Mktg Spend',   src:'sc',   req:null,      key:'ts', fmt:v=>v?'$'+Math.round(v).toLocaleString():'—',color:false},
+    {label:'Blended CPL',  src:'sc',   req:null,      key:'cpl',fmt:v=>v!=null?(typeof v==='number'?'$'+v.toFixed(2):v):'—',color:false},
+    {label:'Est. RMR',     src:'sc',   req:null,      key:'rmr',fmt:v=>v?'$'+Math.round(v).toLocaleString():'—',color:false},
+    {label:'Cancellations',src:'sc',     req:null,    key:'canc',fmt:v=>v!=null?v:'—',color:false},
+    {label:'Comm. Events', src:'missing',req:6,       key:'ev', fmt:v=>v!=null?v:'—',color:true},
+    {label:'Grs. Presales',src:'missing',req:20,      key:'gp', fmt:v=>v!=null?v:'—',color:true},
+    {label:'IG New Followers',src:'sc',     req:30,   key:'ig', fmt:v=>v!=null?v:'—',color:true},
+  ];
+
+  const srcStyle={
+    auto:'background:#f0f8ff;color:#0077bb',
+    sc:'background:#f8f8f0;color:#7a6500',
+    missing:'background:#f8f8f8;color:#b0b8c0'
+  };
+  const srcIcon={auto:'🔄',sc:'📋',missing:'—'};
+
+  h+=`<div class="chart-card"><div class="chart-card-title">Weekly KPIs — ${sc.full_name.replace('SWEAT440 ','')} <span style="font-size:11px;color:#8aaabb;font-weight:400">(W${cw} current)</span></div><div style="overflow-x:auto"><table class="data-table sc-table"><thead><tr>`;
+  h+=`<th style="min-width:160px">KPI</th><th style="min-width:40px;text-align:center">Src</th>`;
+  h+=`<th class="num" style="background:#f8f4ec;color:#b8860b;min-width:52px">Req/Wk</th>`;
+  const pastWeeks=weeks.filter(w=>w.w>0);
+  function _fmtD(iso){if(!iso)return'?';const[y,m,d]=iso.split('-');return`${+m}/${+d}`+(y!=='2026'?`<br><span style="font-size:8px;color:#c07000">${y}</span>`:'')}
+  pastWeeks.forEach(wk=>{
+    const dateSpan=wk.ds?`<span style="font-size:9px;font-weight:400;color:#5a7a8a;white-space:nowrap">${_fmtD(wk.ds)}</span><br><span style="font-size:9px;font-weight:400;color:#5a7a8a;white-space:nowrap">${_fmtD(wk.de)}</span>`:`<span style="font-size:9px;font-weight:400;color:#8aaabb">${(wk.date||'').slice(0,9)}</span>`;
+    h+=`<th class="num${wk.isCur?' sc-cell-cur':''}" style="min-width:72px">W${wk.w}<br>${dateSpan}${wk.hasAuto?'<br><span style="font-size:8px;color:#0077bb">●</span>':''}</th>`;
+  });
+  h+=`</tr></thead><tbody>`;
+
+  wkDefs.forEach(row=>{
+    const ss=srcStyle[row.src];
+    h+=`<tr><td style="font-size:12px;font-weight:600">${row.label}</td>`;
+    h+=`<td style="text-align:center;font-size:13px" title="${row.src}">${srcIcon[row.src]}</td>`;
+    h+=`<td class="num" style="background:#f8f4ec;color:#b8860b">${row.req!=null?row.req:'n/a'}</td>`;
+    pastWeeks.forEach(wk=>{
+      const val=wk[row.key];const isCur=wk.isCur;
+      let cls=isCur?'sc-cell-cur':'';
+      if(row.color&&row.req!=null&&typeof val==='number'&&val!=null){
+        if(val>=row.req)cls='sc-cell-good';
+        else if(val>=row.req*.7)cls='sc-cell-warn';
+        else if(wk.w>0&&val>0)cls='sc-cell-bad';
+      }
+      const style=row.src==='missing'&&val==null?'color:#d0d8e0':'';
+      h+=`<td class="num ${cls}" style="${style}">${row.fmt(val)}</td>`;
+    });
+    h+=`</tr>`;
+  });
+  h+=`</tbody></table></div></div>`;
+
+  // Cumulative presales chart
+  h+=`<div class="chart-card"><div class="chart-card-title">Cumulative Presales vs Targets</div><div style="position:relative;width:100%;height:260px"><canvas id="scCumChart"></canvas></div></div>`;
+
+  el.innerHTML=h;
+  setTimeout(()=>drawScCumChart(sc,weeks),50);
+}
+
+function drawScCumChart(sc,weeks){
+  const ctx=document.getElementById('scCumChart');if(!ctx)return;
+  if(_ch.scCum){_ch.scCum.destroy();_ch.scCum=null;}
+  const go=sc.go_week||27;
+  const allW=Array.from({length:go+1},(_,i)=>i);
+  const labels=allW.map(i=>`W${i}`);
+  const actual=allW.map(i=>{const w=weeks.find(x=>x.w===i);return(w&&w.pc)?w.pc:null;});
+  const t300=allW.map((_,i)=>i<=12?Math.round(300/12*i):null);
+  const t440_16=allW.map((_,i)=>i<=16?Math.round(440/16*i):null);
+  const t440_go=allW.map((_,i)=>+(440/go*i).toFixed(1));
+  _ch.scCum=new Chart(ctx,{type:'line',data:{labels,datasets:[
+    {label:'Actual Presales',data:actual,borderColor:'#5b9bd5',borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.3,fill:false,spanGaps:false},
+    {label:'300 in 12 Weeks',data:t300,borderColor:'#ed7d31',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,fill:false,spanGaps:false},
+    {label:'440 in 16 Weeks',data:t440_16,borderColor:'#ffc000',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,fill:false,spanGaps:false},
+    {label:`440 by GO (W${go})`,data:t440_go,borderColor:'#70ad47',borderWidth:1.5,borderDash:[4,4],pointRadius:0,tension:0,fill:false},
+  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom',labels:{font:{family:'Oswald',size:12,style:'italic'},usePointStyle:true,padding:16}}},
+    scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#5a7a8a',maxRotation:0}},
+      y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'},min:0}}}});
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   META ADS TAB
+   ══════════════════════════════════════════════════════════════════════════ */
+let META_RAW=null;
+const META_CODES={
+  'SWEAT440 Herriman':'UT-001',
+  'SWEAT440 Dallas - Prestonwood':'TX-003',
+  'SWEAT440 Naples - Mercato':'FL-019',
+  'SWEAT440 Pinecrest - Palmetto Bay':'FL-017',
+  'SWEAT440 Reston':'VA-001'
+};
+
+function metaFilter(studio,from,to){
+  if(!META_RAW)return[];
+  const code=META_CODES[studio];
+  if(!code)return[];
+  return META_RAW.filter(r=>{
+    if(!r.campaign_name.includes(code))return false;
+    if(from&&r.date<from)return false;
+    if(to&&r.date>to)return false;
+    return true;
+  });
+}
+
+function renderMeta(){
+  const el=document.getElementById('meta-content');if(!el)return;
+  if(!META_RAW||!META_RAW.length){el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No Meta Ads data available.</div>';return;}
+  const from=document.getElementById('fFrom').value||null;
+  const to=document.getElementById('fTo').value||null;
+  const selStudios=_getSel('studioMenu');
+  const activeStudios=NSO.filter(s=>selStudios.includes(s));
+  if(!activeStudios.length){el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No studios selected.</div>';return;}
+
+  const allRows=activeStudios.flatMap(s=>metaFilter(s,from,to));
+  const totalSpend=allRows.reduce((s,r)=>s+(r.spend||0),0);
+  const totalImp=allRows.reduce((s,r)=>s+(r.impressions||0),0);
+  const totalClicks=allRows.reduce((s,r)=>s+(r.clicks||0),0);
+  const totalLeads=allRows.reduce((s,r)=>s+(r.leads||0),0);
+  const avgCPL=totalLeads>0?(totalSpend/totalLeads):0;
+
+  let h='';
+
+  // Aggregate KPI cards (matching index.html)
+  h+=`<div class="kpi-grid">`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Total Spend</div><div class="kpi-card-val">$${totalSpend.toLocaleString('en-US',{maximumFractionDigits:0})}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Impressions</div><div class="kpi-card-val">${totalImp.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Clicks</div><div class="kpi-card-val">${totalClicks.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Cost per Lead</div><div class="kpi-card-val">${avgCPL>0?'$'+avgCPL.toFixed(2):'—'}</div></div>`;
+  h+=`</div>`;
+
+  // Active ads table (grouped by ad_name, preserving creative metadata)
+  const byAd={};
+  allRows.forEach(r=>{
+    const k=r.ad_name||r.campaign_name;
+    if(!byAd[k]){byAd[k]={imp:0,clicks:0,spend:0,leads:0,camp:r.campaign_name,
+      thumb:r.thumbnail_url||r.image_url||'',
+      preview:r.preview_link||'',obj:r.object_type||''};}
+    byAd[k].imp+=r.impressions||0;byAd[k].clicks+=r.clicks||0;
+    byAd[k].spend+=r.spend||0;byAd[k].leads+=r.leads||0;
+    if(!byAd[k].thumb&&(r.thumbnail_url||r.image_url))byAd[k].thumb=r.thumbnail_url||r.image_url;
+    if(!byAd[k].preview&&r.preview_link)byAd[k].preview=r.preview_link;
+  });
+  const adRows=Object.entries(byAd).map(([name,v])=>({
+    name,camp:v.camp,imp:v.imp,clicks:v.clicks,spend:v.spend,leads:v.leads,
+    thumb:v.thumb,preview:v.preview,obj:v.obj,
+    ctr:v.imp>0?(v.clicks/v.imp*100):0,
+    cpl:v.leads>0?(v.spend/v.leads):0
+  })).sort((a,b)=>b.spend-a.spend);
+
+  h+=`<div class="chart-card"><div class="chart-card-title">Active Ads</div><div style="overflow-x:auto">`;
+  h+=`<table class="data-table"><thead><tr><th>Ad</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Spend</th><th class="num">Leads</th><th class="num">CPL</th></tr></thead><tbody>`;
+  if(adRows.length){
+    adRows.forEach(a=>{
+      const isVid=(a.obj||'').toLowerCase().includes('video')||a.name.toLowerCase().includes('reel');
+      const thumbHtml=a.thumb
+        ?`<a href="${a.preview||a.thumb}" target="_blank" rel="noopener" title="View ad"><img src="${a.thumb}" style="width:52px;height:52px;object-fit:cover;border-radius:6px;display:block;border:1px solid #d0e4ef"></a>`
+        :`<div class="ad-thumb">${isVid?'&#9654;':'&#128444;'}</div>`;
+      const nameHtml=a.preview
+        ?`<a href="${a.preview}" target="_blank" rel="noopener" style="color:#1a4d6e;text-decoration:none;font-weight:600;font-size:13px" title="Preview ad">${a.name}</a>`
+        :`<div class="ad-title">${a.name}</div>`;
+      h+=`<tr><td><div style="display:flex;align-items:center;gap:10px">${thumbHtml}<div>${nameHtml}<div class="pill-bar"><span class="pill">${a.camp}</span></div></div></div></td><td class="num">${a.imp.toLocaleString()}</td><td class="num">${a.clicks.toLocaleString()}</td><td class="num">${a.ctr.toFixed(2)}%</td><td class="num">$${a.spend.toFixed(0)}</td><td class="num">${a.leads}</td><td class="num">${a.cpl>0?'$'+a.cpl.toFixed(0):'—'}</td></tr>`;
+    });
+  } else {
+    h+=`<tr><td colspan="7" style="text-align:center;color:#8aaabb;font-style:italic;padding:24px">No ad data for selected period</td></tr>`;
+  }
+  h+=`</tbody></table></div></div>`;
+
+  // Spend over time chart
+  h+=`<div class="chart-card"><div class="chart-card-title">Daily Spend Over Time</div><div style="position:relative;width:100%;height:260px"><canvas id="metaSpendChart"></canvas></div></div>`;
+
+  // Brand Awareness placeholder (matching index.html)
+  h+=`<div class="chart-card" style="margin-top:20px"><div class="chart-card-title" style="margin-bottom:12px">Brand Awareness</div><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:120px;border:1.5px dashed #c0d4df;border-radius:10px;gap:8px"><div style="font-size:24px">📢</div><div style="font-size:12px;color:#8aaabb;font-style:italic">Reach, impressions, frequency and brand lift campaigns — coming soon</div></div></div>`;
+
+  el.innerHTML=h;
+  setTimeout(()=>drawMetaTrend(from,to,activeStudios),50);
+}
+
+function drawMetaTrend(from,to,activeStudios){
+  const ctx=document.getElementById('metaSpendChart');if(!ctx)return;
+  if(_ch.meta){_ch.meta.destroy();_ch.meta=null;}
+  const datasets=activeStudios.map(studio=>{
+    const rows=metaFilter(studio,from,to);
+    const byDate={};rows.forEach(r=>{byDate[r.date]=(byDate[r.date]||0)+(r.spend||0)});
+    return{studio,byDate};
+  });
+  const allDates=[...new Set(datasets.flatMap(d=>Object.keys(d.byDate)))].sort();
+  const isMob=window.innerWidth<=768;
+  _ch.meta=new Chart(ctx,{type:'bar',data:{labels:allDates.map(d=>fmDay(d)),datasets:datasets.map(({studio,byDate})=>({label:studio.replace('SWEAT440 ',''),data:allDates.map(d=>+(byDate[d]||0).toFixed(2)),backgroundColor:(GA4_COLORS[studio]||'#1877F2')+'cc',borderColor:GA4_COLORS[studio]||'#1877F2',borderWidth:1}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:'Oswald',size:12,style:'italic'},usePointStyle:true,padding:14}},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>`${ctx.dataset.label}: $${ctx.parsed.y.toFixed(2)}`}}},scales:{x:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#5a7a8a',autoSkip:true,maxTicksLimit:isMob?5:14,maxRotation:0}},y:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',callback:v=>'$'+v}}}}});
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GOOGLE ADS TAB
+   ══════════════════════════════════════════════════════════════════════════ */
+let GOOGLE_RAW=null;
+const GOOGLE_ACCOUNTS={
+  'SWEAT440 Dallas - Prestonwood':'SWEAT440 - Prestonwood',
+  'SWEAT440 Naples - Mercato':'SWEAT440 - Naples',
+  'SWEAT440 Pinecrest - Palmetto Bay':'SWEAT440 - Pinecrest',
+  'SWEAT440 Reston':'SWEAT440 - Reston',
+  'SWEAT440 Herriman':'SWEAT440 - Herriman'
+};
+
+function googleFilter(studio,from,to){
+  if(!GOOGLE_RAW)return[];
+  const acct=GOOGLE_ACCOUNTS[studio];
+  if(!acct)return[];
+  return GOOGLE_RAW.filter(r=>{
+    if(r.account_name!==acct)return false;
+    if(from&&r.date<from)return false;
+    if(to&&r.date>to)return false;
+    return true;
+  });
+}
+
+function renderGoogle(){
+  const el=document.getElementById('google-content');if(!el)return;
+  const from=document.getElementById('fFrom').value||null;
+  const to=document.getElementById('fTo').value||null;
+  const selStudios=_getSel('studioMenu');
+  const activeStudios=NSO.filter(s=>selStudios.includes(s));
+  if(!activeStudios.length){el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No studios selected.</div>';return;}
+
+  const allRows=activeStudios.flatMap(s=>googleFilter(s,from,to));
+  const totalSpend=allRows.reduce((s,r)=>s+(r.spend||0),0);
+  const totalLeads=allRows.reduce((s,r)=>s+(r.conversions||0),0);
+  const totalClicks=allRows.reduce((s,r)=>s+(r.clicks||0),0);
+  const totalCalls=allRows.reduce((s,r)=>s+(r.calls||0),0);
+  const totalDir=allRows.reduce((s,r)=>s+(r.directions||0),0);
+  const totalOpp=totalLeads+totalCalls+totalDir||totalClicks;
+  const cpo=totalOpp>0?(totalSpend/totalOpp):0;
+
+  let h='';
+
+  // KPI cards (matching index.html Google Ads)
+  h+=`<div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Spend</div><div class="kpi-card-val">$${totalSpend.toLocaleString('en-US',{maximumFractionDigits:0})}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Total Opportunities</div><div class="kpi-card-val">${totalOpp.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Cost / Opportunity</div><div class="kpi-card-val">${cpo>0?'$'+Math.round(cpo):'—'}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Leads</div><div class="kpi-card-val">${totalLeads.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Calls</div><div class="kpi-card-val">${totalCalls.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Directions</div><div class="kpi-card-val">${totalDir.toLocaleString()}</div></div>`;
+  h+=`</div>`;
+
+  // Campaigns table
+  const byCamp={};
+  allRows.forEach(r=>{
+    const k=r.campaign_name;if(!k)return;
+    if(!byCamp[k])byCamp[k]={spend:0,imp:0,clicks:0,leads:0,calls:0,dir:0};
+    byCamp[k].spend+=r.spend||0;byCamp[k].imp+=r.impressions||0;
+    byCamp[k].clicks+=r.clicks||0;byCamp[k].leads+=r.conversions||0;
+    byCamp[k].calls+=r.calls||0;byCamp[k].dir+=r.directions||0;
+  });
+  const campRows=Object.entries(byCamp).map(([name,v])=>({name,...v,ctr:v.imp>0?(v.clicks/v.imp*100):0,cpl:v.leads>0?(v.spend/v.leads):0})).sort((a,b)=>b.spend-a.spend);
+
+  h+=`<div class="chart-card"><div class="chart-card-title">Campaigns</div><div style="overflow-x:auto">`;
+  h+=`<table class="data-table"><thead><tr><th>Campaign</th><th class="num">Spend</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Leads</th><th class="num">CPL</th></tr></thead><tbody>`;
+  if(campRows.length){
+    campRows.forEach(c=>{
+      h+=`<tr><td style="font-size:12px">${c.name}</td><td class="num">$${c.spend.toFixed(0)}</td><td class="num">${c.imp.toLocaleString()}</td><td class="num">${c.clicks.toLocaleString()}</td><td class="num">${c.ctr.toFixed(2)}%</td><td class="num">${c.leads}</td><td class="num">${c.cpl>0?'$'+c.cpl.toFixed(0):'—'}</td></tr>`;
+    });
+  } else {
+    h+=`<tr><td colspan="7" style="text-align:center;color:#8aaabb;font-style:italic;padding:24px">No Google Ads data available for selected period</td></tr>`;
+  }
+  h+=`</tbody></table></div></div>`;
+
+  // Headlines & Descriptions tables (matching index.html layout)
+  const headlines=allRows.filter(r=>r.headline).reduce((acc,r)=>{const k=r.headline;if(!acc[k])acc[k]={imp:0,clicks:0,rating:r.rating||'—'};acc[k].imp+=r.impressions||0;acc[k].clicks+=r.clicks||0;return acc},{});
+  const hlRows=Object.entries(headlines).map(([t,v])=>({t,...v,ctr:v.imp>0?(v.clicks/v.imp*100):0})).sort((a,b)=>b.imp-a.imp);
+  const descs=allRows.filter(r=>r.description).reduce((acc,r)=>{const k=r.description;if(!acc[k])acc[k]={imp:0,clicks:0,rating:r.rating||'—'};acc[k].imp+=r.impressions||0;acc[k].clicks+=r.clicks||0;return acc},{});
+  const dsRows=Object.entries(descs).map(([t,v])=>({t,...v,ctr:v.imp>0?(v.clicks/v.imp*100):0})).sort((a,b)=>b.imp-a.imp);
+
+  const ratingColor=r=>r==='Best'?'#0a8a4a':r==='Good'?'#b85c00':'#888';
+  const emptyRow=(cols)=>`<tr><td colspan="${cols}" style="text-align:center;color:#8aaabb;font-style:italic;padding:24px">No data available</td></tr>`;
+
+  h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">`;
+  h+=`<div class="chart-card"><div class="chart-card-title">Headlines Performance</div><div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Headline</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Rating</th></tr></thead><tbody>`;
+  h+=hlRows.length?hlRows.map(r=>`<tr><td>${r.t}</td><td class="num">${r.imp.toLocaleString()}</td><td class="num">${r.clicks.toLocaleString()}</td><td class="num">${r.ctr.toFixed(2)}%</td><td class="num"><span style="color:${ratingColor(r.rating)};font-weight:600">${r.rating}</span></td></tr>`).join(''):emptyRow(5);
+  h+=`</tbody></table></div></div>`;
+  h+=`<div class="chart-card"><div class="chart-card-title">Descriptions Performance</div><div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Description</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Rating</th></tr></thead><tbody>`;
+  h+=dsRows.length?dsRows.map(r=>`<tr><td style="max-width:220px;white-space:normal">${r.t}</td><td class="num">${r.imp.toLocaleString()}</td><td class="num">${r.clicks.toLocaleString()}</td><td class="num">${r.ctr.toFixed(2)}%</td><td class="num"><span style="color:${ratingColor(r.rating)};font-weight:600">${r.rating}</span></td></tr>`).join(''):emptyRow(5);
+  h+=`</tbody></table></div></div>`;
+  h+=`</div>`;
+
+  // Brand Awareness placeholder
+  h+=`<div class="chart-card" style="margin-top:20px"><div class="chart-card-title" style="margin-bottom:12px">Brand Awareness</div><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:120px;border:1.5px dashed #c0d4df;border-radius:10px;gap:8px"><div style="font-size:24px">🏷️</div><div style="font-size:12px;color:#8aaabb;font-style:italic">Display, YouTube and brand search campaigns — coming soon</div></div></div>`;
+
+  el.innerHTML=h;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GA4 TAB
+   ══════════════════════════════════════════════════════════════════════════ */
+let GA4_RAW=null;
+const GA4_PATHS={
+  'SWEAT440 Herriman':['/gyms/utah-herriman','/nso-2026-herriman','/secure-founders-rate-herriman','/opening-herriman'],
+  'SWEAT440 Dallas - Prestonwood':['/gyms/locations-texas-prestonwood','/nso-2026-prestonwood','/opening-prestonwood','/secure-founders-rate-prestonwood','/events-prestonwood'],
+  'SWEAT440 Naples - Mercato':['/nso-2026-naples','/locations-florida-naples','/naples-secure-founders-rate','/opening-naples'],
+  'SWEAT440 Pinecrest - Palmetto Bay':['/gyms/locations-florida-pinecrest','/nso-2026-pinecrest','/opening-pinecrest','/secure-founders-rate-pinecrest','/nso-pinecrest'],
+  'SWEAT440 Reston':['/gyms/locations-virginia-reston','/nso-2026-reston','/opening-reston','/secure-founders-rate-reston']
+};
+const GA4_COLORS={'SWEAT440 Herriman':'#00A3E0','SWEAT440 Dallas - Prestonwood':'#4285F4','SWEAT440 Naples - Mercato':'#00C9A7','SWEAT440 Pinecrest - Palmetto Bay':'#f4a021','SWEAT440 Reston':'#e05a5a'};
+
+function ga4Filter(studio,from,to){
+  if(!GA4_RAW)return[];
+  const paths=GA4_PATHS[studio]||[];
+  return GA4_RAW.filter(r=>{
+    if(!paths.some(p=>r.landing_page.startsWith(p)))return false;
+    if(from&&r.date<from)return false;
+    if(to&&r.date>to)return false;
+    return true;
+  });
+}
+
+function renderGA4(){
+  const el=document.getElementById('ga4-content');if(!el)return;
+  if(!GA4_RAW||!GA4_RAW.length){el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No GA4 data available.</div>';return;}
+  const from=document.getElementById('fFrom').value||null;
+  const to=document.getElementById('fTo').value||null;
+  const selStudios=_getSel('studioMenu');
+  const activeStudios=NSO.filter(s=>selStudios.includes(s));
+  if(!activeStudios.length){el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No studios selected.</div>';return;}
+
+  const studioTotals=activeStudios.map(studio=>{
+    const rows=ga4Filter(studio,from,to);
+    return{studio,sessions:rows.reduce((s,r)=>s+(r.sessions||0),0),users:rows.reduce((s,r)=>s+(r.total_users||0),0),newUsers:rows.reduce((s,r)=>s+(r.new_users||0),0)};
+  });
+
+  let h='';
+  h+='<div class="chart-card"><div class="chart-card-title">Website Visits — NSO Studios</div>';
+  h+='<div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));margin-bottom:0">';
+  studioTotals.forEach(({studio,sessions,users,newUsers})=>{
+    const name=studio.replace('SWEAT440 ','');const col=GA4_COLORS[studio]||'#00A3E0';
+    h+=`<div class="kpi-card"><div class="kpi-card-label" style="color:${col}">${name}</div><div class="kpi-card-val">${sessions.toLocaleString()}</div><div style="font-size:11px;color:#8aaabb;margin-top:2px">Sessions</div><div style="font-size:11px;color:#5a7a8a;margin-top:6px">${users.toLocaleString()} users &nbsp;·&nbsp; ${newUsers.toLocaleString()} new</div></div>`;
+  });
+  h+='</div></div>';
+
+  h+='<div class="chart-card"><div class="chart-card-title">Sessions Over Time</div><div style="position:relative;width:100%;height:280px"><canvas id="ga4TrendChart"></canvas></div></div>';
+
+  h+='<div class="chart-card"><div class="chart-card-title">Traffic Sources by Studio</div><div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Studio</th><th>Source / Medium</th><th class="num">Sessions</th><th class="num">Users</th><th class="num">New Users</th></tr></thead><tbody>';
+  activeStudios.forEach(studio=>{
+    const rows=ga4Filter(studio,from,to);
+    const bySrc={};
+    rows.forEach(r=>{const k=r.source+' / '+r.medium;if(!bySrc[k])bySrc[k]={s:0,u:0,n:0};bySrc[k].s+=r.sessions||0;bySrc[k].u+=r.total_users||0;bySrc[k].n+=r.new_users||0});
+    const sorted=Object.entries(bySrc).sort((a,b)=>b[1].s-a[1].s).slice(0,4);
+    sorted.forEach(([src,v],i)=>{h+=`<tr><td>${i===0?studio.replace('SWEAT440 ',''):''}</td><td>${src}</td><td class="num">${v.s.toLocaleString()}</td><td class="num">${v.u.toLocaleString()}</td><td class="num">${v.n.toLocaleString()}</td></tr>`});
+  });
+  h+='</tbody></table></div></div>';
+
+  el.innerHTML=h;
+  setTimeout(()=>drawGA4Trend(from,to,activeStudios),50);
+}
+
+function drawGA4Trend(from,to,activeStudios){
+  const ctx=document.getElementById('ga4TrendChart');if(!ctx)return;
+  if(_ch.ga4){_ch.ga4.destroy();_ch.ga4=null;}
+  const datasets=activeStudios.map(studio=>{
+    const rows=ga4Filter(studio,from,to);
+    const byDate={};rows.forEach(r=>{byDate[r.date]=(byDate[r.date]||0)+(r.sessions||0)});
+    return{studio,byDate};
+  });
+  const allDates=[...new Set(datasets.flatMap(d=>Object.keys(d.byDate)))].sort();
+  const isMob=window.innerWidth<=768;
+  _ch.ga4=new Chart(ctx,{type:'line',data:{labels:allDates.map(d=>fmDay(d)),datasets:datasets.map(({studio,byDate})=>({label:studio.replace('SWEAT440 ',''),data:allDates.map(d=>byDate[d]||0),borderColor:GA4_COLORS[studio]||'#aaa',borderWidth:2,pointRadius:0,tension:.4,fill:false}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:'Oswald',size:12,style:'italic'},usePointStyle:true,padding:14}},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#5a7a8a',autoSkip:true,maxTicksLimit:isMob?5:14,maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'}}}}});
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GBP TAB
+   ══════════════════════════════════════════════════════════════════════════ */
+const GBP_DATA=[
+  {
+    store_code:'S440-Pinecrest',
+    studio:'SWEAT440 Pinecrest - Palmetto Bay',
+    address:'13623 S Dixie Hwy, Unit 145, Palmetto Bay, FL 33176',
+    period:'Jan 27 – Apr 26, 2026',
+    search_mobile:1667,
+    search_desktop:490,
+    maps_mobile:2701,
+    maps_desktop:205,
+    calls:101,
+    messages:0,
+    bookings:0,
+    directions:371,
+    website_clicks:437
+  },
+  {
+    store_code:'S440-Prestonwood',
+    studio:'SWEAT440 Dallas - Prestonwood',
+    address:'3204 E Hebron Pkwy, Suite 330, Carrollton, TX 75010',
+    period:'Jan 27 – Apr 26, 2026',
+    search_mobile:844,
+    search_desktop:536,
+    maps_mobile:1006,
+    maps_desktop:193,
+    calls:21,
+    messages:0,
+    bookings:0,
+    directions:265,
+    website_clicks:449
+  },
+  {
+    store_code:'S440-Reston',
+    studio:'SWEAT440 Reston',
+    address:'1422 North Point Village Center, Unit 1422, Reston, VA 20194',
+    period:'Jan 27 – Apr 26, 2026',
+    search_mobile:670,
+    search_desktop:568,
+    maps_mobile:1027,
+    maps_desktop:239,
+    calls:17,
+    messages:0,
+    bookings:0,
+    directions:197,
+    website_clicks:345
+  },
+  {
+    store_code:'09191048626309248608',
+    studio:'SWEAT440 Naples - Mercato',
+    address:'9123 Strada Place, Naples, FL 34108',
+    period:'Jan 27 – Apr 26, 2026',
+    search_mobile:152,
+    search_desktop:161,
+    maps_mobile:351,
+    maps_desktop:93,
+    calls:8,
+    messages:0,
+    bookings:0,
+    directions:146,
+    website_clicks:163
+  },
+  {
+    store_code:'01689314637450990290',
+    studio:'SWEAT440 Herriman',
+    address:'5127 W Miller Crossing Dr, Suite A, Herriman, UT 84096',
+    period:'Jan 27 – Apr 26, 2026',
+    search_mobile:39,
+    search_desktop:84,
+    maps_mobile:140,
+    maps_desktop:40,
+    calls:3,
+    messages:0,
+    bookings:0,
+    directions:63,
+    website_clicks:46
+  }
+];
+
+function gbpKpi(label,value,icon){
+  return`<div class="kpi-card"><div class="kpi-card-label">${icon?icon+' ':''} ${label}</div><div class="kpi-card-val">${value.toLocaleString()}</div></div>`;
+}
+
+function renderGBP(){
+  const el=document.getElementById('gbp-content');
+  if(!el)return;
+  const selStudios=_getSel('studioMenu');
+  const from=document.getElementById('fFrom').value||null;
+  const to=document.getElementById('fTo').value||null;
+
+  // Use live API data if available, else fall back to static GBP_DATA
+  if(GBP_RAW&&(GBP_RAW.studios||[]).length){
+    const studios=(GBP_RAW.studios||[]).filter(s=>selStudios.includes(s.name));
+    if(!studios.length){el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No studios selected.</div>';return;}
+    let h='';
+    studios.forEach(s=>{
+      const rows=(s.daily||[]).filter(r=>(!from||r.date>=from)&&(!to||r.date<=to));
+      const sum=k=>rows.reduce((a,r)=>a+(r[k]||0),0);
+      const totalViews=sum('total_views');
+      const searchViews=sum('desktop_search')+sum('mobile_search');
+      const mapsViews=sum('desktop_maps')+sum('mobile_maps');
+      const periodLabel=rows.length?(rows[0].date+' – '+rows[rows.length-1].date):(from&&to?from+' – '+to:'All time');
+      h+=`<div class="chart-card" style="margin-bottom:20px">`;
+      h+=`<div class="chart-card-title">${s.name} <span style="font-size:12px;font-weight:400;color:#5a7a8a;margin-left:8px">${periodLabel}</span></div>`;
+      h+=`<div style="font-family:'Oswald',sans-serif;font-style:italic;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:#5a7a8a;margin-bottom:10px">Profile Views</div>`;
+      h+=`<div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-bottom:20px">`;
+      h+=gbpKpi('Total Views',totalViews,'');
+      h+=gbpKpi('Google Search',searchViews,'🔍');
+      h+=gbpKpi('Google Maps',mapsViews,'📍');
+      h+=`</div>`;
+      h+=`<div style="font-family:'Oswald',sans-serif;font-style:italic;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:#5a7a8a;margin-bottom:10px">Search Detail</div>`;
+      h+=`<div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-bottom:20px">`;
+      h+=gbpKpi('Search — Mobile',sum('mobile_search'),'📱');
+      h+=gbpKpi('Search — Desktop',sum('desktop_search'),'🖥️');
+      h+=gbpKpi('Maps — Mobile',sum('mobile_maps'),'📱');
+      h+=gbpKpi('Maps — Desktop',sum('desktop_maps'),'🖥️');
+      h+=`</div>`;
+      h+=`<div style="font-family:'Oswald',sans-serif;font-style:italic;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:#5a7a8a;margin-bottom:10px">Customer Actions</div>`;
+      h+=`<div class="kpi-grid four" style="margin-bottom:8px">`;
+      h+=gbpKpi('Direction Requests',sum('direction_requests'),'🧭');
+      h+=gbpKpi('Website Clicks',sum('website_clicks'),'🌐');
+      h+=gbpKpi('Calls',sum('calls'),'📞');
+      h+=`</div>`;
+      h+=`<div style="font-size:10px;color:#aab;margin-top:12px">Source: Google Business Profile API · ${rows.length} daily data points</div>`;
+      h+=`</div>`;
+    });
+    el.innerHTML=h||'<p style="color:#8aaabb;padding:20px">No GBP data available.</p>';
+    return;
+  }
+
+  // Fallback: static GBP_DATA
+  const filtered=GBP_DATA.filter(d=>selStudios.includes(d.studio));
+  if(!filtered.length){el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No studios selected.</div>';return;}
+  let h='';
+  filtered.forEach(d=>{
+    const totalViews=d.search_mobile+d.search_desktop+d.maps_mobile+d.maps_desktop;
+    const searchViews=d.search_mobile+d.search_desktop;
+    const mapsViews=d.maps_mobile+d.maps_desktop;
+    h+=`<div class="chart-card" style="margin-bottom:20px">`;
+    h+=`<div class="chart-card-title">${d.studio} <span style="font-size:12px;font-weight:400;color:#5a7a8a;margin-left:8px">${d.period}</span></div>`;
+    h+=`<div style="font-size:11px;color:#8aaabb;margin-bottom:16px">${d.address}</div>`;
+    h+=`<div style="font-family:'Oswald',sans-serif;font-style:italic;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:#5a7a8a;margin-bottom:10px">Profile Views</div>`;
+    h+=`<div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-bottom:20px">`;
+    h+=gbpKpi('Total Views',totalViews,'');
+    h+=gbpKpi('Google Search',searchViews,'🔍');
+    h+=gbpKpi('Google Maps',mapsViews,'📍');
+    h+=`</div>`;
+    h+=`<div style="font-family:'Oswald',sans-serif;font-style:italic;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:#5a7a8a;margin-bottom:10px">Search Detail</div>`;
+    h+=`<div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-bottom:20px">`;
+    h+=gbpKpi('Search — Mobile',d.search_mobile,'📱');
+    h+=gbpKpi('Search — Desktop',d.search_desktop,'🖥️');
+    h+=gbpKpi('Maps — Mobile',d.maps_mobile,'📱');
+    h+=gbpKpi('Maps — Desktop',d.maps_desktop,'🖥️');
+    h+=`</div>`;
+    h+=`<div style="font-family:'Oswald',sans-serif;font-style:italic;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:#5a7a8a;margin-bottom:10px">Customer Actions</div>`;
+    h+=`<div class="kpi-grid four" style="margin-bottom:8px">`;
+    h+=gbpKpi('Direction Requests',d.directions,'🧭');
+    h+=gbpKpi('Website Clicks',d.website_clicks,'🌐');
+    h+=gbpKpi('Calls',d.calls,'📞');
+    h+=gbpKpi('Messages',d.messages,'💬');
+    h+=`</div>`;
+    h+=`<div style="font-size:10px;color:#aab;margin-top:12px">Source: Google Business Profile CSV export.</div>`;
+    h+=`</div>`;
+  });
+  el.innerHTML=h||'<p style="color:#8aaabb;padding:20px">No GBP data available.</p>';
+}
+
+let SOCIAL_RAW=null;
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FACEBOOK PAGE TAB
+   ══════════════════════════════════════════════════════════════════════════ */
+function _socialStudios(key){
+  const sel=_getSel('studioMenu');
+  const data=(SOCIAL_RAW&&SOCIAL_RAW[key])||[];
+  // Match by studio code: 'SWEAT440 Herriman' → 'UT-001'
+  const CODE_MAP={
+    'SWEAT440 Herriman':'UT-001','SWEAT440 Dallas - Prestonwood':'TX-003',
+    'SWEAT440 Naples - Mercato':'FL-019','SWEAT440 Pinecrest - Palmetto Bay':'FL-017',
+    'SWEAT440 Reston':'VA-001'
+  };
+  const activeCodes=sel.map(s=>CODE_MAP[s]).filter(Boolean);
+  return data.filter(s=>activeCodes.includes(s.code));
+}
+
+const _C2S={'UT-001':'SWEAT440 Herriman','TX-003':'SWEAT440 Dallas - Prestonwood','FL-019':'SWEAT440 Naples - Mercato','FL-017':'SWEAT440 Pinecrest - Palmetto Bay','VA-001':'SWEAT440 Reston'};
+const _SOC_SORTS={fb:{col:-1,dir:'desc'},ig:{col:-1,dir:'desc'}};
+
+function _socSortHdr(text,key,colIdx,sortable=true){
+  if(!sortable)return`<div class="soc-cell">${text}</div>`;
+  const st=_SOC_SORTS[key];const sorted=st.col===colIdx;
+  const arr=sorted?(st.dir==='desc'?' ▼':' ▲'):'';
+  return`<div class="soc-cell${sorted?' sorted':''}" onclick="_socSort('${key}',${colIdx})">${text}${arr}</div>`;
+}
+function _socSort(key,colIdx){
+  const st=_SOC_SORTS[key];
+  if(st.col===colIdx)st.dir=st.dir==='desc'?'asc':'desc';else{st.col=colIdx;st.dir='desc';}
+  if(key==='fb')renderFacebook();else renderInstagram();
+}
+function _scCls(key,col){return _SOC_SORTS[key].col===col?'sc':'';}
+
+function renderFacebook(){
+  const el=document.getElementById('facebook-content');if(!el)return;
+  const studios=_socialStudios('facebook');
+  const from=document.getElementById('fFrom').value||null;
+  const to=document.getElementById('fTo').value||null;
+
+  if(!studios.length){
+    el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No Facebook data available. Run: python scripts/fetch_social_insights.py --source facebook</div>';
+    return;
+  }
+
+  const filtered=studios.map(s=>({...s,posts:(s.posts||[]).filter(p=>(!from||p.date>=from)&&(!to||p.date<=to))}));
+
+  // KPIs
+  const totalFans=studios.reduce((a,s)=>a+(s.total_fans||0),0);
+  const totalTalking=studios.reduce((a,s)=>a+(s.talking_about||0),0);
+  const allPosts=filtered.flatMap(s=>s.posts.map(p=>({...p,studio:s.studio,code:s.code})));
+  const totalLikes=allPosts.reduce((a,p)=>a+(p.likes||0),0);
+  const totalComments=allPosts.reduce((a,p)=>a+(p.comments||0),0);
+
+  let h='';
+  h+=`<div class="kpi-grid">`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Total Followers</div><div class="kpi-card-val">${totalFans>0?totalFans.toLocaleString():'—'}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Talking About</div><div class="kpi-card-val">${totalTalking>0?totalTalking.toLocaleString():'—'}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Total Reactions</div><div class="kpi-card-val">${totalLikes.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Total Comments</div><div class="kpi-card-val">${totalComments.toLocaleString()}</div></div>`;
+  h+=`</div>`;
+
+  // Posts table — sorted
+  if(allPosts.length){
+    const ST=_SOC_SORTS.fb;
+    const KEYS=['date','message','likes','comments','engagement'];
+    const NUM=[2,3,4];
+    let sorted=[...allPosts];
+    if(ST.col>=0){const k=KEYS[ST.col];const isN=NUM.includes(ST.col);sorted.sort((a,b)=>{let va=isN?parseInt(a[k])||0:String(a[k]||'').toLowerCase();let vb=isN?parseInt(b[k])||0:String(b[k]||'').toLowerCase();return(va<vb?-1:va>vb?1:0)*(ST.dir==='asc'?1:-1)});}
+
+    h+=`<div class="chart-card"><div class="chart-card-title">Posts <span style="font-size:11px;color:#8aaabb;font-style:normal;font-weight:400">(click column header to sort)</span></div>`;
+    h+=`<div style="overflow-x:auto"><div style="min-width:460px">`;
+    h+=`<div class="soc-row soc-th soc-fb">${_socSortHdr('Date','fb',0)}${_socSortHdr('','fb',-1,false)}${_socSortHdr('Post','fb',1)}${_socSortHdr('Likes','fb',2)}${_socSortHdr('Comments','fb',3)}</div>`;
+    sorted.slice(0,30).forEach(p=>{
+      const img=p.image_url?`<a href="${p.permalink||'#'}" target="_blank" rel="noopener"><img class="soc-thumb" src="${p.image_url}" loading="lazy" onerror="this.outerHTML='<div class=soc-thumb-ph>📘</div>'"></a>`:`<div class="soc-thumb-ph">📘</div>`;
+      const caption=p.permalink?`<a href="${p.permalink}" target="_blank" rel="noopener">${(p.message||'').slice(0,90)||'(no text)'}</a>`:((p.message||'').slice(0,90)||'(no text)');
+      h+=`<div class="soc-row soc-fb">
+        <div class="soc-cell soc-date ${_scCls('fb',0)}">${fmDay(p.date)}</div>
+        <div class="soc-cell">${img}</div>
+        <div class="soc-cell soc-caption soc-left ${_scCls('fb',1)}">${caption}</div>
+        <div class="soc-cell ${_scCls('fb',2)}">${(p.likes||0).toLocaleString()}</div>
+        <div class="soc-cell ${_scCls('fb',3)}">${(p.comments||0).toLocaleString()}</div>
+      </div>`;
+    });
+    h+=`</div></div></div>`;
+  }
+
+  el.innerHTML=h;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INSTAGRAM TAB
+   ══════════════════════════════════════════════════════════════════════════ */
+function renderInstagram(){
+  const el=document.getElementById('instagram-content');if(!el)return;
+  const studios=_socialStudios('instagram');
+  const from=document.getElementById('fFrom').value||null;
+  const to=document.getElementById('fTo').value||null;
+
+  if(!studios.length){
+    el.innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">No Instagram data available. Run: python scripts/fetch_social_insights.py --source instagram</div>';
+    return;
+  }
+
+  const filtered=studios.map(s=>({
+    ...s,
+    current_followers:s.current_followers||0,
+    daily:(s.daily||[]).filter(r=>(!from||r.date>=from)&&(!to||r.date<=to)),
+    posts:(s.posts||[]).filter(p=>(!from||p.date>=from)&&(!to||p.date<=to))
+  }));
+
+  const allPosts=filtered.flatMap(s=>s.posts.map(p=>({...p,studio:s.studio,code:s.code})));
+  let totalReach=0;
+  filtered.forEach(s=>s.daily.forEach(r=>{totalReach+=(r.reach||0);}));
+  const days=new Set(filtered.flatMap(s=>s.daily.map(r=>r.date))).size||1;
+  const avgReach=Math.round(totalReach/days);
+  const totalFollowers=filtered.reduce((a,s)=>a+(s.current_followers||0),0);
+  const hasFollowers=filtered.some(s=>s.current_followers>0);
+
+  let h='';
+
+  // KPI cards
+  h+=`<div class="kpi-grid">`;
+  if(hasFollowers)h+=`<div class="kpi-card"><div class="kpi-card-label">Total Followers</div><div class="kpi-card-val">${totalFollowers.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Avg Daily Reach</div><div class="kpi-card-val">${avgReach.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Total Reach</div><div class="kpi-card-val">${totalReach.toLocaleString()}</div></div>`;
+  h+=`<div class="kpi-card"><div class="kpi-card-label">Posts in Period</div><div class="kpi-card-val">${allPosts.length}</div></div>`;
+  h+=`</div>`;
+
+  // Posts table — sorted (same style as dashboard.html)
+  if(allPosts.length){
+    const ST=_SOC_SORTS.ig;
+    const KEYS=['date','caption','media_type','likes','comments','engagement'];
+    const NUM=[3,4,5];
+    let sorted=[...allPosts];
+    if(ST.col>=0){const k=KEYS[ST.col];const isN=NUM.includes(ST.col);sorted.sort((a,b)=>{let va=isN?parseInt(a[k])||0:String(a[k]||'').toLowerCase();let vb=isN?parseInt(b[k])||0:String(b[k]||'').toLowerCase();return(va<vb?-1:va>vb?1:0)*(ST.dir==='asc'?1:-1)});}
+
+    h+=`<div class="chart-card"><div class="chart-card-title">Best Performing Posts <span style="font-size:11px;color:#8aaabb;font-style:normal;font-weight:400">(click column header to sort)</span></div>`;
+    h+=`<div style="overflow-x:auto"><div style="min-width:580px">`;
+    h+=`<div class="soc-row soc-th soc-ig">${_socSortHdr('Date','ig',0)}<div class="soc-cell"></div>${_socSortHdr('Post','ig',1)}${_socSortHdr('Type','ig',2)}${_socSortHdr('Likes','ig',3)}${_socSortHdr('Comments','ig',4)}${_socSortHdr('Eng.','ig',5)}</div>`;
+    sorted.slice(0,30).forEach(p=>{
+      const isVid=p.media_type==='VIDEO'||p.media_type==='REELS';
+      const img=p.image_url
+        ?`<a href="${p.permalink||'#'}" target="_blank" rel="noopener" style="position:relative;display:block;width:60px"><img class="soc-thumb" src="${p.image_url}" loading="lazy" onerror="this.outerHTML='<div class=soc-thumb-ph>📷</div>'">${isVid?'<div style="position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,.6);color:#fff;border-radius:3px;font-size:9px;padding:1px 4px">▶</div>':''}</a>`
+        :`<div class="soc-thumb-ph">📷</div>`;
+      const caption=p.permalink?`<a href="${p.permalink}" target="_blank" rel="noopener">${(p.caption||'').slice(0,80)||'(no caption)'}</a>`:((p.caption||'').slice(0,80)||'(no caption)');
+      const typeLabel=p.media_type==='CAROUSEL_ALBUM'?'CAROUSEL':(p.media_type||'—');
+      h+=`<div class="soc-row soc-ig">
+        <div class="soc-cell soc-date ${_scCls('ig',0)}">${fmDay(p.date)}</div>
+        <div class="soc-cell">${img}</div>
+        <div class="soc-caption soc-cell ${_scCls('ig',1)}">${caption}</div>
+        <div class="soc-cell ${_scCls('ig',2)}">${typeLabel}</div>
+        <div class="soc-cell ${_scCls('ig',3)}">${(p.likes||0).toLocaleString()}</div>
+        <div class="soc-cell ${_scCls('ig',4)}">${(p.comments||0).toLocaleString()}</div>
+        <div class="soc-cell ${_scCls('ig',5)}">${(p.engagement||0).toLocaleString()}</div>
+      </div>`;
+    });
+    h+=`</div></div></div>`;
+  }
+
+  el.innerHTML=h;
+}
+
+function _drawIgChart(filtered){
+  const ctx=document.getElementById('igReachChart');if(!ctx)return;
+  if(_ch.ig){_ch.ig.destroy();_ch.ig=null;}
+  const allDates=[...new Set(filtered.flatMap(s=>s.daily.map(r=>r.date)))].sort();
+  if(!allDates.length)return;
+  const isMob=window.innerWidth<=768;
+  _ch.ig=new Chart(ctx,{type:'bar',data:{
+    labels:allDates.map(d=>fmDay(d)),
+    datasets:filtered.map(s=>{
+      const byDate={};s.daily.forEach(r=>{byDate[r.date]=r.reach||0});
+      const color=GA4_COLORS[_C2S[s.code]]||'#833ab4';
+      return{label:s.studio,data:allDates.map(d=>byDate[d]||0),backgroundColor:color+'cc',borderColor:color,borderWidth:1};
+    })
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:'Oswald',size:12,style:'italic'},usePointStyle:true,padding:14}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},color:'#5a7a8a',autoSkip:true,maxTicksLimit:isMob?5:14,maxRotation:0}},
+      y:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'}}}}});
+}
+
+/* ── LOAD ─────────────────────────────────────────────────────────────── */
+async function init(){
+  // Load all data files
+  const [dataRes,scRes,mktRes,dashRes,gadsRes,socialRes,salesRes,gbpRes]=await Promise.allSettled([
+    fetch('../data.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject()),
+    fetch('nso_scorecard_data.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject()),
+    fetch('marketing_data.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject()),
+    fetch('dashboard_data.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject()),
+    fetch('nso_google_ads.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject()),
+    fetch('social_insights.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject()),
+    fetch('nso_sales_data.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject()),
+    fetch('gbp_data.json?_='+Date.now()).then(r=>r.ok?r.json():Promise.reject())
+  ]);
+
+  if(dataRes.status==='fulfilled'){RAW=dataRes.value;if(!RAW.daily_detail)RAW.daily_detail=[];if(!RAW.monthly_detail)RAW.monthly_detail=[]}
+  else{console.error('data.json failed');RAW={daily_detail:[],monthly_detail:[],sources:[],studios:[]}}
+
+  if(scRes.status==='fulfilled'){SC=scRes.value}
+  else{console.warn('nso_scorecard_data.json not found');SC={studios:[]};document.getElementById('summaryContent').innerHTML='<div style="padding:40px;text-align:center;color:#8aaabb;font-family:Oswald,sans-serif;font-style:italic">Scorecard data not yet available for NSO studios.</div>'}
+
+  if(mktRes.status==='fulfilled'){GA4_RAW=mktRes.value.ga4_traffic||[];META_RAW=mktRes.value.meta_ads||[]}
+  else{console.warn('marketing_data.json not found');GA4_RAW=[];META_RAW=[]}
+
+  if(dashRes.status==='fulfilled'){
+    if(!META_RAW.length)META_RAW=dashRes.value.tabs?.meta_ads||[];
+    if(!GA4_RAW.length)GA4_RAW=dashRes.value.tabs?.ga4_traffic||[];
+  }else{console.warn('dashboard_data.json not found')}
+
+  if(gadsRes.status==='fulfilled'){GOOGLE_RAW=gadsRes.value.google_ads||[]}
+  else{console.warn('nso_google_ads.json not found');GOOGLE_RAW=[]}
+
+  if(socialRes.status==='fulfilled'){SOCIAL_RAW=socialRes.value}
+  else{console.warn('social_insights.json not found');SOCIAL_RAW={facebook:[],instagram:[]}}
+
+  if(salesRes.status==='fulfilled'){
+    NSO_SALES=salesRes.value;
+    NSO_SALES_ROWS=[];
+    Object.values(NSO_SALES.studios||{}).forEach(s=>{
+      (s.daily||[]).forEach(r=>{
+        NSO_SALES_ROWS.push({date:r.date,studio:s.name,source:r.source||'Unknown',first_sales:r.presales||0,cancellations:r.cancellations||0,gross_revenue:r.gross_revenue||0});
+      });
+    });
+  }else{console.warn('nso_sales_data.json not found');NSO_SALES=null;NSO_SALES_ROWS=[]}
+
+  if(gbpRes.status==='fulfilled'){GBP_RAW=gbpRes.value}
+  else{console.warn('gbp_data.json not found');GBP_RAW=null}
+
+  // Build multi-selects
+  _buildMS('studioMenu','studioLabel',NSO,[]);
+  const _allSrc=[...new Set([...(RAW.sources||[]),...NSO_SALES_ROWS.map(r=>r.source)])].filter(Boolean).sort();
+  _buildMS('sourceMenu','sourceLabel',_allSrc,EXCL_SRC);
+
+  // Populate summary studio dropdown
+  const sel=document.getElementById('summaryStudio');
+  sel.innerHTML=(SC.studios||[]).filter(s=>!s.name.toLowerCase().includes('naples')).map(s=>`<option value="${s.code}">${s.name}</option>`).join('');
+  if(!sel.options.length)sel.innerHTML='<option>No scorecard data</option>';
+
+  // Fallback dates
+  const nsoRows=[...(RAW.daily_detail||[]),...(RAW.monthly_detail||[])].filter(r=>NSO.includes(r.studio));
+  const allKeys=nsoRows.map(r=>r.date||r.month).filter(Boolean).sort();
+  if(allKeys.length){const lk=allKeys[allKeys.length-1].slice(0,7);const df=document.getElementById('fFrom').value.slice(0,7);const has=allKeys.some(k=>k>=df+'-01'&&k<=df+'-31');if(!has){const ld=new Date(lk+'-01T00:00:00Z');document.getElementById('fFrom').value=new Date(Date.UTC(ld.getUTCFullYear(),ld.getUTCMonth(),1)).toISOString().slice(0,10);document.getElementById('fTo').value=new Date(Date.UTC(ld.getUTCFullYear(),ld.getUTCMonth()+1,0)).toISOString().slice(0,10)}}
+
+  renderSummary();
+  applyFilters();
+}
+init();
+</script>
+</body>
+</html>
