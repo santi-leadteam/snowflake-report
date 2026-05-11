@@ -1,878 +1,1181 @@
-"""
-fetch_paid_ads.py
-─────────────────────────────────────────────────────────────
-ETL Meta Ads → paid-ads-data.json
-"""
-from __future__ import annotations
-import json
-import logging
-import os
-import re
-import sys
-from collections import defaultdict
-from datetime import date, datetime, timedelta, timezone
-from datetime import datetime, timezone
-from pathlib import Path
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SWEAT440 — Open Studio Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared/style.css"/>
+</head>
+<body>
 
-import yaml
+</head>
+<body>
 
-from meta_client import MetaClient, leads_of, purchases_of, trials_of
+<nav class="nav">
+  <div class="nav-logo"><img src="logo.png" alt="SWEAT440"/></div>
+  <div class="nav-tabs" id="navTabs">
 
+    <button class="nav-tab active" onclick="switchTab('summary',this)">Summary</button>
 
-REPO_ROOT = Path(__file__).resolve().parent
-CONFIG_PATH = REPO_ROOT / "config.yaml"
-OUT_PATH = REPO_ROOT / "paid-ads-data.json"
+    <div class="nav-group">
+      <button class="nav-tab nav-group-label" onclick="toggleNavGroup('funnel-group',this)">Funnel ▾</button>
+      <div class="nav-submenu" id="funnel-group">
+        <button class="nav-tab nav-sub" onclick="switchTab('funnel',this)">All Stages</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('leads',this)">Leads</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('stage',this)">First Timers</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('members',this)">Members</button>
+      </div>
+    </div>
 
-DAILY_WINDOW_DAYS = 90
+    <button class="nav-tab" onclick="switchTab('cpr',this)">Blended CPR</button>
 
+    <div class="nav-group">
+      <button class="nav-tab nav-group-label" onclick="toggleNavGroup('paid-group',this)">Paid Channels ▾</button>
+      <div class="nav-submenu" id="paid-group">
+        <button class="nav-tab nav-sub" onclick="switchTab('meta',this)">Meta Ads</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('google',this)">Google Ads</button>
+      </div>
+    </div>
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    stream=sys.stdout,
-)
-log = logging.getLogger("paid-ads-etl")
+    <div class="nav-group">
+      <button class="nav-tab nav-group-label" onclick="toggleNavGroup('organic-group',this)">Organic Channels ▾</button>
+      <div class="nav-submenu" id="organic-group">
+        <button class="nav-tab nav-sub" onclick="switchTab('website',this)">Website</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('gbp',this)">Google Business Profile</button>
+        <button class="nav-tab nav-sub" onclick="switchTab('instagram',this)">Instagram</button>
+      </div>
+    </div>
 
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-# ── helpers de clasificación ─────────────────────────────────────────
-def match_studio(name: str, studios: list[dict]) -> dict | None:
-    n = (name or "").lower()
-    for s in studios:
-        if s.get("match") and s["match"].lower() in n:
-            return s
-    return None
+<div class="controls-bar">
+  <button class="controls-toggle" id="ctrlToggle" onclick="toggleControls()">Filters ▾</button>
+  <div class="controls-inner" id="ctrlInner">
+    <span class="ctrl-label">Studio</span>
+    <div class="multi-select" id="studioDropdown">
+      <button class="ms-trigger" onclick="toggleDropdown('studio')">
+        <span id="studioLabel">All Studios</span><span class="ms-arrow">▾</span>
+      </button>
+      <div class="ms-menu" id="studioMenu"></div>
+    </div>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-label">Source</span>
+    <div class="multi-select" id="sourceDropdown">
+      <button class="ms-trigger" onclick="toggleDropdown('source')">
+        <span id="sourceLabel">All Sources</span><span class="ms-arrow">▾</span>
+      </button>
+      <div class="ms-menu" id="sourceMenu"></div>
+    </div>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-label">Date range</span>
+    <div class="ctrl-date">
+      <input type="date" id="fFrom" onchange="applyFilters()"/>
+      <span style="font-size:12px;color:#5a7a8a">→</span>
+      <input type="date" id="fTo" onchange="applyFilters()"/>
+    </div>
+  </div>
+</div>
 
+<div class="main">
+  <div class="tab-content active" id="tab-summary">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">📊</div>
+      <div class="placeholder-title">Summary</div>
+      <div class="placeholder-sub">High-level overview across all channels — coming soon</div>
+    </div>
+  </div>
 
-def _has_token(name: str, token: str) -> bool:
-    if not name or not token:
-        return False
-    norm = re.sub(r"[_\-/|]+", " ", name.upper())
-    tok = token.upper()
-    pattern = r"(?:(?<=^)|(?<=\s))" + re.escape(tok) + r"(?=$|\s)"
-    return re.search(pattern, norm) is not None
+  <div class="tab-content" id="tab-funnel">
+    <div class="chart-card">
+      <div class="chart-card-title">Conversion funnel</div>
+      <div class="funnel-wrap" id="funnelBars"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">Funnel over time</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="toggle-group" style="margin-bottom:0">
+          <button class="tog-btn on" data-ds="0" onclick="toggleDs(this,0)" style="border-color:#00A3E0;background:#00A3E0;color:#000"><span class="dot" style="background:#000"></span>Leads</button>
+          <button class="tog-btn on" data-ds="1" onclick="toggleDs(this,1)" style="border-color:#00FFC2;background:#00FFC2;color:#000"><span class="dot" style="background:#000"></span>First Timers</button>
+          <button class="tog-btn on" data-ds="2" onclick="toggleDs(this,2)" style="border-color:#DDFF00;background:#DDFF00;color:#000"><span class="dot" style="background:#000"></span>New Members</button>
+        </div>
+        <div class="gran-group">
+          <button class="gran-btn" id="granDaily"   onclick="setGran('daily')">Daily</button>
+          <button class="gran-btn" id="granWeekly"  onclick="setGran('weekly')">Weekly</button>
+          <button class="gran-btn active" id="granMonthly" onclick="setGran('monthly')">Monthly</button>
+        </div>
+      </div>
+      <div style="position:relative;width:100%;height:260px">
+        <canvas id="trendChart" role="img" aria-label="Line chart of leads, first timers and new members over time">Monthly funnel trend data.</canvas>
+      </div>
+    </div>
+  </div>
 
+  <!-- LEADS TAB -->
+  <div class="tab-content" id="tab-leads">
+    <div id="leads-kpis" class="kpi-grid three"></div>
+    <div class="chart-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="chart-card-title" style="margin-bottom:0">Leads over time  by source</div>
+        <div class="gran-group" id="gran-leadsAreaChart">
+          <button class="gran-btn"        id="gran-daily-leadsAreaChart"  onclick="setAreaGran('leadsAreaChart','daily')">Daily</button>
+          <button class="gran-btn active" id="gran-weekly-leadsAreaChart" onclick="setAreaGran('leadsAreaChart','weekly')">Weekly</button>
+          <button class="gran-btn"        id="gran-monthly-leadsAreaChart"onclick="setAreaGran('leadsAreaChart','monthly')">Monthly</button>
+        </div>
+      </div>
+      <div class="toggle-group" id="leads-src-toggles"></div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="leadsAreaChart" height="260" role="img" aria-label="Area chart of leads by source over time"></canvas></div>
+    </div>
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-card-title">Source participation</div>
+        <div class="ring-wrap">
+          <div class="ring-canvas-wrap"><canvas id="leadsRingChart" height="180" width="180" role="img" aria-label="Ring chart of leads by source"></canvas></div>
+          <div class="ring-legend" id="leadsRingLegend"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Studio ranking</div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="leadsStudioTable">
+            <thead><tr><th>Studio</th><th class="num">Leads</th><th class="num">% of total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
-def match_audience(name: str, tokens_by_aud: dict[str, list[str]]) -> str | None:
-    for aud, tokens in tokens_by_aud.items():
-        for tok in tokens:
-            if _has_token(name, tok):
-                return aud
-    return None
+  <!-- FIRST TIMERS TAB -->
+  <div class="tab-content" id="tab-stage">
+    <div id="ft-kpis" class="kpi-grid three"></div>
+    <div class="chart-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="chart-card-title" style="margin-bottom:0">First timers over time  by source</div>
+        <div class="gran-group" id="gran-ftAreaChart">
+          <button class="gran-btn"        id="gran-daily-ftAreaChart"  onclick="setAreaGran('ftAreaChart','daily')">Daily</button>
+          <button class="gran-btn active" id="gran-weekly-ftAreaChart" onclick="setAreaGran('ftAreaChart','weekly')">Weekly</button>
+          <button class="gran-btn"        id="gran-monthly-ftAreaChart"onclick="setAreaGran('ftAreaChart','monthly')">Monthly</button>
+        </div>
+      </div>
+      <div class="toggle-group" id="ft-src-toggles"></div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="ftAreaChart" height="260" role="img" aria-label="Area chart of first timers by source over time"></canvas></div>
+    </div>
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-card-title">Source participation</div>
+        <div class="ring-wrap">
+          <div class="ring-canvas-wrap"><canvas id="ftRingChart" height="180" width="180" role="img" aria-label="Ring chart of first timers by source"></canvas></div>
+          <div class="ring-legend" id="ftRingLegend"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Studio ranking</div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="ftStudioTable">
+            <thead><tr><th>Studio</th><th class="num">First Timers</th><th class="num">% of total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div><!-- end tab-stage -->
 
+<!-- NEW MEMBERS TAB -->
+  <div class="tab-content" id="tab-members">
+    <div id="mem-kpis" class="kpi-grid three"></div>
+    <div class="chart-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+        <div class="chart-card-title" style="margin-bottom:0">New members over time  by source</div>
+        <div class="gran-group" id="gran-memAreaChart">
+          <button class="gran-btn"        id="gran-daily-memAreaChart"  onclick="setAreaGran('memAreaChart','daily')">Daily</button>
+          <button class="gran-btn active" id="gran-weekly-memAreaChart" onclick="setAreaGran('memAreaChart','weekly')">Weekly</button>
+          <button class="gran-btn"        id="gran-monthly-memAreaChart"onclick="setAreaGran('memAreaChart','monthly')">Monthly</button>
+        </div>
+      </div>
+      <div class="toggle-group" id="mem-src-toggles"></div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="memAreaChart" height="260" role="img" aria-label="Area chart of new members by source over time"></canvas></div>
+    </div>
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-card-title">Source participation</div>
+        <div class="ring-wrap">
+          <div class="ring-canvas-wrap"><canvas id="memRingChart" height="180" width="180" role="img" aria-label="Ring chart of new members by source"></canvas></div>
+          <div class="ring-legend" id="memRingLegend"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Studio ranking</div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="memStudioTable">
+            <thead><tr><th>Studio</th><th class="num">New Members</th><th class="num">% of total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
-def match_pillar(name: str, tokens_by_pillar: dict[str, list[str]]) -> str | None:
-    for pillar, tokens in tokens_by_pillar.items():
-        for tok in tokens:
-            if _has_token(name, tok):
-                return pillar
-    return None
+  <!-- CPR TAB -->
+  <div class="tab-content" id="tab-cpr">
+    <div class="chart-card" style="margin-bottom:20px">
+      <div class="chart-card-title">Cost sources</div>
+      <div class="cpr-filter" id="cprCostFilter">
+        <span style="font-family:'Oswald',sans-serif;font-style:italic;font-size:12px;color:#5a7a8a;text-transform:uppercase;letter-spacing:1px">Include:</span>
+        <button class="cpr-tog on" data-cost="google"   onclick="toggleCPRCost(this)" style="border-color:#34A853;background:#34A853">Google Ads</button>
+        <button class="cpr-tog on" data-cost="meta"     onclick="toggleCPRCost(this)" style="border-color:#1877F2;background:#1877F2">Meta Ads</button>
+        <button class="cpr-tog on" data-cost="leadteam" onclick="toggleCPRCost(this)" style="border-color:#FF6B35;background:#FF6B35">Leadteam Fee</button>
+      </div>
+      <div id="cpr-warning" style="display:none;margin-top:10px;padding:10px 12px;background:#fff8e1;border-left:3px solid #f59e0b;border-radius:4px;font-size:12px;color:#92400e;line-height:1.5"></div>
+    </div>
+    <div id="cpr-spend-breakdown" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px"></div>
+    <div class="kpi-grid" id="cpr-kpis"></div>
+    <div class="chart-card">
+      <div class="chart-card-title">Cost per result  over time</div>
+      <div class="toggle-group" id="cpr-toggles">
+        <button class="tog-btn on" data-ds="0" onclick="toggleCPRds(this,0)" style="border-color:#00A3E0;background:#00A3E0;color:#000"><span class="dot" style="background:#000"></span>Blended CPL</button>
+        <button class="tog-btn on" data-ds="1" onclick="toggleCPRds(this,1)" style="border-color:#00FFC2;background:#00FFC2;color:#000"><span class="dot" style="background:#000"></span>Blended CPFT</button>
+        <button class="tog-btn on" data-ds="2" onclick="toggleCPRds(this,2)" style="border-color:#DDFF00;background:#DDFF00;color:#000"><span class="dot" style="background:#000"></span>Blended CPA</button>
 
+      </div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="cprChart" role="img" aria-label="Line chart of cost per result over time"></canvas></div>
+    </div>
+  </div>
 
-_STOPWORDS = {
-    "V1", "V2", "V3", "V4", "V5", "A", "B", "C", "TEST", "VER", "VERSION",
-    "WAFM", "WIN", "FREE", "MONTH", "CLASS", "OPEN", "STUDIOS", "STUDIO",
-    "PROMO", "AD", "ADS", "COPY", "CREATIVE",
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
-    "ENE", "ABR", "AGO", "DIC",
+  <!-- META ADS TAB -->
+  <div class="tab-content" id="tab-meta">
+
+    <!-- KPI row: 6 cards -->
+    <div class="kpi-grid" id="meta-kpis" style="grid-template-columns:repeat(6,1fr);margin-bottom:20px"></div>
+
+    <!-- Active Ads table -->
+    <div class="chart-card" style="margin-bottom:20px">
+      <div class="chart-card-title">Active Ads</div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="meta-ads-table">
+          <thead>
+            <tr>
+              <th style="width:56px"></th>
+              <th>Ad</th>
+              <th class="num">Impressions</th>
+              <th class="num">Clicks</th>
+              <th class="num">CTR</th>
+              <th class="num">Spend</th>
+              <th class="num">Leads</th>
+              <th class="num">CPL</th>
+              <th class="num">Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Studio breakdown -->
+    <div class="chart-card">
+      <div class="chart-card-title">Studio Breakdown</div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="meta-studio-table">
+          <thead>
+            <tr>
+              <th>Studio</th>
+              <th class="num">Impressions</th>
+              <th class="num">Clicks</th>
+              <th class="num">CTR</th>
+              <th class="num">Spend</th>
+              <th class="num">Leads</th>
+              <th class="num">CPL</th>
+              <th class="num">Trials</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <!-- end tab-meta -->
+
+  <!-- GOOGLE ADS TAB -->
+  <div class="tab-content" id="tab-google">
+    <div class="kpi-grid" id="google-kpis" style="grid-template-columns:repeat(6,1fr);margin-bottom:20px"></div>
+    <div class="chart-card" style="margin-bottom:20px"><div class="chart-card-title">Performance over time</div><div style="position:relative;width:100%;height:260px"><canvas id="googleTrendChart" role="img" aria-label="Google Ads performance over time"></canvas></div></div>
+    <div class="chart-card" style="margin-bottom:20px"><div class="chart-card-title">Studio Breakdown</div><div style="overflow-x:auto"><table class="data-table" id="google-studio-table"><thead><tr><th>Studio</th><th class="num">Spend</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">Leads</th><th class="num">Calls</th><th class="num">Directions</th><th class="num">Opportunities</th><th class="num">Cost / Opp</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-card-title">Headlines performance</div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="google-headlines-table">
+            <thead><tr><th>Headline</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Rating</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Descriptions performance</div>
+        <div style="overflow-x:auto">
+          <table class="data-table" id="google-desc-table">
+            <thead><tr><th>Description</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">CTR</th><th class="num">Rating</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-top:20px">
+      <div class="chart-card-title" style="margin-bottom:12px">Brand Awareness</div>
+      <div class="placeholder-tab" style="min-height:120px">
+        <div class="placeholder-icon" style="font-size:24px">🏷️</div>
+        <div class="placeholder-sub">Display, YouTube and brand search campaigns — coming soon</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-website">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">🌐</div>
+      <div class="placeholder-title">Website</div>
+      <div class="placeholder-sub">Website traffic and conversion analytics — coming soon</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-gbp">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">📍</div>
+      <div class="placeholder-title">Google Business Profile</div>
+      <div class="placeholder-sub">Local search visibility, calls and direction requests — coming soon</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-instagram">
+    <div class="placeholder-tab">
+      <div class="placeholder-icon">📸</div>
+      <div class="placeholder-title">Instagram</div>
+      <div class="placeholder-sub">Organic Instagram reach, engagement and profile visits — coming soon</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="shared/utils.js"></script>
+<script>
+// -- Dashboard state -------------------------------------------------------
+let RAW = null;
+let trendChart = null;
+let GRAN = 'weekly';
+const COLORS = ['#00A3E0','#00FFC2','#DDFF00']; // Leads, First Timers, New Members
+const AREA_GRAN = {leadsAreaChart:'weekly', ftAreaChart:'weekly', memAreaChart:'weekly'};
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  // Open parent group if clicking a sub-item
+  if (btn && btn.closest('.nav-submenu')) {
+    document.querySelectorAll('.nav-submenu').forEach(g => g.classList.remove('open'));
+    document.querySelectorAll('.nav-group-label').forEach(b => b.classList.remove('open'));
+    btn.closest('.nav-submenu').classList.add('open');
+    btn.closest('.nav-group').querySelector('.nav-group-label').classList.add('open');
+  }
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('navTabs').classList.remove('open');
+  // Rebuild charts after tab is visible (Chart.js needs visible canvas to measure dimensions)
+  if (['leads','stage','members'].includes(id) && window._lastCurrFiltered) {
+    buildStageTabs(window._lastCurrFiltered, window._lastPpFiltered, window._lastPyFiltered, window._lastPpLabel, window._lastPyLabel);
+  }
+  if (id === 'cpr')    { buildCPRTab(); checkCPRWarning(); }
+  if (id === 'meta')   buildMetaTab();
+  if (id === 'google') buildGoogleTab();
+  // Hide source filter for single-source tabs
+  const singleSourceTabs = ['meta', 'google', 'website', 'gbp', 'instagram'];
+  const srcDropEl  = document.getElementById('sourceDropdown');
+  const srcLabelEl = srcDropEl ? srcDropEl.previousElementSibling : null;
+  const srcSepEl   = srcLabelEl ? srcLabelEl.previousElementSibling : null;
+  const showSrc = !singleSourceTabs.includes(id);
+  if (srcDropEl)  srcDropEl.style.display  = showSrc ? '' : 'none';
+  if (srcLabelEl && srcLabelEl.tagName === 'SPAN')           srcLabelEl.style.display = showSrc ? '' : 'none';
+  if (srcSepEl   && srcSepEl.classList.contains('ctrl-sep')) srcSepEl.style.display   = showSrc ? '' : 'none';
 }
 
-_GENERIC_PREFIXES = {
-    "VIDEO", "REEL", "REELS", "IMAGE", "PHOTO", "STATIC",
-    "CAROUSEL", "GIF", "STORY", "STORIES",
+
+function toggleNav() { document.getElementById('navTabs').classList.toggle('open'); }
+
+
+function toggleControls() {
+  const el = document.getElementById('ctrlInner');
+  el.classList.toggle('open');
+  document.getElementById('ctrlToggle').textContent = el.classList.contains('open') ? 'Filters ▴' : 'Filters ▾';
 }
 
-# Fallback por nombre cuando Meta no devuelve creative info.
-_VIDEO_KEYWORDS = {"VIDEO", "REEL", "REELS", "GIF", "STORY", "STORIES"}
-_STATIC_KEYWORDS = {"STATIC", "IMAGE", "PHOTO", "CAROUSEL"}
+// Date inputs set in loadData() after utils.js is available
 
 
-def _media_type_from_creative(creative: dict) -> str | None:
-    """
-    Determina Static vs Video usando el objeto `creative` de Meta.
-    Devuelve "Video", "Static" o None si no se puede decidir.
+async function loadData() {
+  const [rawRes, metaRes, googleRes] = await Promise.allSettled([
+    fetch('data.json?_='            + Date.now()),
+    fetch('paid-ads-data.json?_='   + Date.now()),
+    fetch('google-ads-data.json?_=' + Date.now()),
+  ]);
+  try {
+    RAW = await rawRes.value.json();
+    if (!RAW.daily_detail)   RAW.daily_detail   = [];
+    if (!RAW.monthly_detail) RAW.monthly_detail = [];
+  } catch(e) {
+    console.warn('Using mock data:', e); RAW = getMock();
+  }
+  try { META_ADS_RAW   = await metaRes.value.json();   } catch(e) { console.warn('paid-ads-data.json unavailable:', e); }
+  try { GOOGLE_ADS_RAW = await googleRes.value.json(); } catch(e) { console.warn('google-ads-data.json unavailable:', e); }
+  // Set default date range: year to date
+  const _today = new Date();
+  const _jan1  = new Date(_today.getFullYear(), 0, 1);
+  document.getElementById('fFrom').value = localDateStr(_jan1);
+  document.getElementById('fTo').value   = localDateStr(_today);
 
-    Para SWEAT440 la mayoría de ads son object_type=LINK con la info de
-    imagen/video DENTRO de object_story_spec, así que también miramos ahí.
+  buildMultiSelect('studioMenu', 'studioLabel', RAW.studios, DEFAULT_EXCL_STUDIOS);
+  buildSourceSelect('sourceMenu', 'sourceLabel', RAW.sources, DEFAULT_EXCL_SOURCES);
+  setGran('weekly');
 
-    Orden de prioridad:
-      1. object_type explícito ("VIDEO" / "PHOTO") → decide directo.
-      2. video_id / image_hash a nivel top.
-      3. object_story_spec.video_data → Video.
-      4. object_story_spec.link_data: video_id → Video, image_hash/picture → Static.
-      5. object_story_spec.photo_data → Static.
-      6. asset_feed_spec (si por alguna razón viene): videos → Video, images → Static.
-    """
-    if not creative:
-        return None
-
-    ot = (creative.get("object_type") or "").upper()
-    if ot == "VIDEO":
-        return "Video"
-    if ot == "PHOTO":
-        return "Static"
-
-    # Top-level
-    if creative.get("video_id"):
-        return "Video"
-    if creative.get("image_hash"):
-        return "Static"
-
-    # Anidado en object_story_spec — donde Meta esconde los datos cuando
-    # object_type es LINK / SHARE.
-    oss = creative.get("object_story_spec") or {}
-    if isinstance(oss, dict):
-        vd = oss.get("video_data") or {}
-        if isinstance(vd, dict) and (vd.get("video_id") or vd.get("image_url")):
-            return "Video"
-        ld = oss.get("link_data") or {}
-        if isinstance(ld, dict):
-            if ld.get("video_id"):
-                return "Video"
-            if ld.get("image_hash") or ld.get("picture"):
-                return "Static"
-        pd = oss.get("photo_data") or {}
-        if isinstance(pd, dict) and pd.get("image_hash"):
-            return "Static"
-
-    # Asset feed spec (dynamic creatives) — fallback histórico
-    afs = creative.get("asset_feed_spec") or {}
-    if isinstance(afs, dict):
-        videos = afs.get("videos") or []
-        images = afs.get("images") or []
-        if videos:
-            return "Video"
-        if images:
-            return "Static"
-
-    return None
-
-
-def _media_type_from_name(ad_name: str) -> str:
-    """Fallback por nombre — usado solo si no hay creative info."""
-    if not ad_name:
-        return "Other"
-    words = {w.upper() for w in re.findall(r"\w+", ad_name)}
-    if words & _VIDEO_KEYWORDS:
-        return "Video"
-    if words & _STATIC_KEYWORDS:
-        return "Static"
-    return "Other"
-
-
-def detect_media_type(ad_name: str, creative: dict | None = None) -> str:
-    """
-    Determina "Video" / "Static" / "Other".
-    Prioriza la info del creative de Meta (object_type / video_id / image_hash).
-    Cae al heurístico de nombre si Meta no devolvió esos campos.
-    """
-    via_creative = _media_type_from_creative(creative or {})
-    if via_creative:
-        return via_creative
-    return _media_type_from_name(ad_name)
-
-
-def detect_concept(
-    ad_name: str,
-    *,
-    studio_match: str | None,
-    audience_tokens_flat: set[str],
-    pillar_tokens_flat: set[str],
-    state_code: str | None = None,
-) -> str:
-    if not ad_name:
-        return "(other)"
-    text = ad_name
-
-    if studio_match:
-        text = re.sub(re.escape(studio_match), " ", text, flags=re.IGNORECASE)
-
-    text = re.sub(r"\b[A-Z]{2}[\-\s]?\d{2,3}\b", " ", text)
-    text = re.sub(r"[_\-/|]+", " ", text)
-
-    all_class_tokens = {t.upper() for t in audience_tokens_flat} | {t.upper() for t in pillar_tokens_flat}
-    words_out = []
-    for raw in re.split(r"\s+", text):
-        w = raw.strip()
-        if not w:
-            continue
-        upper = w.upper()
-        if upper in all_class_tokens:
-            continue
-        if upper in _STOPWORDS:
-            continue
-        if len(w) == 2 and w.isalpha() and w.isupper():
-            continue
-        if re.fullmatch(r"\d+", w):
-            continue
-        if re.fullmatch(r"[Vv]\d+", w):
-            continue
-        if len(w) < 3:
-            continue
-        words_out.append(w)
-
-    if not words_out:
-        return "(other)"
-
-    primary = None
-    primary_idx = 0
-    for i, w in enumerate(words_out):
-        if w[0].isupper():
-            primary = w
-            primary_idx = i
-            break
-    if primary is None:
-        primary = words_out[0]
-        primary_idx = 0
-
-    if primary.upper() in _GENERIC_PREFIXES:
-        for w in words_out[primary_idx + 1:]:
-            if len(w) >= 3 and w[0].isupper():
-                return f"{primary} - {w}"
-
-    return primary
-
-
-def safe_float(x, default=0.0):
-    try:
-        return float(x)
-    except (TypeError, ValueError):
-        return default
-
-
-# ── núcleo: procesar 1 campaña ───────────────────────────────────────
-def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
-    log.info(f"── Campaign: {c['display_name']} ({c['period_label']}) [{campaign_key}]")
-
-    ad_sets = meta.list_ad_sets(c["campaign_id"])
-    log.info(f"  {len(ad_sets)} ad sets")
-    adset_by_id = {a["id"]: a for a in ad_sets}
-
-    ads = meta.list_ads(c["campaign_id"])
-    log.info(f"  {len(ads)} ads")
-
-    # Recolectar creative_ids únicos y traerlos en batch desde Meta.
-    # La expansión `creative{...}` desde el endpoint de ads dropea sub-fields
-    # silenciosamente — por eso fetcheamos los creatives por ID directamente.
-    cids_per_ad: dict[str, str] = {}
-    for ad in ads:
-        ad_id = ad.get("id")
-        if not ad_id:
-            continue
-        cr = ad.get("creative") or {}
-        cid = cr.get("id")
-        if cid:
-            cids_per_ad[ad_id] = cid
-    unique_cids = list({cid for cid in cids_per_ad.values()})
-    log.info(f"  fetching {len(unique_cids)} unique creatives in batch...")
-    cdetails = meta.get_creatives_by_ids(unique_cids)
-    log.info(f"  got detail for {len(cdetails)}/{len(unique_cids)} creatives")
-
-    # Mapa ad_id → creative DETALLADO (incluye asset_feed_spec.images/videos).
-    creative_by_ad: dict[str, dict] = {}
-    for ad_id, cid in cids_per_ad.items():
-        creative_by_ad[ad_id] = cdetails.get(cid) or {}
-
-    # Conteos para diagnosticar la cobertura
-    n_with_creative = sum(1 for cr in creative_by_ad.values() if cr)
-    n_without_creative = len(creative_by_ad) - n_with_creative
-    log.info(
-        f"  creative info: {n_with_creative}/{len(creative_by_ad)} ads "
-        f"con creative ({n_without_creative} sin info → fallback por nombre)"
-    )
-
-    # Insights a nivel AD
-    ad_insights: list[dict] = []
-    for adset in ad_sets:
-        try:
-            rows = meta.get_insights(
-                adset["id"],
-                level="ad",
-                date_start=c["date_start"],
-                date_end=c["date_end"],
-            )
-            ad_insights.extend(rows)
-        except Exception as e:
-            log.warning(f"  ad set {adset.get('name','?')} ({adset['id']}) failed: {e}")
-    log.info(f"  {len(ad_insights)} ad-level insight rows")
-
-    daily = meta.get_daily_insights(
-        c["campaign_id"],
-        date_start=c["date_start"],
-        date_end=c["date_end"],
-    )
-    log.info(f"  {len(daily)} daily rows")
-
-    studios_cfg = c["studios"]
-
-    def _empty_bucket():
-        return {"spend": 0.0, "impressions": 0, "leads": 0, "ads": []}
-
-    studio_agg: dict[str, dict] = {
-        s["code"]: {
-            "code": s["code"], "name": s["name"], "state": s["state"],
-            "impressions": 0, "clicks": 0, "spend": 0.0, "reach": 0,
-            "leads": 0, "purchases": 0, "trials": 0,
-            "_audiences":   defaultdict(_empty_bucket),
-            "_pillars":     defaultdict(_empty_bucket),
-            "_concepts":    defaultdict(_empty_bucket),
-            "_media_types": defaultdict(_empty_bucket),
-        } for s in studios_cfg
+  // If default date range has no data, fall back to last available month in dataset
+  const allRows = [...(RAW.daily_detail||[]), ...(RAW.monthly_detail||[])];
+  const allKeys = allRows.map(r=>r.date||r.month).filter(Boolean).sort();
+  if (allKeys.length) {
+    const lastKey  = allKeys[allKeys.length-1].slice(0,7); // YYYY-MM
+    const defFrom  = document.getElementById('fFrom').value.slice(0,7);
+    const defTo    = document.getElementById('fTo').value.slice(0,7);
+    // Check if any data exists in default range
+    const hasData = allKeys.some(k => k >= defFrom+'-01' && k <= defTo+'-31');
+    if (!hasData) {
+      // Fall back to last month of available data
+      const lastDate = new Date(lastKey+'-01T00:00:00Z');
+      const y = lastDate.getUTCFullYear(), m = lastDate.getUTCMonth();
+      const firstOfLast = new Date(Date.UTC(y,m,1));
+      const lastOfLast  = new Date(Date.UTC(y,m+1,0));
+      document.getElementById('fFrom').value = firstOfLast.toISOString().slice(0,10);
+      document.getElementById('fTo').value   = lastOfLast.toISOString().slice(0,10);
     }
+  }
 
-    global_aud:        dict[str, dict] = defaultdict(_empty_bucket)
-    global_pillar:     dict[str, dict] = defaultdict(_empty_bucket)
-    global_concept:    dict[str, dict] = defaultdict(_empty_bucket)
-    global_media_type: dict[str, dict] = defaultdict(_empty_bucket)
+  applyFilters();
+}
 
-    aud_tokens_cfg    = c.get("audience_tokens", {}) or {}
-    pillar_tokens_cfg = c.get("pillar_tokens", {}) or {}
-    aud_flat    = {t for toks in aud_tokens_cfg.values() for t in toks}
-    pillar_flat = {t for toks in pillar_tokens_cfg.values() for t in toks}
 
-    ad_dims: dict[str, dict] = {}
+function applyFilters() {
+  if (!RAW) return;
+  const studios = getSelected('studioMenu');
+  const sources  = getSelected('sourceMenu');
+  const fromStr = document.getElementById('fFrom').value;
+  const toStr   = document.getElementById('fTo').value;
+  const from = fromStr ? new Date(fromStr+'T00:00:00Z') : new Date(RAW.monthly_detail[0]?.month+'T00:00:00Z');
+  const to   = toStr   ? new Date(toStr+'T23:59:59Z')   : new Date();
+  updateGranButtons(from, to);
 
-    # Diagnóstico de clasificación de media_type
-    mt_via_creative = 0
-    mt_via_name = 0
+  // Partial period rules — applied universally to ALL cards in ALL tabs
+  // Prev year: only show if range = complete calendar months
+  // Prev period: only show if range = complete calendar months
+  //             OR if the to-date is within 45 days of today (recent partial = unreliable)
+  const fullMonths  = typeof _isFullMonths === 'function' ? _isFullMonths(from, to) : true;
+  const daysToToday = (new Date() - to) / 86400000;
+  const recentPartial = !fullMonths && daysToToday < 45;
 
-    for ins in ad_insights:
-        adset = adset_by_id.get(ins.get("adset_id"), {})
-        studio = match_studio(adset.get("name", ""), studios_cfg)
-        if not studio:
-            continue
-
-        ad_name = ins.get("ad_name", "")
-        aud    = match_audience(ad_name, aud_tokens_cfg)
-        pillar = match_pillar(ad_name, pillar_tokens_cfg)
-        concept = detect_concept(
-            ad_name,
-            studio_match=studio.get("match"),
-            audience_tokens_flat=aud_flat,
-            pillar_tokens_flat=pillar_flat,
-            state_code=studio.get("state"),
-        )
-        # Clasificación de tipo de creatividad. Usamos creative (Meta API)
-        # como fuente primaria; ad_name es fallback.
-        creative = creative_by_ad.get(ins.get("ad_id")) or {}
-        via_creative = _media_type_from_creative(creative)
-        if via_creative:
-            media_type = via_creative
-            mt_via_creative += 1
-        else:
-            media_type = _media_type_from_name(ad_name)
-            mt_via_name += 1
-
-        spend = safe_float(ins.get("spend"))
-        impressions = int(safe_float(ins.get("impressions")))
-        clicks = int(safe_float(ins.get("clicks")))
-        reach = int(safe_float(ins.get("reach")))
-        leads = leads_of(ins)
-        purchases = purchases_of(ins)
-        trials = trials_of(ins)
-
-        agg = studio_agg[studio["code"]]
-        agg["impressions"] += impressions
-        agg["clicks"] += clicks
-        agg["spend"] += spend
-        agg["reach"] += reach
-        agg["leads"] += leads
-        agg["purchases"] += purchases
-        agg["trials"] += trials
-
-        def _bump(bucket: dict, ad: str):
-            bucket["spend"] += spend
-            bucket["impressions"] += impressions
-            bucket["leads"] += leads
-            if ad and ad not in bucket["ads"]:
-                bucket["ads"].append(ad)
-
-        if aud:
-            _bump(agg["_audiences"][aud], ad_name)
-            _bump(global_aud[aud], ad_name)
-        if pillar:
-            _bump(agg["_pillars"][pillar], ad_name)
-            _bump(global_pillar[pillar], ad_name)
-        if concept and concept != "(other)":
-            _bump(agg["_concepts"][concept], ad_name)
-            _bump(global_concept[concept], ad_name)
-        _bump(agg["_media_types"][media_type], ad_name)
-        _bump(global_media_type[media_type], ad_name)
-
-        ad_id = ins.get("ad_id")
-        if ad_id:
-            ad_dims[ad_id] = {
-                "studio_code": studio["code"],
-                "audience":    aud,
-                "pillar":      pillar,
-                "concept":     concept if concept and concept != "(other)" else None,
-                "media_type":  media_type,
-            }
-
-    log.info(
-        f"  media_type breakdown: {mt_via_creative} via Meta creative API, "
-        f"{mt_via_name} via name fallback"
-    )
-
-    # Totales
-    totals = {k: 0 for k in ["impressions", "clicks", "reach", "leads", "purchases", "trials"]}
-    totals["spend"] = 0.0
-    for s in studio_agg.values():
-        for k in ["impressions", "clicks", "reach", "leads", "purchases", "trials"]:
-            totals[k] += s[k]
-        totals["spend"] += s["spend"]
-    totals["spend"] = round(totals["spend"], 2)
-    totals["ctr"] = round((totals["clicks"] / totals["impressions"] * 100), 2) if totals["impressions"] else 0
-    totals["cpm"] = round((totals["spend"] / totals["impressions"] * 1000), 2) if totals["impressions"] else 0
-    totals["cpl"] = round((totals["spend"] / totals["leads"]), 2) if totals["leads"] else 0
-
-    log.info(
-        f"  totals: spend=${totals['spend']:.2f}  leads={totals['leads']}  "
-        f"trials={totals['trials']}  purchases={totals['purchases']}  "
-        f"CPL=${totals['cpl']:.2f}"
-    )
-
-    # ── armar estructuras JSON ──────────────────────────────────────
-    studios_out = []
-    for s in studios_cfg:
-        a = studio_agg[s["code"]]
-        cpl = round(a["spend"] / a["leads"], 2) if a["leads"] else 0
-        ctr = round(a["clicks"] / a["impressions"] * 100, 2) if a["impressions"] else 0
-        cpm = round(a["spend"] / a["impressions"] * 1000, 2) if a["impressions"] else 0
-        studios_out.append({
-            "code": a["code"],
-            "name": a["name"],
-            "state": a["state"],
-            "impressions": a["impressions"],
-            "clicks": a["clicks"],
-            "spend": round(a["spend"], 2),
-            "reach": a["reach"],
-            "ctr": ctr,
-            "cpm": cpm,
-            "leads": a["leads"],
-            "cpl": cpl,
-            "purchases": a["purchases"],
-            "trials": a["trials"],
-        })
-
-    audiences_out = []
-    for code, agg in studio_agg.items():
-        for aud, v in agg["_audiences"].items():
-            audiences_out.append({
-                "studio_code": code,
-                "audience": aud,
-                "spend": round(v["spend"], 2),
-                "impressions": v["impressions"],
-                "leads": v["leads"],
-                "ads": v["ads"],
-            })
-
-    pillars_out = []
-    for pillar, v in global_pillar.items():
-        cpl = round(v["spend"] / v["leads"], 2) if v["leads"] else 0
-        pillars_out.append({
-            "pillar": pillar,
-            "spend": round(v["spend"], 2),
-            "impressions": v["impressions"],
-            "leads": v["leads"],
-            "cpl": cpl,
-            "ads": v["ads"][:20],
-        })
-
-    concepts_out = []
-    for concept, v in global_concept.items():
-        cpl = round(v["spend"] / v["leads"], 2) if v["leads"] else 0
-        concepts_out.append({
-            "concept": concept,
-            "spend": round(v["spend"], 2),
-            "impressions": v["impressions"],
-            "leads": v["leads"],
-            "cpl": cpl,
-            "ads": v["ads"][:20],
-        })
-
-    studio_pillars_out = []
-    for code, agg in studio_agg.items():
-        for pillar, v in agg["_pillars"].items():
-            cpl = round(v["spend"] / v["leads"], 2) if v["leads"] else 0
-            studio_pillars_out.append({
-                "studio_code": code,
-                "pillar": pillar,
-                "spend": round(v["spend"], 2),
-                "impressions": v["impressions"],
-                "leads": v["leads"],
-                "cpl": cpl,
-            })
-
-    studio_concepts_out = []
-    for code, agg in studio_agg.items():
-        for concept, v in agg["_concepts"].items():
-            cpl = round(v["spend"] / v["leads"], 2) if v["leads"] else 0
-            studio_concepts_out.append({
-                "studio_code": code,
-                "concept": concept,
-                "spend": round(v["spend"], 2),
-                "impressions": v["impressions"],
-                "leads": v["leads"],
-                "cpl": cpl,
-            })
-
-    media_types_out = []
-    for mt, v in global_media_type.items():
-        cpl = round(v["spend"] / v["leads"], 2) if v["leads"] else 0
-        media_types_out.append({
-            "media_type": mt,
-            "spend": round(v["spend"], 2),
-            "impressions": v["impressions"],
-            "leads": v["leads"],
-            "cpl": cpl,
-            "ads": v["ads"][:20],
-        })
-
-    studio_media_types_out = []
-    for code, agg in studio_agg.items():
-        for mt, v in agg["_media_types"].items():
-            cpl = round(v["spend"] / v["leads"], 2) if v["leads"] else 0
-            studio_media_types_out.append({
-                "studio_code": code,
-                "media_type": mt,
-                "spend": round(v["spend"], 2),
-                "impressions": v["impressions"],
-                "leads": v["leads"],
-                "cpl": cpl,
-            })
-
-    daily_out = []
-    for d in daily:
-        daily_out.append({
-            "date": d.get("date_start"),
-            "impressions": int(safe_float(d.get("impressions"))),
-            "clicks": int(safe_float(d.get("clicks"))),
-            "spend": round(safe_float(d.get("spend")), 2),
-            "reach": int(safe_float(d.get("reach"))),
-            "leads": leads_of(d),
-            "purchases": purchases_of(d),
-            "trials": trials_of(d),
-        })
-
-    today = date.today()
-    window_start = (today - timedelta(days=DAILY_WINDOW_DAYS)).isoformat()
-    today_iso = today.isoformat()
-    daily_start = max(c["date_start"], window_start)
-    daily_end   = min(c["date_end"], today_iso)
-
-    daily_series: dict = {
-        "window_start": daily_start,
-        "window_end":   daily_end,
-        "window_days":  DAILY_WINDOW_DAYS,
-        "campaign":             [],
-        "by_studio":            [],
-        "by_audience":          [],
-        "by_pillar":            [],
-        "by_concept":           [],
-        "by_media_type":        [],
-        "by_studio_audience":   [],
-        "by_studio_pillar":     [],
-        "by_studio_concept":    [],
-        "by_studio_media_type": [],
-    }
-
-    ad_first_seen: dict[str, str] = {}  # populated below if daily window is valid
-    if daily_start > daily_end:
-        log.info(f"  daily series: ventana vacía (start={daily_start} > end={daily_end}), skip.")
-    else:
-        log.info(f"  fetching daily ad×day insights [{daily_start} → {daily_end}] …")
-        daily_ad_insights: list[dict] = []
-        for adset in ad_sets:
-            try:
-                rows = meta.get_insights(
-                    adset["id"],
-                    level="ad",
-                    date_start=daily_start,
-                    date_end=daily_end,
-                    time_increment=1,
-                )
-                daily_ad_insights.extend(rows)
-            except Exception as e:
-                log.warning(f"  daily ad-level failed for adset {adset.get('name','?')} ({adset['id']}): {e}")
-        log.info(f"  {len(daily_ad_insights)} ad×day rows")
-
-        def _empty_d():
-            return {"spend": 0.0, "impressions": 0, "clicks": 0,
-                    "reach": 0, "leads": 0, "trials": 0, "purchases": 0}
-
-        camp_d         = defaultdict(_empty_d)
-        d_studio       = defaultdict(_empty_d)
-        d_aud          = defaultdict(_empty_d)
-        d_pillar       = defaultdict(_empty_d)
-        d_concept      = defaultdict(_empty_d)
-        d_media_type   = defaultdict(_empty_d)
-        d_stu_aud      = defaultdict(_empty_d)
-        d_stu_pillar   = defaultdict(_empty_d)
-        d_stu_concept  = defaultdict(_empty_d)
-        d_stu_media    = defaultdict(_empty_d)
-
-        def _bump_d(bucket, spend, impressions, clicks, reach, leads, trials, purchases):
-            bucket["spend"]       += spend
-            bucket["impressions"] += impressions
-            bucket["clicks"]      += clicks
-            bucket["reach"]       += reach
-            bucket["leads"]       += leads
-            bucket["trials"]      += trials
-            bucket["purchases"]   += purchases
-
-        for row in daily_ad_insights:
-            ad_id = row.get("ad_id")
-            dims = ad_dims.get(ad_id)
-            if not dims:
-                continue
-            d = row.get("date_start")
-            if not d:
-                continue
-
-            # Record earliest date this ad had spend
-            if safe_float(row.get("spend")) > 0:
-                if ad_id not in ad_first_seen or d < ad_first_seen[ad_id]:
-                    ad_first_seen[ad_id] = d
-
-            spend       = safe_float(row.get("spend"))
-            impressions = int(safe_float(row.get("impressions")))
-            clicks      = int(safe_float(row.get("clicks")))
-            reach       = int(safe_float(row.get("reach")))
-            leads       = leads_of(row)
-            trials      = trials_of(row)
-            purchases   = purchases_of(row)
-
-            _bump_d(camp_d[d], spend, impressions, clicks, reach, leads, trials, purchases)
-
-            sc = dims["studio_code"]
-            _bump_d(d_studio[(sc, d)], spend, impressions, clicks, reach, leads, trials, purchases)
-
-            if dims["audience"]:
-                a = dims["audience"]
-                _bump_d(d_aud[(a, d)],          spend, impressions, clicks, reach, leads, trials, purchases)
-                _bump_d(d_stu_aud[(sc, a, d)],  spend, impressions, clicks, reach, leads, trials, purchases)
-            if dims["pillar"]:
-                p = dims["pillar"]
-                _bump_d(d_pillar[(p, d)],         spend, impressions, clicks, reach, leads, trials, purchases)
-                _bump_d(d_stu_pillar[(sc, p, d)], spend, impressions, clicks, reach, leads, trials, purchases)
-            if dims["concept"]:
-                co = dims["concept"]
-                _bump_d(d_concept[(co, d)],         spend, impressions, clicks, reach, leads, trials, purchases)
-                _bump_d(d_stu_concept[(sc, co, d)], spend, impressions, clicks, reach, leads, trials, purchases)
-            mt = dims.get("media_type") or "Other"
-            _bump_d(d_media_type[(mt, d)],     spend, impressions, clicks, reach, leads, trials, purchases)
-            _bump_d(d_stu_media[(sc, mt, d)],  spend, impressions, clicks, reach, leads, trials, purchases)
-
-        def _row_metrics(b: dict) -> dict:
-            return {
-                "spend":       round(b["spend"], 2),
-                "impressions": b["impressions"],
-                "clicks":      b["clicks"],
-                "reach":       b["reach"],
-                "leads":       b["leads"],
-                "trials":      b["trials"],
-                "purchases":   b["purchases"],
-                "cpl": round(b["spend"] / b["leads"], 2)     if b["leads"]     else 0,
-                "cpt": round(b["spend"] / b["trials"], 2)    if b["trials"]    else 0,
-                "cpp": round(b["spend"] / b["purchases"], 2) if b["purchases"] else 0,
-                "ctr": round(b["clicks"] / b["impressions"] * 100, 2) if b["impressions"] else 0,
-                "cpm": round(b["spend"] / b["impressions"] * 1000, 2) if b["impressions"] else 0,
-            }
-
-        def _emit(data_dict, key_names):
-            out = []
-            for k in sorted(data_dict.keys()):
-                if not isinstance(k, tuple):
-                    k = (k,)
-                row = dict(zip(key_names, k))
-                row.update(_row_metrics(data_dict[k]))
-                out.append(row)
-            return out
-
-        campaign_series = [
-            {"date": dt, **_row_metrics(camp_d[dt])}
-            for dt in sorted(camp_d.keys())
-        ]
-
-        daily_series.update({
-            "campaign":             campaign_series,
-            "by_studio":            _emit(d_studio,      ["studio_code", "date"]),
-            "by_audience":          _emit(d_aud,         ["audience",    "date"]),
-            "by_pillar":            _emit(d_pillar,      ["pillar",      "date"]),
-            "by_concept":           _emit(d_concept,     ["concept",     "date"]),
-            "by_media_type":        _emit(d_media_type,  ["media_type",  "date"]),
-            "by_studio_audience":   _emit(d_stu_aud,     ["studio_code", "audience",   "date"]),
-            "by_studio_pillar":     _emit(d_stu_pillar,  ["studio_code", "pillar",     "date"]),
-            "by_studio_concept":    _emit(d_stu_concept, ["studio_code", "concept",    "date"]),
-            "by_studio_media_type": _emit(d_stu_media,   ["studio_code", "media_type", "date"]),
-        })
-
-        log.info(
-            f"  daily series: {len(campaign_series)} days | "
-            f"{len(daily_series['by_studio'])} studio×day | "
-            f"{len(daily_series['by_audience'])} aud×day | "
-            f"{len(daily_series['by_pillar'])} pillar×day | "
-            f"{len(daily_series['by_concept'])} concept×day | "
-            f"{len(daily_series['by_media_type'])} media×day"
-        )
-
-    # ── ads — per-ad row for the Active Ads table in index.html ──────────
-    # All data already computed above — zero extra API calls.
-    # ad_insights:     aggregated metrics per ad_id (whole campaign window)
-    # ads:             list_ads() result → status per ad_id
-    # creative_by_ad:  thumbnail_url / object_type per ad_id
-    # ad_dims:         studio_code, audience, pillar, concept, media_type per ad_id
-
-    # Build status map from list_ads() result
-    status_by_ad: dict[str, str] = {
-        ad["id"]: ad.get("status", "UNKNOWN")
-        for ad in ads
-        if ad.get("id")
-    }
-
-    # Aggregate ad_insights to one row per ad_id (campaign totals, not daily)
-    ad_metrics: dict[str, dict] = {}
-    for ins in ad_insights:
-        ad_id = ins.get("ad_id")
-        if not ad_id:
-            continue
-        if ad_id not in ad_metrics:
-            ad_metrics[ad_id] = {
-                "ad_id":       ad_id,
-                "name":        ins.get("ad_name", ""),
-                "spend":       0.0,
-                "impressions": 0,
-                "clicks":      0,
-                "leads":       0,
-                "trials":      0,
-                "purchases":   0,
-            }
-        m = ad_metrics[ad_id]
-        m["spend"]       += safe_float(ins.get("spend"))
-        m["impressions"] += int(safe_float(ins.get("impressions")))
-        m["clicks"]      += int(safe_float(ins.get("clicks")))
-        m["leads"]       += leads_of(ins)
-        m["trials"]      += trials_of(ins)
-        m["purchases"]   += purchases_of(ins)
-
-    ads_out = []
-    for ad_id, m in ad_metrics.items():
-        dims     = ad_dims.get(ad_id, {})
-        creative = creative_by_ad.get(ad_id, {})
-
-        # thumbnail_url: video ads return it directly; static ads use image_url
-        thumb = (
-            creative.get("thumbnail_url")
-            or creative.get("image_url")
-            or ""
-        )
-
-        spend       = round(m["spend"], 2)
-        impressions = m["impressions"]
-        clicks      = m["clicks"]
-        leads       = m["leads"]
-        trials      = m["trials"]
-        purchases   = m["purchases"]
-
-        ads_out.append({
-            "ad_id":        ad_id,
-            "name":         m["name"],
-            "status":       status_by_ad.get(ad_id, "UNKNOWN"),
-            "media_type":   dims.get("media_type", "Other"),
-            "studio_code":  dims.get("studio_code"),
-            "audience":     dims.get("audience"),
-            "concept":      dims.get("concept"),
-            "spend":        spend,
-            "impressions":  impressions,
-            "clicks":       clicks,
-            "ctr":          round(clicks / impressions * 100, 2) if impressions else 0,
-            "leads":        leads,
-            "cpl":          round(spend / leads, 2) if leads else 0,
-            "trials":       trials,
-            "cpt":          round(spend / trials, 2) if trials else 0,
-            "purchases":    purchases,
-            "thumbnail_url": thumb,
-            "library_url":  f"https://www.facebook.com/ads/library/?id={ad_id}",
-            "first_seen":   ad_first_seen.get(ad_id),
-        })
-
-    # Sort by leads desc, then spend desc
-    ads_out.sort(key=lambda x: (-x["leads"], -x["spend"]))
-    log.info(f"  ads_out: {len(ads_out)} ad rows")
-
+  if (typeof _partialPeriod !=='undefined') {
+    const today = new Date();
+    const {ppFrom: _ppF, ppTo: _ppT} = computeWindows(from, to);
+    const currWithin90 = (today - from) / 86400000 <= 90 && (today - to) / 86400000 >= 0;
+    const ppWithin90   = (today - _ppF) / 86400000 <= 90;
+    _partialPeriod.py = !fullMonths;                              // prev year: full months only
+    _partialPeriod.pp = !fullMonths && !(currWithin90 && ppWithin90); // pp ok if both within 90d
+  }
+  const {ppFrom,ppTo,pyFrom,pyTo} = computeWindows(from,to);
+  function filterAll(f,t) {
     return {
-        "display_name": c["display_name"],
-        "period_label": c["period_label"],
-        "date_start": c["date_start"],
-        "date_end": c["date_end"],
-        "totals": totals,
-        "studios": studios_out,
-        "audiences": audiences_out,
-        "pillars": pillars_out,
-        "concepts": concepts_out,
-        "media_types": media_types_out,
-        "studio_pillars": studio_pillars_out,
-        "studio_concepts": studio_concepts_out,
-        "studio_media_types": studio_media_types_out,
-        "daily": daily_out,
-        "daily_series": daily_series,
-        "ads": ads_out,         # NEW — used by index.html Meta Ads tab; ignored by paid-ads.html
+      daily:   filterRows(RAW.daily_detail   || [], f, t, studios, sources),
+      monthly: filterRows(RAW.monthly_detail || [], f, t, studios, sources),
+      get all() { return [...this.daily,...this.monthly]; }
+    };
+  }
+  const curr = filterAll(from,to);
+  const pp   = filterAll(ppFrom,ppTo);
+  const py   = filterAll(pyFrom,pyTo);
+  buildFunnel(sumRows(curr.all), sumRows(pp.all), sumRows(py.all),
+    `${fmtDate(ppFrom)} – ${fmtDate(ppTo)}`, `${fmtDate(pyFrom)} – ${fmtDate(pyTo)}`);
+  buildTrend(toTimeSeries(curr.daily, curr.monthly));
+  // Always build all tabs  all are rendered (just hidden via opacity/height)
+  if (typeof checkCPRWarning === 'function') checkCPRWarning();
+  buildStageTabs(curr, pp, py, fmtDate(ppFrom)+' – '+fmtDate(ppTo), fmtDate(pyFrom)+' – '+fmtDate(pyTo));
+  window._metaFrom    = from;  window._metaTo   = to;
+  window._metaPpFrom  = ppFrom; window._metaPpTo = ppTo;
+  window._metaPyFrom  = pyFrom; window._metaPyTo = pyTo;
+  window._metaPpLabel = fmtDate(ppFrom)+' – '+fmtDate(ppTo);
+  window._metaPyLabel = fmtDate(pyFrom)+' – '+fmtDate(pyTo);
+  window._cprCurr     = curr;
+  window._cprPp       = pp;
+  window._cprPy       = py;
+  window._cprStudios  = studios;
+  buildMetaTab();
+  buildGoogleTab();
+  buildCPRTab();
+}
+
+
+function buildFunnel(curr, prev, pyear, ppLabel, pyLabel) {
+  const stages = [
+    {label:'Leads',       curr:curr.leads,prev:prev.leads,py:pyear.leads,color:'#00A3E0'},
+    {label:'First Timers',curr:curr.ft,   prev:prev.ft,   py:pyear.ft,   color:'#00FFC2'},
+    {label:'New Members', curr:curr.mem,  prev:prev.mem,  py:pyear.mem,  color:'#DDFF00'},
+  ];
+  const max = Math.max(...stages.map(s=>s.curr),1);
+  document.getElementById('funnelBars').innerHTML = stages.map(s => {
+    const w = Math.max(2,(s.curr/max)*100);
+    const dpp = calcDelta(s.curr,s.prev);
+    const dpy = calcDelta(s.curr,s.py);
+    const ppHTML = _partialPeriod.pp
+      ? (dpp!==null ? '<span class="delta neu" title="Select complete calendar months">⚠ partial period</span>' : '<span class="delta neu">— prev period</span>')
+      : (dpp!==null ? `<span class="delta ${dpp>=0?'pos':'neg'}" title="vs ${ppLabel}">${dpp>=0?'▲':'▼'} ${Math.abs(dpp).toFixed(1)}% prev period</span>` : '<span class="delta neu">— prev period</span>');
+    const pyHTML = _partialPeriod.py
+      ? (dpy!==null ? '<span class="delta neu" title="Select complete calendar months">⚠ partial period</span>' : '<span class="delta neu">— prev year</span>')
+      : (dpy!==null ? `<span class="delta ${dpy>=0?'pos':'neg'}" title="vs ${pyLabel}">${dpy>=0?'▲':'▼'} ${Math.abs(dpy).toFixed(1)}% prev year</span>` : '<span class="delta neu">— prev year</span>');
+    return `<div><div class="funnel-stage-label">${s.label}</div><div class="funnel-row"><div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:${w}%;background:${s.color}"></div></div><div class="funnel-num">${s.curr.toLocaleString()}</div><div class="funnel-deltas">${ppHTML}${pyHTML}</div></div></div>`;
+  }).join('');
+}
+
+
+function buildTrend(series) {
+  const isMobile = window.innerWidth <= 768;
+  const labels = series.map(m=>m.label);
+  const leadsD = series.map(m=>m.signups||0);
+  const ftD    = series.map(m=>m.first_visits||0);
+  const memD   = series.map(m=>m.first_activations||0);
+  if (trendChart) {
+    const hidden = trendChart.data.datasets.map(ds=>ds.hidden);
+    trendChart.data.labels=labels;
+    trendChart.data.datasets[0].data=leadsD;
+    trendChart.data.datasets[1].data=ftD;
+    trendChart.data.datasets[2].data=memD;
+    trendChart.data.datasets.forEach((ds,i)=>ds.hidden=hidden[i]);
+    trendChart.update(); return;
+  }
+  const ctx = document.getElementById('trendChart').getContext('2d');
+  trendChart = new Chart(ctx, {
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Leads',       data:leadsD,borderColor:'#00A3E0',borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.4,fill:false},
+      {label:'First Timers',data:ftD,   borderColor:'#00FFC2',borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.4,fill:false},
+      {label:'New Members', data:memD,  borderColor:'#DDFF00',borderWidth:2.5,pointRadius:3,pointHoverRadius:6,tension:.4,fill:false},
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',autoSkip:true,maxTicksLimit:isMobile?5:12,maxRotation:0}},
+        y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a'}}
+      }
     }
+  });
+}
 
 
-# ── entry point ──────────────────────────────────────────────────────
-def run():
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-        cfg = yaml.safe_load(f)
+function toggleDs(btn, i) {
+  if (!trendChart) return;
+  const ds = trendChart.data.datasets[i];
+  ds.hidden = !ds.hidden;
+  btn.classList.toggle('on');
+  if (btn.classList.contains('on')) { btn.style.background=COLORS[i]; btn.style.borderColor=COLORS[i]; btn.style.color='#000'; btn.querySelector('.dot').style.background='#000'; }
+  else { btn.style.background='#f4f9fd'; btn.style.borderColor='#c0d4df'; btn.style.color='#5a7a8a'; }
+  trendChart.update();
+}
 
-    keys = cfg.get("campaigns_to_track") or [cfg["active_campaign"]]
-    active = cfg.get("active_campaign", keys[0])
 
-    meta = MetaClient()
 
-    campaigns_data: dict[str, dict] = {}
-    campaigns_index: list[dict] = []
+// Map specific sources to specific colors for consistency across tabs
 
-    for key in keys:
-        if key not in cfg["campaigns"]:
-            log.warning(f"Skipping '{key}' — not in config.campaigns")
-            continue
-        try:
-            data = run_one(meta, key, cfg["campaigns"][key])
-        except Exception as e:
-            log.exception(f"❌ Campaign '{key}' failed: {e}")
-            continue
 
-        campaigns_data[key] = data
-        campaigns_index.append({
-            "key": key,
-            "display_name": data["display_name"],
-            "period_label": data["period_label"],
-            "date_start": data["date_start"],
-            "date_end": data["date_end"],
-            "leads": data["totals"]["leads"],
-            "spend": data["totals"]["spend"],
-            "is_default": key == active,
-        })
+function buildStageTabs(currFiltered, ppFiltered, pyFiltered, ppLabel, pyLabel){
+  // Store for use by setAreaGran and filter changes
+  window._lastCurrFiltered = currFiltered;
+  window._lastPpFiltered   = ppFiltered  || {daily:[],monthly:[],all:[]};
+  window._lastPyFiltered   = pyFiltered  || {daily:[],monthly:[],all:[]};
+  window._lastPpLabel      = ppLabel  || '';
+  window._lastPyLabel      = pyLabel  || '';
+  const pp  = window._lastPpFiltered;
+  const py  = window._lastPyFiltered;
+  const srcList = RAW.sources.filter(s => !['ClassPass / Platforms','Grassroots'].includes(s));
+  const leadsTotal = currFiltered.all.reduce((s,r)=>s+r.signups,0);
+  const ftTotal    = currFiltered.all.reduce((s,r)=>s+r.first_visits,0);
+  const memTotal   = currFiltered.all.reduce((s,r)=>s+r.first_activations,0);
+  const ppLeads = pp.all.reduce((s,r)=>s+r.signups,0);
+  const ppFT    = pp.all.reduce((s,r)=>s+r.first_visits,0);
+  const ppMem   = pp.all.reduce((s,r)=>s+r.first_activations,0);
+  const pyLeads = py.all.reduce((s,r)=>s+r.signups,0);
+  const pyFT    = py.all.reduce((s,r)=>s+r.first_visits,0);
+  const pyMem   = py.all.reduce((s,r)=>s+r.first_activations,0);
+  const thisLeads = currFiltered.daily.length ? currFiltered.daily.reduce((s,r)=>s+r.signups,0)
+                  : currFiltered.all.reduce((s,r)=>s+r.signups,0);
+  const thisFT    = currFiltered.daily.length ? currFiltered.daily.reduce((s,r)=>s+r.first_visits,0)
+                  : currFiltered.all.reduce((s,r)=>s+r.first_visits,0);
+  const thisMem   = currFiltered.daily.length ? currFiltered.daily.reduce((s,r)=>s+r.first_activations,0)
+                  : currFiltered.all.reduce((s,r)=>s+r.first_activations,0);
 
-    output = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "active_campaign": active,
-        "campaigns_index": campaigns_index,
-        "campaigns": campaigns_data,
+  const convFT  = leadsTotal ? ((ftTotal/leadsTotal)*100).toFixed(1)+'%' : '--';
+  const convMem = ftTotal    ? ((memTotal/ftTotal)*100).toFixed(1)+'%'   : '--';
+  const convMemFromLead = leadsTotal ? ((memTotal/leadsTotal)*100).toFixed(1)+'%' : '--';
+
+  const ppConvFT  = ppLeads  ? (ppFT /ppLeads *100) : null;
+  const ppConvMem = ppFT     ? (ppMem/ppFT   *100) : null;
+  const pyConvFT  = pyLeads  ? (pyFT /pyLeads*100)  : null;
+  const pyConvMem = pyFT     ? (pyMem/pyFT   *100)  : null;
+
+  const currConvFT  = leadsTotal ? ftTotal /leadsTotal*100 : null;
+  const currConvMem = ftTotal    ? memTotal/ftTotal  *100  : null;
+  const currConvMemLead = leadsTotal ? memTotal/leadsTotal*100 : null;
+  function convCard(label, curr, ppRate, pyRate) {
+    if (curr === null) return kpiCard(label, '--', null, null, v=>v);
+    const fmt = v => typeof v==='number' ? v.toFixed(1)+'%' : v;
+    const dpp = ppRate != null ? (curr - ppRate) / ppRate * 100 : null;
+    const dpy = pyRate != null ? (curr - pyRate) / pyRate * 100 : null;
+    const ppH = _partialPeriod.pp ? (dpp!=null ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '') : (dpp!=null ? '<div class="kpi-card-delta '+(dpp>=0?'pos':'neg')+'">'+(dpp>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpp).toFixed(1)+'% prev period</div>' : '');
+    const pyH = _partialPeriod.py ? (dpy!=null ? '<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>' : '') : (dpy!=null ? '<div class="kpi-card-delta '+(dpy>=0?'pos':'neg')+'">'+(dpy>=0?'&#9650;':'&#9660;')+' '+Math.abs(dpy).toFixed(1)+'% prev year</div>' : '');
+    return '<div class="kpi-card"><div class="kpi-card-label">'+label+'</div><div class="kpi-card-val">'+curr.toFixed(1)+'%</div>'+ppH+pyH+'</div>';
+  }
+
+  //  LEADS TAB 
+  const el1 = document.getElementById('leads-kpis');
+  if(el1) el1.innerHTML =
+    kpiCard('Total Leads', leadsTotal, ppLeads||null, pyLeads||null) +
+    convCard('Conv → 1st Visit', currConvFT,  ppConvFT,  pyConvFT) +
+    convCard('Conv → Member',    currConvMem, ppConvMem, pyConvMem);
+
+  buildAreaChart('leadsAreaChart','leads-src-toggles',
+    toSourceTimeSeries(currFiltered.daily, currFiltered.monthly, AREA_GRAN['leadsAreaChart']),
+    srcList, 'signups');
+  buildRingChart('leadsRingChart','leadsRingLegend', srcList,
+    srcList.map(s=>currFiltered.all.filter(r=>r.source===s).reduce((sum,r)=>sum+r.signups,0)));
+  buildStudioRankTable('leadsStudioTable', currFiltered.all, 'signups');
+
+  //  FIRST TIMERS TAB 
+  const el2 = document.getElementById('ft-kpis');
+  if(el2) el2.innerHTML =
+    kpiCard('Total First Timers', ftTotal, ppFT||null, pyFT||null) +
+    convCard('Conv Rate (Lead→FT)', currConvFT,  ppConvFT,  pyConvFT) +
+    convCard('Conv → Member',       currConvMem, ppConvMem, pyConvMem);
+
+  buildAreaChart('ftAreaChart','ft-src-toggles',
+    toSourceTimeSeries(currFiltered.daily, currFiltered.monthly, AREA_GRAN['ftAreaChart']),
+    srcList, 'first_visits');
+  buildRingChart('ftRingChart','ftRingLegend', srcList,
+    srcList.map(s=>currFiltered.all.filter(r=>r.source===s).reduce((sum,r)=>sum+r.first_visits,0)));
+  buildStudioRankTable('ftStudioTable', currFiltered.all, 'first_visits');
+
+  //  NEW MEMBERS TAB 
+  const el3 = document.getElementById('mem-kpis');
+  if(el3) el3.innerHTML =
+    kpiCard('Total New Members', memTotal, ppMem||null, pyMem||null) +
+    convCard('Conv Rate (FT→Mbr)', currConvMem,      ppConvMem, pyConvMem) +
+    convCard('Conv Rate (Lead→Mbr)',currConvMemLead,  ppConvFT!=null&&ppConvMem!=null?ppConvFT*ppConvMem/100:null, pyConvFT!=null&&pyConvMem!=null?pyConvFT*pyConvMem/100:null);
+
+  buildAreaChart('memAreaChart','mem-src-toggles',
+    toSourceTimeSeries(currFiltered.daily, currFiltered.monthly, AREA_GRAN['memAreaChart']),
+    srcList, 'first_activations');
+  buildRingChart('memRingChart','memRingLegend', srcList,
+    srcList.map(s=>currFiltered.all.filter(r=>r.source===s).reduce((sum,r)=>sum+r.first_activations,0)));
+  buildStudioRankTable('memStudioTable', currFiltered.all, 'first_activations');
+
+  //  Update area gran button states (no recursive calls)
+  ['leadsAreaChart','ftAreaChart','memAreaChart'].forEach(id=>{
+    const {dailyFrom,dailyTo} = getQuarterBounds();
+    const from = new Date(document.getElementById('fFrom').value+'T00:00:00Z');
+    const to   = new Date(document.getElementById('fTo').value+'T23:59:59Z');
+    const hasDaily = from <= dailyTo && to >= dailyFrom;
+    const daysDiff = (to - from) / 86400000;
+    const bd = document.getElementById('gran-daily-'+id);
+    const bw = document.getElementById('gran-weekly-'+id);
+    if(bd) bd.disabled = !hasDaily;
+    if(bw) bw.disabled = daysDiff > 366;
+    // Auto-downgrade granularity WITHOUT recursive call
+    if(AREA_GRAN[id]==='daily'  && bd && bd.disabled) {
+      AREA_GRAN[id]='weekly';
+      if(bd) bd.classList.remove('on');
+      const bw2=document.getElementById('gran-weekly-'+id);
+      if(bw2) bw2.classList.add('on');
     }
+    if(AREA_GRAN[id]==='weekly' && bw && bw.disabled) {
+      AREA_GRAN[id]='monthly';
+      if(bw) bw.classList.remove('on');
+      const bm=document.getElementById('gran-monthly-'+id);
+      if(bm) bm.classList.add('on');
+    }
+  });
+}
 
-    OUT_PATH.write_text(
-        json.dumps(output, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
-    log.info(f"✅ Wrote {OUT_PATH}  ({OUT_PATH.stat().st_size:,} bytes, "
-             f"{len(campaigns_data)} campaign(s))")
+
+function setAreaGran(canvasId, gran) {
+  AREA_GRAN[canvasId] = gran;
+  ['daily','weekly','monthly'].forEach(g => {
+    const btn = document.getElementById('gran-'+g+'-'+canvasId);
+    if (btn) btn.classList.toggle('active', g === gran);
+  });
+  // Re-run full applyFilters so chart uses current filter state
+  applyFilters();
+}
+
+const CPR_COSTS_ACTIVE={google:true,meta:true,leadteam:true};
+let cprChart=null;
 
 
-if __name__ == "__main__":
-    try:
-        run()
-    except Exception as e:
-        log.exception(f"❌ ETL failed: {e}")
-        sys.exit(1)
+function toggleCPRCost(btn){
+  const cost=btn.dataset.cost;CPR_COSTS_ACTIVE[cost]=!CPR_COSTS_ACTIVE[cost];btn.classList.toggle('on');
+  const colors={google:'#34A853',meta:'#1877F2',leadteam:'#FF6B35'};const c=colors[cost];
+  if(btn.classList.contains('on')){btn.style.background=c;btn.style.borderColor=c;btn.style.color='#fff';}else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a';}
+  buildCPRTab();
+  checkCPRWarning();
+}
+
+
+function buildCPRTab() {
+  const el = document.getElementById('cpr-kpis');
+  if (!el) return;
+  const from=window._metaFrom||null,to=window._metaTo||null;
+  const ppFrom=window._metaPpFrom||null,ppTo=window._metaPpTo||null;
+  const pyFrom=window._metaPyFrom||null,pyTo=window._metaPyTo||null;
+  const funnelCurr=window._cprCurr||null,funnelPp=window._cprPp||null,funnelPy=window._cprPy||null;
+  const selStudios=window._cprStudios||[];
+  if (!from||!to||!funnelCurr) return;
+  const fTime=from.getTime(),tTime=to.getTime();
+  const allStudios=selStudios.length>0?selStudios:(RAW?RAW.studios:[]);
+  const studioCount=allStudios.length||1;
+  const LEADTEAM_PER_STUDIO_MONTH=1200;
+  function leadteamForRange(f,t){if(!f||!t)return 0;const days=(t.getTime()-f.getTime())/86400000+1;return studioCount*LEADTEAM_PER_STUDIO_MONTH*(days/30.4375);}
+  const ltCurr=leadteamForRange(from,to);
+  const ltPp=leadteamForRange(ppFrom?new Date(ppFrom):null,ppTo?new Date(ppTo):null);
+  const ltPy=leadteamForRange(pyFrom?new Date(pyFrom):null,pyTo?new Date(pyTo):null);
+  function sumGoogleSpend(f,t){if(!f||!t||!GOOGLE_ADS_RAW)return 0;const fT=f.getTime(),tT=t.getTime(),bySt=selStudios.length>0;return[...(GOOGLE_ADS_RAW.daily||[]),...(GOOGLE_ADS_RAW.monthly||[])].reduce((s,r)=>{const d=new Date((r.date||r.month)+'T00:00:00Z').getTime();if(d<fT||d>tT)return s;if(bySt&&!selStudios.includes(r.studio))return s;return s+(r.spend||0);},0);}
+  function sumMetaSpend(f,t){
+    if(!f||!t||!META_ADS_RAW)return 0;
+    const fT=f.getTime(),tT=t.getTime(),bySt=selStudios.length>0;
+    let tot=0;
+    // Track which studio+month combos are covered by live daily data
+    const liveCovered=new Set();
+    for(const camp of Object.values(META_ADS_RAW.campaigns||{})){
+      for(const row of((camp.daily_series||{}).by_studio||[])){
+        const d=new Date(row.date+'T00:00:00Z').getTime();
+        if(d<fT||d>tT)continue;
+        const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
+        if(bySt&&!selStudios.includes(nm))continue;
+        tot+=row.spend||0;
+        liveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
+      }
+    }
+    // Add baked historical monthly spend, skipping months already covered by live data
+    for(const row of(META_ADS_RAW.monthly_spend||[])){
+      const d=new Date(row.month+'T00:00:00Z').getTime();
+      if(d<fT||d>tT)continue;
+      const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
+      if(bySt&&!selStudios.includes(nm))continue;
+      if(liveCovered.has(row.studio_code+'|'+row.month.slice(0,7)))continue;
+      tot+=row.spend||0;
+    }
+    return tot;
+  }
+  function funnelSum(fi){if(!fi)return{leads:0,ft:0,mem:0};return sumRows([...(fi.daily||[]),...(fi.monthly||[])]);}
+  const curr=funnelSum(funnelCurr),pp=funnelSum(funnelPp),py=funnelSum(funnelPy);
+  function spendTotals(f,t,lt){const g=CPR_COSTS_ACTIVE.google?sumGoogleSpend(f,t):0;const m=CPR_COSTS_ACTIVE.meta?sumMetaSpend(f,t):0;const l=CPR_COSTS_ACTIVE.leadteam?lt:0;return{google:g,meta:m,leadteam:l,total:g+m+l};}
+  const spCurr=spendTotals(from,to,ltCurr);
+  const spPp=spendTotals(ppFrom?new Date(ppFrom):null,ppTo?new Date(ppTo):null,ltPp);
+  const spPy=spendTotals(pyFrom?new Date(pyFrom):null,pyTo?new Date(pyTo):null,ltPy);
+  const f$=v=>'$'+Math.round(v).toLocaleString('en-US');
+  const f$2=v=>'$'+Number(v).toFixed(2);
+  const cpl_curr=curr.leads>0?spCurr.total/curr.leads:0,cpl_pp=pp.leads>0?spPp.total/pp.leads:null,cpl_py=py.leads>0?spPy.total/py.leads:null;
+  const cpft_curr=curr.ft>0?spCurr.total/curr.ft:0,cpft_pp=pp.ft>0?spPp.total/pp.ft:null,cpft_py=py.ft>0?spPy.total/py.ft:null;
+  const cpa_curr=curr.mem>0?spCurr.total/curr.mem:0,cpa_pp=pp.mem>0?spPp.total/pp.mem:null,cpa_py=py.mem>0?spPy.total/py.mem:null;
+  el.innerHTML=cprKpiCard('Blended CPL',cpl_curr,cpl_pp,cpl_py,f$2)+cprKpiCard('Blended CPFT',cpft_curr,cpft_pp,cpft_py,f$2)+cprKpiCard('Blended CPA',cpa_curr,cpa_pp,cpa_py,f$2);
+  const bdEl=document.getElementById('cpr-spend-breakdown');
+  if(bdEl){const parts=[];const bLabels={google:'Google Ads',meta:'Meta Ads',leadteam:'Leadteam Fee'};const bColors={google:'#34A853',meta:'#1877F2',leadteam:'#FF6B35'};let first=true;['google','meta','leadteam'].forEach(k=>{if(!CPR_COSTS_ACTIVE[k])return;const v=spCurr[k],vPp=spPp[k],vPy=spPy[k];if(!first)parts.push('<span style="font-family:Oswald,sans-serif;font-size:20px;font-weight:600;color:#5a7a8a;padding:0 4px">+</span>');const dpp=vPp>0?((v-vPp)/vPp*100).toFixed(1):null,dpy=vPy>0?((v-vPy)/vPy*100).toFixed(1):null;const ppH=_partialPeriod.pp?'<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>':(dpp!==null?'<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpp)+'% prev period</div>':'');const pyH=_partialPeriod.py?'<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>':(dpy!==null?'<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpy)+'% prev year</div>':'');parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid '+bColors[k]+'"><div class="kpi-card-label">'+bLabels[k]+'</div><div class="kpi-card-val">'+f$(v)+'</div>'+ppH+pyH+'</div>');first=false;});if(parts.length>0){const totV=spCurr.total,totPp=spPp.total,totPy=spPy.total;const dppT=totPp>0?((totV-totPp)/totPp*100).toFixed(1):null,dpyT=totPy>0?((totV-totPy)/totPy*100).toFixed(1):null;const ppTH=_partialPeriod.pp?'<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>':(dppT!==null?'<div class="kpi-card-delta neu">&#9650; '+Math.abs(dppT)+'% prev period</div>':'');const pyTH=_partialPeriod.py?'<div class="kpi-card-delta neu" title="Select complete calendar months">&#9651; partial period</div>':(dpyT!==null?'<div class="kpi-card-delta neu">&#9650; '+Math.abs(dpyT)+'% prev year</div>':'');parts.push('<span style="font-family:Oswald,sans-serif;font-size:20px;font-weight:600;color:#5a7a8a;padding:0 4px">=</span>');parts.push('<div class="kpi-card" style="flex:1;min-width:140px;border-top:3px solid #1a1a2e"><div class="kpi-card-label">Total Spend</div><div class="kpi-card-val">'+f$(totV)+'</div>'+ppTH+pyTH+'</div>');}bdEl.innerHTML=parts.join('');}
+  if(cprChart){cprChart.destroy();cprChart=null;}
+  const ctx=document.getElementById('cprChart');if(!ctx)return;
+  const allGRows=GOOGLE_ADS_RAW?[...(GOOGLE_ADS_RAW.daily||[]),...(GOOGLE_ADS_RAW.monthly||[])]:[];
+  const byStudio=selStudios.length>0;
+  const allMetaRows=[];
+  const metaLiveCovered=new Set();
+  if(META_ADS_RAW){
+    for(const camp of Object.values(META_ADS_RAW.campaigns||{})){
+      for(const row of((camp.daily_series||{}).by_studio||[])){
+        const name=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
+        allMetaRows.push({date:row.date,studio:name,spend:row.spend||0});
+        metaLiveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
+      }
+    }
+    // Append baked historical monthly spend for months not covered by live data
+    for(const row of(META_ADS_RAW.monthly_spend||[])){
+      if(metaLiveCovered.has(row.studio_code+'|'+row.month.slice(0,7)))continue;
+      const name=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
+      allMetaRows.push({date:row.month,studio:name,spend:row.spend||0});
+    }
+  }
+  const sfRows=[...(funnelCurr.daily||[]),...(funnelCurr.monthly||[])];
+  const buckets={};const mk=s=>(s||'x').slice(0,7)+'-01';
+  for(const r of allGRows){const d=new Date((r.date||r.month)+'T00:00:00Z').getTime();if(d<fTime||d>tTime)continue;if(byStudio&&!selStudios.includes(r.studio))continue;const key=mk(r.date||r.month);if(!buckets[key])buckets[key]={google:0,meta:0,leads:0,ft:0,mem:0};buckets[key].google+=r.spend||0;}
+  for(const r of allMetaRows){const d=new Date(r.date+'T00:00:00Z').getTime();if(d<fTime||d>tTime)continue;if(byStudio&&!selStudios.includes(r.studio))continue;const key=mk(r.date);if(!buckets[key])buckets[key]={google:0,meta:0,leads:0,ft:0,mem:0};buckets[key].meta+=r.spend||0;}
+  for(const r of sfRows){const key=mk(r.date||r.month);if(!buckets[key])buckets[key]={google:0,meta:0,leads:0,ft:0,mem:0};buckets[key].leads+=r.signups||0;buckets[key].ft+=r.first_visits||0;buckets[key].mem+=r.first_activations||0;}
+  const sortedMonths=Object.keys(buckets).sort();
+  const dispLabels=sortedMonths.map(m=>{const d=new Date(m+'T00:00:00Z');return d.toLocaleDateString('en-US',{month:'short',year:'2-digit',timeZone:'UTC'});});
+  function trendSpend(key){let s=0;if(CPR_COSTS_ACTIVE.google)s+=buckets[key].google;if(CPR_COSTS_ACTIVE.meta)s+=buckets[key].meta;if(CPR_COSTS_ACTIVE.leadteam)s+=studioCount*LEADTEAM_PER_STUDIO_MONTH;return s;}
+  const cplData=sortedMonths.map(k=>{const s=trendSpend(k),l=buckets[k].leads;return l>0?Math.round(s/l*100)/100:null;});
+  const cpftData=sortedMonths.map(k=>{const s=trendSpend(k),f=buckets[k].ft;return f>0?Math.round(s/f*100)/100:null;});
+  const cpaData=sortedMonths.map(k=>{const s=trendSpend(k),m=buckets[k].mem;return m>0?Math.round(s/m*100)/100:null;});
+  cprChart=new Chart(ctx,{type:'line',data:{labels:dispLabels,datasets:[{label:'Blended CPL',data:cplData,borderColor:'#00A3E0',borderWidth:2.5,pointRadius:4,tension:0.4,fill:false,spanGaps:true},{label:'Blended CPFT',data:cpftData,borderColor:'#00FFC2',borderWidth:2.5,pointRadius:4,tension:0.4,fill:false,spanGaps:true},{label:'Blended CPA',data:cpaData,borderColor:'#DDFF00',borderWidth:2.5,pointRadius:4,tension:0.4,fill:false,spanGaps:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y!=null?c.parsed.y.toLocaleString():'-')}}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',callback:v=>'$'+v},position:'left'}}}});
+}
+
+function toggleCPRds(btn,i){if(!cprChart)return;const ds=cprChart.data.datasets[i];ds.hidden=!ds.hidden;btn.classList.toggle('on');const cols=['#00A3E0','#00FFC2','#DDFF00','#888'];if(btn.classList.contains('on')){btn.style.background=cols[i];btn.style.borderColor=cols[i];btn.style.color='#000';}else{btn.style.background='#f4f9fd';btn.style.borderColor='#c0d4df';btn.style.color='#5a7a8a';}cprChart.update();}
+
+
+
+
+
+
+
+// -- META ADS ----------------------------------------------------------
+let META_ADS_RAW    = null;
+let GOOGLE_ADS_RAW  = null;
+let googleTrendChart = null;
+
+// Canonical studio code → name (no "SWEAT440 " prefix)
+const META_CODE_TO_STUDIO = {
+  'FL-001': 'Miami Beach',        'FL-002': 'Miami - Brickell',
+  'FL-003': 'Coral Gables',       'FL-004': 'Doral',
+  'FL-005': 'Miami Lakes',        'FL-006': 'Deerfield Beach',
+  'FL-007': 'Miami - Upper East Side', 'FL-008': 'Coral Springs',
+  'FL-009': 'South Miami',        'FL-010': 'Miami - Midtown',
+  'FL-011': 'Miami - Coconut Grove', 'FL-012': 'Miramar',
+  'FL-013': 'Fort Lauderdale - Las Olas', 'FL-014': 'Pembroke Pines',
+  'FL-015': 'West Palm Beach',    'FL-016': 'Boca Raton',
+  'NC-001': 'Charlotte - Noda',   'NJ-001': 'Toms River',
+  'NJ-002': 'Ocean Township',     'NJ-003': 'Wall Township',
+  'NY-002': 'NYC - Chelsea',      'NY-003': 'NYC - Park Slope',
+  'NY-004': 'Eastchester',        'TX-001': 'Austin - Zilker',
+  'TX-002': 'Austin - Highland',
+};
+
+// Strip "26-FL-015-02 - " style prefix to get the creative short name
+function creativeShortName(adName) {
+  return (adName || '').replace(/^\d+\-[A-Z]{2}\-\d+\-\d+\s*-\s*/i, '').trim();
+}
+
+async function ensureMetaAds() {
+  if (META_ADS_RAW) return META_ADS_RAW;
+  try {
+    const res = await fetch('paid-ads-data.json?_=' + Date.now());
+    META_ADS_RAW = await res.json();
+  } catch(e) {
+    console.warn('paid-ads-data.json not available:', e);
+    META_ADS_RAW = null;
+  }
+  return META_ADS_RAW;
+}
+
+async function buildMetaTab() {
+  const data = await ensureMetaAds();
+  const kpisEl = document.getElementById('meta-kpis');
+  if (!kpisEl) return;
+
+  if (!data) {
+    kpisEl.innerHTML = '<div style="color:#888;padding:20px;grid-column:1/-1">No paid-ads-data.json found.</div>';
+    return;
+  }
+
+  // ---- Read filters directly from DOM ----
+  const fromStr = document.getElementById('fFrom')?.value;
+  const toStr   = document.getElementById('fTo')?.value;
+  if (!fromStr || !toStr) return;
+
+  const from  = new Date(fromStr + 'T00:00:00Z');
+  const to    = new Date(toStr   + 'T23:59:59Z');
+  const fTime = from.getTime();
+  const tTime = to.getTime();
+
+  // Studio filter
+  const selectedStudios = new Set(
+    typeof getSelected === 'function' ? getSelected('studioMenu') : []
+  );
+  const filterByStudio = selectedStudios.size > 0;
+
+  const allCamps = Object.values(data.campaigns || {})
+    .sort((a, b) => a.date_start.localeCompare(b.date_start));
+
+  // ---- Aggregate totals + per-studio breakdown from daily_series ----
+  let spend=0, impressions=0, clicks=0, leads=0, trials=0, hasData=false;
+  const studioMap = {};
+
+  for (const camp of allCamps) {
+    for (const row of ((camp.daily_series || {}).by_studio || [])) {
+      const d = new Date(row.date + 'T00:00:00Z').getTime();
+      if (d < fTime || d > tTime) continue;
+      const canonicalName = META_CODE_TO_STUDIO[row.studio_code] || row.studio_code;
+      if (filterByStudio && !selectedStudios.has(canonicalName)) continue;
+      hasData = true;
+      spend       += row.spend       || 0;
+      impressions += row.impressions || 0;
+      clicks      += row.clicks      || 0;
+      leads       += row.leads       || 0;
+      trials      += row.trials      || 0;
+      if (!studioMap[canonicalName]) studioMap[canonicalName] = { spend:0, impressions:0, clicks:0, leads:0, trials:0 };
+      studioMap[canonicalName].spend       += row.spend       || 0;
+      studioMap[canonicalName].impressions += row.impressions || 0;
+      studioMap[canonicalName].clicks      += row.clicks      || 0;
+      studioMap[canonicalName].leads       += row.leads       || 0;
+      studioMap[canonicalName].trials      += row.trials      || 0;
+    }
+  }
+
+  const adsTb  = document.querySelector('#meta-ads-table tbody');
+  const stTb   = document.querySelector('#meta-studio-table tbody');
+
+  if (!hasData) {
+    kpisEl.innerHTML = '<div style="color:#888;padding:20px;grid-column:1/-1">No Meta Ads data for selected period.</div>';
+    if (adsTb) adsTb.innerHTML = '<tr><td colspan="9" style="color:#8aabbf;text-align:center;padding:20px">No data for selected period.</td></tr>';
+    if (stTb)  stTb.innerHTML  = '<tr><td colspan="8" style="color:#8aabbf;text-align:center;padding:20px">No data for selected period.</td></tr>';
+    return;
+  }
+
+  const f$  = v => '$' + Number(v).toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
+  const f$2 = v => '$' + Number(v).toFixed(2);
+  const fN  = v => Number(v).toLocaleString();
+  const fK  = v => Number(v) >= 1000 ? (Number(v)/1000).toFixed(0) + 'K' : fN(v);
+  const cpl = leads > 0 ? spend / leads : 0;
+
+  // ---- KPI cards ----
+  kpisEl.innerHTML =
+    kpiCard('Spend',        spend,        null, null, f$)  +
+    kpiCard('Impressions',  impressions,  null, null, v=>fK(v)) +
+    kpiCard('Clicks',       clicks,       null, null, v=>fN(v)) +
+    kpiCard('Leads',        leads,        null, null, v=>v) +
+    kpiCard('Trials',       trials,       null, null, v=>v) +
+    kpiCard('Cost / Lead',  cpl,          null, null, f$2);
+
+  // ---- Active Ads table ----
+  // Collect ads from all campaigns that overlap the selected period
+  // Group by creative short name, aggregate metrics, pick best thumbnail
+  const creativeMap = {};
+
+  for (const camp of allCamps) {
+    const campStart = new Date(camp.date_start + 'T00:00:00Z').getTime();
+    const campEnd   = new Date(camp.date_end   + 'T23:59:59Z').getTime();
+    if (campStart > tTime || campEnd < fTime) continue; // campaign outside range
+
+    for (const ad of (camp.ads || [])) {
+      // Apply studio filter
+      const canonicalName = META_CODE_TO_STUDIO[ad.studio_code] || ad.studio_code;
+      if (filterByStudio && !selectedStudios.has(canonicalName)) continue;
+
+      // Only include ads that were active during the selected period
+      // first_seen must be within or before the selected range
+      if (ad.first_seen) {
+        const fs = new Date(ad.first_seen + 'T00:00:00Z').getTime();
+        if (fs > tTime) continue; // started after the period
+      }
+
+      const shortName = creativeShortName(ad.name);
+      if (!shortName) continue;
+
+      if (!creativeMap[shortName]) {
+        creativeMap[shortName] = {
+          name:        shortName,
+          media_type:  ad.media_type,
+          spend:       0, impressions: 0, clicks: 0, leads: 0, trials: 0,
+          isActive:    false,
+          first_seen:  ad.first_seen || camp.date_start,
+          camp_start:  camp.date_start,
+          thumbnail:   '',
+          library_url: '',
+          _ads:        [],
+        };
+      }
+
+      const g = creativeMap[shortName];
+      g.spend       += ad.spend       || 0;
+      g.impressions += ad.impressions || 0;
+      g.clicks      += ad.clicks      || 0;
+      g.leads       += ad.leads       || 0;
+      g.trials      += ad.trials      || 0;
+      if (ad.status === 'ACTIVE') g.isActive = true;
+      if (ad.first_seen && ad.first_seen < g.first_seen) g.first_seen = ad.first_seen;
+      g._ads.push(ad);
+    }
+  }
+
+  // Pick best thumbnail (highest-lead ad that has one)
+  for (const g of Object.values(creativeMap)) {
+    const sorted = g._ads.slice().sort((a, b) => b.leads - a.leads);
+    g.thumbnail   = sorted.find(a => a.thumbnail_url)?.thumbnail_url || '';
+    g.library_url = sorted.find(a => a.library_url)?.library_url || '';
+    delete g._ads;
+  }
+
+  const creativeRows = Object.values(creativeMap)
+    .sort((a, b) => b.leads - a.leads);
+
+  if (adsTb) {
+    adsTb.innerHTML = creativeRows.length ? creativeRows.map(g => {
+      const isNew = g.first_seen > g.camp_start;
+      const statusBadge = g.isActive
+        ? '<span style="background:#00a86b;color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">ACTIVE</span>'
+        : '<span style="background:#f59e0b;color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">PAUSED</span>';
+      const newBadge = isNew
+        ? '<span style="background:#00A3E0;color:#fff;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:5px">NEW</span>'
+        : '';
+      const ctr = g.impressions > 0 ? (g.clicks / g.impressions * 100).toFixed(2) + '%' : '—';
+      const adCpl = g.leads > 0 ? f$2(g.spend / g.leads) : '—';
+
+      // Thumbnail cell — click opens Ads Library
+      const thumbCell = g.thumbnail
+        ? `<a href="${g.library_url}" target="_blank" rel="noopener" style="display:block;width:44px;height:44px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,163,224,0.2);flex-shrink:0">
+             <img src="${g.thumbnail}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\'width:44px;height:44px;background:#0084b5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px\'>▶</div>'"/>
+           </a>`
+        : `<a href="${g.library_url}" target="_blank" rel="noopener" style="display:flex;width:44px;height:44px;background:#0084b5;border-radius:6px;align-items:center;justify-content:center;font-size:18px;text-decoration:none">▶</a>`;
+
+      const mediaIcon = g.media_type === 'Video' ? '▶' : g.media_type === 'Static' ? '🖼' : '⊞';
+
+      return `<tr>
+        <td style="padding:8px 6px">${thumbCell}</td>
+        <td>
+          <div style="font-weight:600;font-size:13px">${g.name}${newBadge}</div>
+          <div style="font-size:11px;color:#8aabbf;margin-top:2px">${mediaIcon} ${g.media_type}</div>
+        </td>
+        <td class="num">${fK(g.impressions)}</td>
+        <td class="num">${fN(g.clicks)}</td>
+        <td class="num">${ctr}</td>
+        <td class="num">${f$(g.spend)}</td>
+        <td class="num">${g.leads}</td>
+        <td class="num">${adCpl}</td>
+        <td class="num">${statusBadge}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="9" style="color:#8aabbf;text-align:center;padding:20px">No ads found for selected period.</td></tr>';
+  }
+
+  // ---- Studio table ----
+  const studioRows = Object.entries(studioMap).map(([name, s]) => ({
+    name,
+    impressions: s.impressions, clicks: s.clicks,
+    ctr: s.impressions > 0 ? s.clicks / s.impressions * 100 : 0,
+    spend: s.spend, leads: s.leads,
+    cpl: s.leads > 0 ? s.spend / s.leads : 0,
+    trials: s.trials,
+  })).sort((a, b) => b.leads - a.leads);
+
+  if (stTb) {
+    stTb.innerHTML = studioRows.length ? studioRows.map(s =>
+      `<tr>
+        <td>${s.name}</td>
+        <td class="num">${fK(s.impressions)}</td>
+        <td class="num">${fN(s.clicks)}</td>
+        <td class="num">${s.ctr.toFixed(2)}%</td>
+        <td class="num">${f$(s.spend)}</td>
+        <td class="num">${s.leads}</td>
+        <td class="num">${s.cpl > 0 ? f$2(s.cpl) : '<span style="color:#8aabbf">—</span>'}</td>
+        <td class="num">${s.trials}</td>
+      </tr>`
+    ).join('') : '<tr><td colspan="8" style="color:#8aabbf;text-align:center;padding:20px">No data for selected period.</td></tr>';
+  }
+}
+
+function buildGoogleTab() {
+  const data=GOOGLE_ADS_RAW;
+  const kpisEl=document.getElementById('google-kpis');if(!kpisEl)return;
+  if(!data){kpisEl.innerHTML='<div style="color:#888;padding:20px;grid-column:1/-1">No google-ads-data.json found.</div>';return;}
+  const fromStr=document.getElementById('fFrom')?.value,toStr=document.getElementById('fTo')?.value;if(!fromStr||!toStr)return;
+  const from=new Date(fromStr+'T00:00:00Z'),to=new Date(toStr+'T23:59:59Z');
+  const ppFrom=window._metaPpFrom||null,ppTo=window._metaPpTo||null,pyFrom=window._metaPyFrom||null,pyTo=window._metaPyTo||null;
+  const selSt=new Set(typeof getSelected==='function'?getSelected('studioMenu'):[]);const fbSt=selSt.size>0;
+  function fgr(rows,f,t){if(!rows||!rows.length)return[];const fT=f?f.getTime():0,tT=t?t.getTime():Infinity;return rows.filter(r=>{const d=new Date((r.date||r.month)+'T00:00:00Z').getTime();if(d<fT||d>tT)return false;if(fbSt&&!selSt.has(r.studio))return false;return true;});}
+  function sg(rows){let sp=0,im=0,cl=0,le=0,ca=0,di=0,op=0;for(const r of rows){sp+=r.spend||0;im+=r.impressions||0;cl+=r.clicks||0;le+=r.leads||0;ca+=r.calls||0;di+=r.directions||0;op+=r.opportunities||0;}return{spend:Math.round(sp*100)/100,impressions:im,clicks:cl,leads:le,calls:ca,directions:di,opportunities:Math.round(op*100)/100};}
+  const allRows=[...(data.daily||[]),...(data.monthly||[])];
+  const curr=sg(fgr(allRows,from,to));
+  const pp=sg(fgr(allRows,ppFrom?new Date(ppFrom):null,ppTo?new Date(ppTo):null));
+  const py=sg(fgr(allRows,pyFrom?new Date(pyFrom):null,pyTo?new Date(pyTo):null));
+  const hasData=curr.spend>0||curr.leads>0||curr.opportunities>0;
+  const stTb=document.querySelector('#google-studio-table tbody');
+  if(!hasData){kpisEl.innerHTML='<div style="color:#888;padding:20px;grid-column:1/-1">No Google Ads data for selected period.</div>';if(stTb)stTb.innerHTML='<tr><td colspan="9" style="color:#8aabbf;text-align:center;padding:20px">No data.</td></tr>';_clearGoogleTrend();return;}
+  const f$=v=>'$'+Number(v).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});const f$2=v=>'$'+Number(v).toFixed(2);const fN=v=>Number(v).toLocaleString();const fK=v=>Number(v)>=1000?(Number(v)/1000).toFixed(0)+'K':fN(v);
+  const cpo_c=curr.opportunities>0?curr.spend/curr.opportunities:0,cpo_p=pp.opportunities>0?pp.spend/pp.opportunities:null,cpo_y=py.opportunities>0?py.spend/py.opportunities:null;
+  kpisEl.innerHTML=kpiCard('Spend',curr.spend,pp.spend||null,py.spend||null,f$)+kpiCard('Opportunities',curr.opportunities,pp.opportunities||null,py.opportunities||null,v=>Number(v).toFixed(0))+kpiCard('Cost / Opp',cpo_c,cpo_p,cpo_y,f$2)+kpiCard('Leads',curr.leads,pp.leads||null,py.leads||null,fN)+kpiCard('Calls',curr.calls,pp.calls||null,py.calls||null,fN)+kpiCard('Directions',curr.directions,pp.directions||null,py.directions||null,fN);
+  _buildGoogleTrend(data,from,to,fbSt,selSt);
+  const smap={};for(const r of fgr(allRows,from,to)){const s=r.studio;if(!smap[s])smap[s]={spend:0,impressions:0,clicks:0,leads:0,calls:0,directions:0,opp:0};smap[s].spend+=r.spend||0;smap[s].impressions+=r.impressions||0;smap[s].clicks+=r.clicks||0;smap[s].leads+=r.leads||0;smap[s].calls+=r.calls||0;smap[s].directions+=r.directions||0;smap[s].opp+=r.opportunities||0;}
+  const srows=Object.entries(smap).map(([name,m])=>({name,...m})).sort((a,b)=>b.opp-a.opp);
+  if(stTb){stTb.innerHTML=srows.length?srows.map(s=>{const cpo=s.opp>0?f$2(s.spend/s.opp):'-';return'<tr><td>'+s.name+'</td><td class="num">'+f$(s.spend)+'</td><td class="num">'+fK(s.impressions)+'</td><td class="num">'+fN(s.clicks)+'</td><td class="num">'+s.leads+'</td><td class="num">'+s.calls+'</td><td class="num">'+s.directions+'</td><td class="num">'+s.opp.toFixed(1)+'</td><td class="num">'+cpo+'</td></tr>';}).join(''):'<tr><td colspan="9" style="color:#8aabbf;text-align:center;padding:20px">No studio data.</td></tr>';}
+  const assets=data.assets||{};_buildGoogleAssets(assets.headlines||[],assets.descriptions||[]);
+}
+function _clearGoogleTrend(){if(googleTrendChart){googleTrendChart.destroy();googleTrendChart=null;}}
+function _buildGoogleTrend(data,from,to,fbSt,selSt){_clearGoogleTrend();const ctx=document.getElementById('googleTrendChart');if(!ctx)return;const allRows=[...(data.daily||[]),...(data.monthly||[])];const fTime=from.getTime(),tTime=to.getTime(),rDays=(tTime-fTime)/86400000;const bkts={};for(const r of allRows){const d=new Date((r.date||r.month)+'T00:00:00Z');if(d.getTime()<fTime||d.getTime()>tTime)continue;if(fbSt&&!selSt.has(r.studio))continue;let lbl;if(rDays<=62){lbl=r.date||r.month;}else if(rDays<=180){const day=d.getUTCDay();const mon=new Date(d);mon.setUTCDate(d.getUTCDate()-((day+6)%7));lbl=mon.toISOString().slice(0,10);}else{lbl=(r.date||r.month).slice(0,7)+'-01';}if(!bkts[lbl])bkts[lbl]={spend:0,opportunities:0};bkts[lbl].spend+=r.spend||0;bkts[lbl].opportunities+=r.opportunities||0;}const lbls=Object.keys(bkts).sort();const spends=lbls.map(l=>Math.round(bkts[l].spend*100)/100);const opps=lbls.map(l=>Math.round(bkts[l].opportunities*10)/10);const dL=lbls.map(l=>{const d=new Date(l+'T00:00:00Z');if(rDays<=62)return d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});if(rDays<=180)return'Wk '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});return d.toLocaleDateString('en-US',{month:'short',year:'2-digit',timeZone:'UTC'});});googleTrendChart=new Chart(ctx,{type:'bar',data:{labels:dL,datasets:[{label:'Spend',data:spends,backgroundColor:'rgba(52,168,83,0.25)',borderColor:'#34A853',borderWidth:2,borderRadius:3,yAxisID:'ySpend',order:2},{label:'Opportunities',data:opps,type:'line',borderColor:'#00A3E0',borderWidth:2.5,pointRadius:3,tension:0.4,fill:false,yAxisID:'yOpp',order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',labels:{font:{size:11},color:'#5a7a8a',boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label==='Spend'?'Spend: $'+c.parsed.y.toLocaleString():'Opportunities: '+c.parsed.y.toFixed(1)}}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#5a7a8a',maxRotation:0,maxTicksLimit:12}},ySpend:{position:'left',grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11},color:'#34A853',callback:v=>'$'+v.toLocaleString()}},yOpp:{position:'right',grid:{display:false},ticks:{font:{size:11},color:'#00A3E0',callback:v=>v.toFixed(0)}}}}})}
+function _buildGoogleAssets(headlines,descriptions){const rb=label=>{const map={BEST:['#0a8a4a','Best'],GOOD:['#b85c00','Good'],LOW:['#888','Low'],LEARNING:['#888','Learning']};const[color,text]=map[label]||['#888',label||'-'];return'<span style="color:'+color+';font-weight:600">'+text+'</span>';};const fK=v=>Number(v)>=1000?(Number(v)/1000).toFixed(0)+'K':String(v);const fN=v=>Number(v).toLocaleString();const htb=document.querySelector('#google-headlines-table tbody');if(htb)htb.innerHTML=headlines.length?headlines.slice(0,20).map(h=>'<tr><td>'+h.text+'</td><td class="num">'+fK(h.impressions)+'</td><td class="num">'+fN(h.clicks)+'</td><td class="num">'+h.ctr+'%</td><td class="num">'+rb(h.performance_label)+'</td></tr>').join(''):'<tr><td colspan="5" style="color:#8aabbf;text-align:center;padding:20px">No headline data.</td></tr>';const dtb=document.querySelector('#google-desc-table tbody');if(dtb)dtb.innerHTML=descriptions.length?descriptions.slice(0,20).map(d=>'<tr><td style="max-width:260px;white-space:normal">'+d.text+'</td><td class="num">'+fK(d.impressions)+'</td><td class="num">'+fN(d.clicks)+'</td><td class="num">'+d.ctr+'%</td><td class="num">'+rb(d.performance_label)+'</td></tr>').join(''):'<tr><td colspan="5" style="color:#8aabbf;text-align:center;padding:20px">No description data.</td></tr>';}
+
+
+
+// Open Summary nav group by default
+(function(){
+  const g = document.getElementById('summary-group');
+  const b = g && g.closest('.nav-group').querySelector('.nav-group-label');
+  if(g) g.classList.add('open');
+  if(b) b.classList.add('open');
+})();
+
+function toggleNavGroup(groupId, btn) {
+  const submenu = document.getElementById(groupId);
+  const isOpen  = submenu.classList.contains('open');
+  document.querySelectorAll('.nav-submenu').forEach(s => s.classList.remove('open'));
+  document.querySelectorAll('.nav-group-label').forEach(b => b.classList.remove('group-open'));
+  if (!isOpen) {
+    submenu.classList.add('open');
+    btn.classList.add('group-open');
+  }
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.nav-group')) {
+    document.querySelectorAll('.nav-submenu').forEach(s => s.classList.remove('open'));
+    document.querySelectorAll('.nav-group-label').forEach(b => b.classList.remove('group-open'));
+  }
+});
+
+function checkCPRWarning() {
+  const warn = document.getElementById('cpr-warning');
+  if (!warn) return;
+
+  const paidOnly  = (CPR_COSTS_ACTIVE.google || CPR_COSTS_ACTIVE.meta) && !CPR_COSTS_ACTIVE.leadteam;
+  const allCosts  = CPR_COSTS_ACTIVE.google && CPR_COSTS_ACTIVE.meta && CPR_COSTS_ACTIVE.leadteam;
+
+  // Get selected sources
+  const selSources = typeof getSelected === 'function' ? (getSelected('sourceMenu') || []) : [];
+  const paidSources  = ['Meta Ads','Google Ads'];
+  const mktgSources  = ['Website (unattributed)','Business Mode','Meta Ads','Google Ads',
+                        'SWEAT440 App','MindBody App','Social Media Organic','Local Listings',
+                        'Word of Mouth','Print Ads / Signs','N/A','Other'];
+  const nonPaidSelected = selSources.some(s => !paidSources.includes(s));
+  const allMktgSelected = mktgSources.every(s => selSources.includes(s));
+
+  let msg = '';
+
+  // Warning 1: only paid costs selected but non-ad lead sources included
+  if (paidOnly && nonPaidSelected) {
+    msg = '⚠️ You are only seeing Ad spend (Google/Meta), but your lead sources include non-ad channels. This will understate your cost per result. Please verify your Source filter.';
+  }
+  // Warning 2: all costs selected but not all marketing sources
+  else if (allCosts && selSources.length > 0 && !allMktgSelected) {
+    msg = '⚠️ You are including all cost sources but some marketing lead sources are deselected. Your cost per result may be overstated. Please verify your Source filter.';
+  }
+
+  if (msg) {
+    warn.textContent = msg;
+    warn.style.display = 'block';
+  } else {
+    warn.style.display = 'none';
+  }
+}
+
+
+
+loadData();
+</script>
+</body>
+</html>
