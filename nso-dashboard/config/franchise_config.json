@@ -1,0 +1,28 @@
+{
+  "franchises": {
+    "herriman": {
+      "display_name": "Herriman",
+      "franchise_id": "herriman",
+      "meta": {
+        "ad_account_id": "act_1553887681409034",
+        "page_id": "1016504601542354",
+        "instagram_account_id": "17841447639266583"
+      },
+      "google_ads": {
+        "customer_id": "385-801-4125",
+        "mcc_id": "605-546-2417"
+      },
+      "ga4": {
+        "property_id": "341934364",
+        "studio_page_path": "/gyms/utah-herriman/"
+      },
+      "gbp": {
+        "location_id": "locations/01689314637450990290",
+        "account_id": "accounts/4243744174605320602"
+      },
+      "snowflake": {
+        "studio_id": 5752080
+      }
+    }
+  }
+}

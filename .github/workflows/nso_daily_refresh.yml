@@ -1,0 +1,150 @@
+name: NSO Dashboard Daily Refresh
+
+on:
+  schedule:
+    - cron: '0 11 * * *'   # 3:00 AM PT (UTC-8 PST / UTC-7 PDT ≈ 11:00 UTC)
+  workflow_dispatch:        # Allow manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r nso-dashboard/requirements.txt
+
+      - name: Set date variables
+        run: |
+          echo "YESTERDAY=$(date -u -d '1 day ago' +%Y-%m-%d)"    >> $GITHUB_ENV
+          echo "TWO_DAYS_AGO=$(date -u -d '2 days ago' +%Y-%m-%d)" >> $GITHUB_ENV
+
+      - name: Write Google service account credentials
+        run: |
+          mkdir -p nso-dashboard/credentials
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}' > nso-dashboard/credentials/service_account.json
+
+      # ── NSO SALES ──────────────────────────────────────────────────────────
+      # Fetches yesterday + 2 days ago to catch late-arriving Snowflake data.
+      # Merges into the full nso_sales_data.json (keeps all history).
+      - name: Refresh NSO Sales (yesterday + 2 days ago)
+        env:
+          SNOWFLAKE_ACCOUNT:   ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER:      ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD:  ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE:  ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_ROLE:      ${{ secrets.SNOWFLAKE_ROLE }}
+        run: |
+          python nso-dashboard/scripts/fetch_nso_sales.py \
+            --start $TWO_DAYS_AGO \
+            --end   $YESTERDAY \
+            --output nso-dashboard/nso_sales_new.json
+          python nso-dashboard/scripts/merge_nso_sales.py \
+            --existing nso-dashboard/nso_sales_data.json \
+            --new      nso-dashboard/nso_sales_new.json
+          rm -f nso-dashboard/nso_sales_new.json
+        continue-on-error: true
+
+      # ── GBP ────────────────────────────────────────────────────────────────
+      # Quota-limited API — fetch last 3 days and merge to preserve history.
+      - name: Refresh Google Business Profile (yesterday + 2 days ago)
+        env:
+          GBP_CLIENT_ID:     ${{ secrets.GBP_CLIENT_ID }}
+          GBP_CLIENT_SECRET: ${{ secrets.GBP_CLIENT_SECRET }}
+          GBP_REFRESH_TOKEN: ${{ secrets.GBP_REFRESH_TOKEN }}
+        run: |
+          python nso-dashboard/scripts/fetch_gbp.py \
+            --start $TWO_DAYS_AGO \
+            --end   $YESTERDAY \
+            --output nso-dashboard/gbp_data_new.json
+          python nso-dashboard/scripts/merge_gbp.py \
+            --existing nso-dashboard/gbp_data.json \
+            --new      nso-dashboard/gbp_data_new.json
+          rm -f nso-dashboard/gbp_data_new.json
+        continue-on-error: true
+
+      # ── META ADS + GA4 + GOOGLE ADS ────────────────────────────────────────
+      # Run fetch_all_marketing with last 3 days, then merge each key separately.
+      - name: Refresh Meta Ads / GA4 / Google Ads (yesterday + 2 days ago)
+        env:
+          META_ACCESS_TOKEN:              ${{ secrets.META_ACCESS_TOKEN }}
+          META_APP_ID:                    ${{ secrets.META_APP_ID }}
+          META_APP_SECRET:                ${{ secrets.META_APP_SECRET }}
+          GOOGLE_ADS_DEVELOPER_TOKEN:     ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID:           ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET:       ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN:       ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+          GOOGLE_SERVICE_ACCOUNT_KEY_PATH: nso-dashboard/credentials/service_account.json
+        run: |
+          python nso-dashboard/scripts/fetch_all_marketing.py \
+            --start $TWO_DAYS_AGO \
+            --end   $YESTERDAY \
+            --output nso-dashboard/marketing_all_new.json
+
+          # Merge meta_ads + ga4_traffic into marketing_data.json
+          python nso-dashboard/scripts/merge_array_json.py \
+            --existing nso-dashboard/marketing_data.json \
+            --new      nso-dashboard/marketing_all_new.json \
+            --keys     meta_ads ga4_traffic
+
+          # Merge google_ads into nso_google_ads.json
+          python nso-dashboard/scripts/merge_array_json.py \
+            --existing nso-dashboard/nso_google_ads.json \
+            --new      nso-dashboard/marketing_all_new.json \
+            --keys     google_ads
+
+          rm -f nso-dashboard/marketing_all_new.json
+        continue-on-error: true
+
+      # ── SOCIAL INSIGHTS ────────────────────────────────────────────────────
+      # Always overwrites — script already fetches recent posts by design.
+      - name: Refresh Social Insights
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_APP_ID:       ${{ secrets.META_APP_ID }}
+          META_APP_SECRET:   ${{ secrets.META_APP_SECRET }}
+        run: |
+          python nso-dashboard/scripts/fetch_social_insights.py \
+            --output nso-dashboard/social_insights.json
+        continue-on-error: true
+
+      # ── SCORECARD ──────────────────────────────────────────────────────────
+      # Rebuilt daily from data.json + nso_sales_data.json (no external API).
+      - name: Rebuild Scorecard
+        env:
+          SNOWFLAKE_ACCOUNT:   ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER:      ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD:  ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE:  ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_ROLE:      ${{ secrets.SNOWFLAKE_ROLE }}
+        run: |
+          python nso-dashboard/scripts/build_all_scorecards.py
+        continue-on-error: true
+
+      # ── COMMIT ─────────────────────────────────────────────────────────────
+      - name: Commit updated data files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add \
+            nso-dashboard/nso_sales_data.json \
+            nso-dashboard/gbp_data.json \
+            nso-dashboard/marketing_data.json \
+            nso-dashboard/nso_google_ads.json \
+            nso-dashboard/social_insights.json \
+            nso-dashboard/nso_scorecard_data.json
+          git diff --cached --quiet || \
+            git commit -m "chore: nso daily refresh $YESTERDAY"
+          git push
