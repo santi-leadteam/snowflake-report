@@ -32,8 +32,8 @@ const SRC_COLOR_MAP = {
 // -- Default exclusions (can be overridden per dashboard) -------------------
 const DEFAULT_EXCL_SOURCES = ['ClassPass / Platforms','Grassroots'];
 const DEFAULT_EXCL_STUDIOS = [
-  'SWEAT440 Dallas - Prestonwood','SWEAT440 Herriman','SWEAT440 Naples - Mercato',
-  'SWEAT440 Nashville - Capitol View','SWEAT440 Pinecrest - Palmetto Bay','SWEAT440 Reston'
+  'Dallas - Prestonwood','Herriman','Naples - Mercato',
+  'Nashville - Capitol View','Pinecrest - Palmetto Bay','Reston'
 ];
 
 function localDateStr(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }

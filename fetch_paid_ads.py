@@ -726,6 +726,7 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
         "studio_media_types": studio_media_types_out,
         "daily": daily_out,
         "daily_series": daily_series,
+        "ads": ads_out,         # NEW — used by index.html Meta Ads tab; ignored by paid-ads.html
     }
 
 

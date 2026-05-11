@@ -252,6 +252,29 @@
     <!-- KPI row: 6 cards -->
     <div class="kpi-grid" id="meta-kpis" style="grid-template-columns:repeat(6,1fr);margin-bottom:20px"></div>
 
+    <!-- Active Ads table -->
+    <div class="chart-card" style="margin-bottom:20px">
+      <div class="chart-card-title">Active Ads</div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="meta-ads-table">
+          <thead>
+            <tr>
+              <th style="width:56px"></th>
+              <th>Ad</th>
+              <th class="num">Impressions</th>
+              <th class="num">Clicks</th>
+              <th class="num">CTR</th>
+              <th class="num">Spend</th>
+              <th class="num">Leads</th>
+              <th class="num">CPL</th>
+              <th class="num">Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Studio breakdown -->
     <div class="chart-card">
       <div class="chart-card-title">Studio Breakdown</div>
@@ -484,7 +507,7 @@ function applyFilters() {
   window._metaPpLabel = fmtDate(ppFrom)+' – '+fmtDate(ppTo);
   window._metaPyLabel = fmtDate(pyFrom)+' – '+fmtDate(pyTo);
   // Rebuild Meta tab if it's currently visible
-  if (document.getElementById('tab-meta')?.classList.contains('active')) buildMetaTab();
+  buildMetaTab();  // always sync meta tab to current filters
 }
 
 
@@ -751,8 +774,32 @@ function toggleCPRds(btn,i){if(!cprChart)return;const ds=cprChart.data.datasets[
 
 
 
+
+
 // -- META ADS ----------------------------------------------------------
 let META_ADS_RAW = null;
+
+// Canonical studio code → name (no "SWEAT440 " prefix)
+const META_CODE_TO_STUDIO = {
+  'FL-001': 'Miami Beach',        'FL-002': 'Miami - Brickell',
+  'FL-003': 'Coral Gables',       'FL-004': 'Doral',
+  'FL-005': 'Miami Lakes',        'FL-006': 'Deerfield Beach',
+  'FL-007': 'Miami - Upper East Side', 'FL-008': 'Coral Springs',
+  'FL-009': 'South Miami',        'FL-010': 'Miami - Midtown',
+  'FL-011': 'Miami - Coconut Grove', 'FL-012': 'Miramar',
+  'FL-013': 'Fort Lauderdale - Las Olas', 'FL-014': 'Pembroke Pines',
+  'FL-015': 'West Palm Beach',    'FL-016': 'Boca Raton',
+  'NC-001': 'Charlotte - Noda',   'NJ-001': 'Toms River',
+  'NJ-002': 'Ocean Township',     'NJ-003': 'Wall Township',
+  'NY-002': 'NYC - Chelsea',      'NY-003': 'NYC - Park Slope',
+  'NY-004': 'Eastchester',        'TX-001': 'Austin - Zilker',
+  'TX-002': 'Austin - Highland',
+};
+
+// Strip "26-FL-015-02 - " style prefix to get the creative short name
+function creativeShortName(adName) {
+  return (adName || '').replace(/^\d+\-[A-Z]{2}\-\d+\-\d+\s*-\s*/i, '').trim();
+}
 
 async function ensureMetaAds() {
   if (META_ADS_RAW) return META_ADS_RAW;
@@ -772,31 +819,30 @@ async function buildMetaTab() {
   if (!kpisEl) return;
 
   if (!data) {
-    kpisEl.innerHTML = '<div style="color:#888;font-family:\'Open Sans\';padding:20px;grid-column:1/-1">No paid-ads-data.json found.</div>';
+    kpisEl.innerHTML = '<div style="color:#888;padding:20px;grid-column:1/-1">No paid-ads-data.json found.</div>';
     return;
   }
 
-  // ---- Read date range directly from the filter inputs ----
+  // ---- Read filters directly from DOM ----
   const fromStr = document.getElementById('fFrom')?.value;
   const toStr   = document.getElementById('fTo')?.value;
   if (!fromStr || !toStr) return;
+
   const from  = new Date(fromStr + 'T00:00:00Z');
   const to    = new Date(toStr   + 'T23:59:59Z');
   const fTime = from.getTime();
   const tTime = to.getTime();
 
-  // ---- Build code→name map ----
-  const codeToName = {};
-  for (const camp of Object.values(data.campaigns || {})) {
-    for (const s of (camp.studios || [])) {
-      if (s.code && s.name) codeToName[s.code] = s.name;
-    }
-  }
+  // Studio filter
+  const selectedStudios = new Set(
+    typeof getSelected === 'function' ? getSelected('studioMenu') : []
+  );
+  const filterByStudio = selectedStudios.size > 0;
 
   const allCamps = Object.values(data.campaigns || {})
     .sort((a, b) => a.date_start.localeCompare(b.date_start));
 
-  // ---- Aggregate totals for selected period ----
+  // ---- Aggregate totals + per-studio breakdown from daily_series ----
   let spend=0, impressions=0, clicks=0, leads=0, trials=0, hasData=false;
   const studioMap = {};
 
@@ -804,27 +850,30 @@ async function buildMetaTab() {
     for (const row of ((camp.daily_series || {}).by_studio || [])) {
       const d = new Date(row.date + 'T00:00:00Z').getTime();
       if (d < fTime || d > tTime) continue;
+      const canonicalName = META_CODE_TO_STUDIO[row.studio_code] || row.studio_code;
+      if (filterByStudio && !selectedStudios.has(canonicalName)) continue;
       hasData = true;
       spend       += row.spend       || 0;
       impressions += row.impressions || 0;
       clicks      += row.clicks      || 0;
       leads       += row.leads       || 0;
       trials      += row.trials      || 0;
-      const code = row.studio_code;
-      if (!studioMap[code]) studioMap[code] = { spend:0, impressions:0, clicks:0, leads:0, trials:0 };
-      studioMap[code].spend       += row.spend       || 0;
-      studioMap[code].impressions += row.impressions || 0;
-      studioMap[code].clicks      += row.clicks      || 0;
-      studioMap[code].leads       += row.leads       || 0;
-      studioMap[code].trials      += row.trials      || 0;
+      if (!studioMap[canonicalName]) studioMap[canonicalName] = { spend:0, impressions:0, clicks:0, leads:0, trials:0 };
+      studioMap[canonicalName].spend       += row.spend       || 0;
+      studioMap[canonicalName].impressions += row.impressions || 0;
+      studioMap[canonicalName].clicks      += row.clicks      || 0;
+      studioMap[canonicalName].leads       += row.leads       || 0;
+      studioMap[canonicalName].trials      += row.trials      || 0;
     }
   }
 
-  const stTb = document.querySelector('#meta-studio-table tbody');
+  const adsTb  = document.querySelector('#meta-ads-table tbody');
+  const stTb   = document.querySelector('#meta-studio-table tbody');
 
   if (!hasData) {
     kpisEl.innerHTML = '<div style="color:#888;padding:20px;grid-column:1/-1">No Meta Ads data for selected period.</div>';
-    if (stTb) stTb.innerHTML = '<tr><td colspan="8" style="color:#8aabbf;text-align:center;padding:20px">No data for selected period.</td></tr>';
+    if (adsTb) adsTb.innerHTML = '<tr><td colspan="9" style="color:#8aabbf;text-align:center;padding:20px">No data for selected period.</td></tr>';
+    if (stTb)  stTb.innerHTML  = '<tr><td colspan="8" style="color:#8aabbf;text-align:center;padding:20px">No data for selected period.</td></tr>';
     return;
   }
 
@@ -834,7 +883,7 @@ async function buildMetaTab() {
   const fK  = v => Number(v) >= 1000 ? (Number(v)/1000).toFixed(0) + 'K' : fN(v);
   const cpl = leads > 0 ? spend / leads : 0;
 
-  // ---- KPI cards — no comparisons ----
+  // ---- KPI cards ----
   kpisEl.innerHTML =
     kpiCard('Spend',        spend,        null, null, f$)  +
     kpiCard('Impressions',  impressions,  null, null, v=>fK(v)) +
@@ -843,20 +892,118 @@ async function buildMetaTab() {
     kpiCard('Trials',       trials,       null, null, v=>v) +
     kpiCard('Cost / Lead',  cpl,          null, null, f$2);
 
+  // ---- Active Ads table ----
+  // Collect ads from all campaigns that overlap the selected period
+  // Group by creative short name, aggregate metrics, pick best thumbnail
+  const creativeMap = {};
+
+  for (const camp of allCamps) {
+    const campStart = new Date(camp.date_start + 'T00:00:00Z').getTime();
+    const campEnd   = new Date(camp.date_end   + 'T23:59:59Z').getTime();
+    if (campStart > tTime || campEnd < fTime) continue; // campaign outside range
+
+    for (const ad of (camp.ads || [])) {
+      // Apply studio filter
+      const canonicalName = META_CODE_TO_STUDIO[ad.studio_code] || ad.studio_code;
+      if (filterByStudio && !selectedStudios.has(canonicalName)) continue;
+
+      // Only include ads that were active during the selected period
+      // first_seen must be within or before the selected range
+      if (ad.first_seen) {
+        const fs = new Date(ad.first_seen + 'T00:00:00Z').getTime();
+        if (fs > tTime) continue; // started after the period
+      }
+
+      const shortName = creativeShortName(ad.name);
+      if (!shortName) continue;
+
+      if (!creativeMap[shortName]) {
+        creativeMap[shortName] = {
+          name:        shortName,
+          media_type:  ad.media_type,
+          spend:       0, impressions: 0, clicks: 0, leads: 0, trials: 0,
+          isActive:    false,
+          first_seen:  ad.first_seen || camp.date_start,
+          camp_start:  camp.date_start,
+          thumbnail:   '',
+          library_url: '',
+          _ads:        [],
+        };
+      }
+
+      const g = creativeMap[shortName];
+      g.spend       += ad.spend       || 0;
+      g.impressions += ad.impressions || 0;
+      g.clicks      += ad.clicks      || 0;
+      g.leads       += ad.leads       || 0;
+      g.trials      += ad.trials      || 0;
+      if (ad.status === 'ACTIVE') g.isActive = true;
+      if (ad.first_seen && ad.first_seen < g.first_seen) g.first_seen = ad.first_seen;
+      g._ads.push(ad);
+    }
+  }
+
+  // Pick best thumbnail (highest-lead ad that has one)
+  for (const g of Object.values(creativeMap)) {
+    const sorted = g._ads.slice().sort((a, b) => b.leads - a.leads);
+    g.thumbnail   = sorted.find(a => a.thumbnail_url)?.thumbnail_url || '';
+    g.library_url = sorted.find(a => a.library_url)?.library_url || '';
+    delete g._ads;
+  }
+
+  const creativeRows = Object.values(creativeMap)
+    .sort((a, b) => b.leads - a.leads);
+
+  if (adsTb) {
+    adsTb.innerHTML = creativeRows.length ? creativeRows.map(g => {
+      const isNew = g.first_seen > g.camp_start;
+      const statusBadge = g.isActive
+        ? '<span style="background:#00a86b;color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">ACTIVE</span>'
+        : '<span style="background:#f59e0b;color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">PAUSED</span>';
+      const newBadge = isNew
+        ? '<span style="background:#00A3E0;color:#fff;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:5px">NEW</span>'
+        : '';
+      const ctr = g.impressions > 0 ? (g.clicks / g.impressions * 100).toFixed(2) + '%' : '—';
+      const adCpl = g.leads > 0 ? f$2(g.spend / g.leads) : '—';
+
+      // Thumbnail cell — click opens Ads Library
+      const thumbCell = g.thumbnail
+        ? `<a href="${g.library_url}" target="_blank" rel="noopener" style="display:block;width:44px;height:44px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,163,224,0.2);flex-shrink:0">
+             <img src="${g.thumbnail}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\'width:44px;height:44px;background:#0084b5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px\'>▶</div>'"/>
+           </a>`
+        : `<a href="${g.library_url}" target="_blank" rel="noopener" style="display:flex;width:44px;height:44px;background:#0084b5;border-radius:6px;align-items:center;justify-content:center;font-size:18px;text-decoration:none">▶</a>`;
+
+      const mediaIcon = g.media_type === 'Video' ? '▶' : g.media_type === 'Static' ? '🖼' : '⊞';
+
+      return `<tr>
+        <td style="padding:8px 6px">${thumbCell}</td>
+        <td>
+          <div style="font-weight:600;font-size:13px">${g.name}${newBadge}</div>
+          <div style="font-size:11px;color:#8aabbf;margin-top:2px">${mediaIcon} ${g.media_type}</div>
+        </td>
+        <td class="num">${fK(g.impressions)}</td>
+        <td class="num">${fN(g.clicks)}</td>
+        <td class="num">${ctr}</td>
+        <td class="num">${f$(g.spend)}</td>
+        <td class="num">${g.leads}</td>
+        <td class="num">${adCpl}</td>
+        <td class="num">${statusBadge}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="9" style="color:#8aabbf;text-align:center;padding:20px">No ads found for selected period.</td></tr>';
+  }
+
   // ---- Studio table ----
-  const studioRows = Object.entries(studioMap).map(([code, s]) => ({
-    name:        codeToName[code] || code,
-    impressions: s.impressions,
-    clicks:      s.clicks,
-    ctr:         s.impressions > 0 ? s.clicks / s.impressions * 100 : 0,
-    spend:       s.spend,
-    leads:       s.leads,
-    cpl:         s.leads > 0 ? s.spend / s.leads : 0,
-    trials:      s.trials,
+  const studioRows = Object.entries(studioMap).map(([name, s]) => ({
+    name,
+    impressions: s.impressions, clicks: s.clicks,
+    ctr: s.impressions > 0 ? s.clicks / s.impressions * 100 : 0,
+    spend: s.spend, leads: s.leads,
+    cpl: s.leads > 0 ? s.spend / s.leads : 0,
+    trials: s.trials,
   })).sort((a, b) => b.leads - a.leads);
 
   if (stTb) {
-    stTb.innerHTML = studioRows.map(s =>
+    stTb.innerHTML = studioRows.length ? studioRows.map(s =>
       `<tr>
         <td>${s.name}</td>
         <td class="num">${fK(s.impressions)}</td>
@@ -867,7 +1014,7 @@ async function buildMetaTab() {
         <td class="num">${s.cpl > 0 ? f$2(s.cpl) : '<span style="color:#8aabbf">—</span>'}</td>
         <td class="num">${s.trials}</td>
       </tr>`
-    ).join('');
+    ).join('') : '<tr><td colspan="8" style="color:#8aabbf;text-align:center;padding:20px">No data for selected period.</td></tr>';
   }
 }
 
