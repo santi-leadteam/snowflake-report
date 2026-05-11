@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T15:34:49.807511Z",
+  "generated_at": "2026-05-11T16:36:01.564864Z",
   "studios": [
     "Austin - Highland",
     "Austin - Zilker",
@@ -177689,11 +177689,5 @@
       "first_activations": 0,
       "first_sales": 4
     }
-  ],
-  "meta": {
-    "account": "SWEAT440 - Corporate Studios",
-    "account_id": "act_1553887681409034",
-    "daily": [],
-    "monthly": []
-  }
+  ]
 }
