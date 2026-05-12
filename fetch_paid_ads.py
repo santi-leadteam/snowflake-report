@@ -308,6 +308,7 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
     # config.yaml may use different casing/spacing; this ensures paid-ads-data.json
     # always uses the same names as data.json for the studio filter merge key.
     _CANONICAL = {
+        'Charlotte - NoDa':      'Charlotte - Noda',
         'Miami Brickell':        'Miami - Brickell',
         'Miami Upper East Side': 'Miami - Upper East Side',
         'Midtown Miami':         'Miami - Midtown',

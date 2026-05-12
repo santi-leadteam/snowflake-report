@@ -812,7 +812,7 @@ function buildSummaryTab() {
 
   function ltFor(f,t) {
     if(!f||!t) return 0;
-    const days=(t.getTime()-f.getTime())/86400000+1;
+    const days=Math.round((t.getTime()-f.getTime())/86400000);
     return studioCount*LTFEE*(days/30.4375);
   }
   function gFor(f,t) {
@@ -925,7 +925,7 @@ function buildCPRTab() {
   const allStudios=selStudios.length>0?selStudios:(RAW?RAW.studios:[]);
   const studioCount=allStudios.length||1;
   const LEADTEAM_PER_STUDIO_MONTH=1200;
-  function leadteamForRange(f,t){if(!f||!t)return 0;const days=(t.getTime()-f.getTime())/86400000+1;return studioCount*LEADTEAM_PER_STUDIO_MONTH*(days/30.4375);}
+  function leadteamForRange(f,t){if(!f||!t)return 0;const days=Math.round((t.getTime()-f.getTime())/86400000);return studioCount*LEADTEAM_PER_STUDIO_MONTH*(days/30.4375);}
   const ltCurr=leadteamForRange(from,to);
   const ltPp=leadteamForRange(ppFrom?new Date(ppFrom):null,ppTo?new Date(ppTo):null);
   const ltPy=leadteamForRange(pyFrom?new Date(pyFrom):null,pyTo?new Date(pyTo):null);
@@ -1080,11 +1080,30 @@ function buildCPRTab() {
     return clampEnd >= clampStart ? (clampEnd - clampStart) / 86400000 + 1 : 0;
   }
 
+  // Compute spend per bucket using the exact same functions as the KPI cards
+  // so chart values match cards when a single bucket covers the selected period
+  function bucketRange(key) {
+    const kStart = new Date(key + 'T00:00:00Z');
+    let kEnd;
+    if (CPR_GRAN === 'monthly') {
+      kEnd = new Date(Date.UTC(kStart.getUTCFullYear(), kStart.getUTCMonth()+1, 0, 23, 59, 59));
+    } else if (CPR_GRAN === 'weekly') {
+      kEnd = new Date(kStart.getTime() + 6*86400000 + 86399999);
+    } else {
+      kEnd = new Date(kStart.getTime() + 86399999);
+    }
+    return {
+      f: new Date(Math.max(fTime, kStart.getTime())),
+      t: new Date(Math.min(tTime,  kEnd.getTime())),
+    };
+  }
+
   function trendSpend(key) {
+    const {f, t} = bucketRange(key);
     let s = 0;
-    if (CPR_COSTS_ACTIVE.google)   s += buckets[key].google;
-    if (CPR_COSTS_ACTIVE.meta)     s += buckets[key].meta;
-    if (CPR_COSTS_ACTIVE.leadteam) s += LT_DAILY_RATE * bucketDays(key);
+    if (CPR_COSTS_ACTIVE.google)   s += sumGoogleSpend(f, t);
+    if (CPR_COSTS_ACTIVE.meta)     s += sumMetaSpend(f, t);
+    if (CPR_COSTS_ACTIVE.leadteam) s += leadteamForRange(f, t);
     return s;
   }
   const cplData=sortedKeys.map(k=>{const s=trendSpend(k),l=buckets[k].leads;return l>0?Math.round(s/l*100)/100:null;});
@@ -1117,7 +1136,7 @@ const META_CODE_TO_STUDIO = {
   'FL-013': 'Fort Lauderdale - Las Olas', 'FL-014': 'Pembroke Pines',
   'FL-015': 'West Palm Beach',          'FL-016': 'Boca Raton',
   'FL-017': 'Pinecrest',                'FL-019': 'Naples Mercato',
-  'NC-001': 'Charlotte - NoDa',         'NJ-001': 'Toms River',
+  'NC-001': 'Charlotte - Noda',         'NJ-001': 'Toms River',
   'NJ-002': 'Ocean Township',           'NJ-003': 'Wall Township',
   'NY-002': 'NYC - Chelsea',              'NY-003': 'NYC - Park Slope',
   'NY-004': 'Eastchester',              'TX-001': 'Austin - Zilker',
