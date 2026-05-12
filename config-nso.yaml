@@ -1,0 +1,68 @@
+# -----------------------------------------------------------------------
+# SWEAT440 NSO (New Studio Opening) Paid Ads Dashboard — Config
+# -----------------------------------------------------------------------
+# El ETL descubre automáticamente las campañas que contengan
+# 'campaign_name_filter' en el nombre, dentro de 'ad_account_id'.
+#
+# Para agregar studios manuales (breakdown por studio dentro de una
+# campaña), añade entradas en 'studios'. Si la lista está vacía,
+# el ETL trata cada campaña como un único bloque (sin sub-breakdown).
+# -----------------------------------------------------------------------
+
+ad_account_id: "act_1553887681409034"   # SWEAT440 - Corporate Studios
+
+# Substring que debe aparecer en el nombre de la campaña (case-insensitive)
+campaign_name_filter: "NSO"
+
+# Statuses de campaña a incluir. Descomenta la siguiente línea para traer
+# solo campañas activas. Por defecto trae ACTIVE + PAUSED.
+# campaign_statuses: ["ACTIVE"]
+
+# Cuántos días hacia atrás (desde hoy) incluir en la serie diaria
+daily_window_days: 90
+
+# Tokens de audiencia — se buscan como palabras en el nombre del ad
+audience_tokens:
+  DINKS: ["DINKS"]
+  POC:   ["POC"]
+  PYC:   ["PYC"]
+  SI:    ["SI"]
+  SAHP:  ["SAHP"]
+
+# Tokens de pilar de producto
+pillar_tokens:
+  DR:    ["DR"]
+  DF:    ["DF"]
+  "P&R": ["P&R", "P+R"]
+  PS:    ["PS"]
+  SSB:   ["SSB"]
+  HYROX: ["HYROX"]
+
+# -----------------------------------------------------------------------
+# Studios (opcional)
+# Si dejas esto vacío, cada campaña NSO se trata como un único studio
+# y todos los ad sets quedan agrupados bajo ese nombre.
+#
+# Si tus ad sets tienen nombres como "NSO Charlotte NoDa - DINKS" y
+# quieres desglosar por studio dentro de la misma campaña, añade:
+#
+# studios:
+#   - { code: "NC-001", name: "Charlotte NoDa",   state: "NC", match: "Charlotte" }
+#   - { code: "FL-001", name: "Miami Beach",       state: "FL", match: "Miami Beach" }
+#   ...
+# -----------------------------------------------------------------------
+studios: []
+
+# -----------------------------------------------------------------------
+# Tier tokens — identifica a qué fase pertenece cada ad por su nombre.
+# Agrega aquí los tokens que aparecen en tus nombres de ad.
+# El ETL busca estas palabras como tokens exactos (insensible a mayúsculas).
+# -----------------------------------------------------------------------
+tier_tokens:
+  "$99 Tier":    ["$99", "99TI", "TIER99", "Tier 99"]
+  "BTI to $129": ["BTI129", "BTI-129", "BTI 129"]
+  "$129 Tier":   ["$129", "129TI", "TIER129", "Tier 129"]
+  "BTI to $149": ["BTI149", "BTI-149", "BTI 149"]
+  "$149 Tier":   ["$149", "149TI", "TIER149", "Tier 149"]
+  "Prev Week":   ["PW", "PREVWEEK", "PREV-WEEK", "Prev Week"]
+  "Opening":     ["OPENING", "OPEN", "OD", "NowOpen"]

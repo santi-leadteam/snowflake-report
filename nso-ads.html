@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SWEAT440 — NSO Paid Ads Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+  :root {
+    --brand-blue:      #00A3E0;
+    --brand-blue-deep: #0084B5;
+    --ink:             #0F172A;
+    --ink-soft:        #475569;
+    --border:          #E2E8F0;
+    --bg:              #F8FAFC;
+    --card:            #FFFFFF;
+    --good:            #16A34A;
+    --bad:             #DC2626;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--ink); font-size: 14px;
+  }
+  h1, h2, h3 { font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: .5px; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+  /* Header */
+  header.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  header.topbar h1 { margin: 0; font-size: 28px; text-transform: uppercase; color: var(--brand-blue-deep); }
+  header.topbar .meta { color: var(--ink-soft); font-size: 12px; }
+  .campaign-picker { display: flex; align-items: center; gap: 10px; }
+  .campaign-picker select {
+    font-family: inherit; font-size: 14px; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: 6px; background: #fff; min-width: 300px;
+  }
+  .period { color: var(--ink-soft); font-size: 12px; }
+
+  /* KPI grid */
+  .kpi-grid {
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-soft); font-weight: 600; }
+  .kpi .value { font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: 600; color: var(--ink); margin-top: 2px; }
+  .kpi .sub   { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+  .kpi.accent { border-left: 4px solid var(--brand-blue); }
+
+  /* Tier KPI strip (inside tier tabs) */
+  .tier-kpi-strip {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(5, 1fr);
+    margin-bottom: 20px;
+  }
+  @media (max-width: 900px) { .tier-kpi-strip { grid-template-columns: repeat(3, 1fr); } }
+  .tier-kpi {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; text-align: center;
+  }
+  .tier-kpi .t-label { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-soft); font-weight: 600; }
+  .tier-kpi .t-value { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 600; color: var(--ink); margin-top: 2px; }
+
+  /* Cards */
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px; margin-bottom: 18px;
+  }
+  .card h2 { margin: 0 0 14px 0; font-size: 16px; color: var(--brand-blue-deep); }
+  .card h3 { margin: 0 0 10px 0; font-size: 14px; color: var(--brand-blue-deep); font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: .5px; }
+
+  /* Tables */
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td.ad-name-cell { white-space: normal; min-width: 200px; max-width: 320px; word-break: break-word; }
+  th {
+    background: #F1F5F9; font-weight: 600; color: var(--ink-soft);
+    text-transform: uppercase; font-size: 11px; letter-spacing: .4px;
+    cursor: pointer; user-select: none; white-space: nowrap;
+  }
+  th.sort-asc::after  { content: " ▲"; color: var(--brand-blue); }
+  th.sort-desc::after { content: " ▼"; color: var(--brand-blue); }
+  th.no-sort { cursor: default; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:hover { background: #F8FAFC; }
+  .tier-chip {
+    display: inline-block; padding: 2px 7px; border-radius: 10px;
+    font-size: 11px; font-weight: 600; white-space: nowrap;
+    background: #EFF6FF; color: var(--brand-blue-deep);
+  }
+
+  /* Layout */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  @media (max-width: 1100px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 900px)  { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  canvas { max-width: 100%; }
+  .chart-wrap         { position: relative; width: 100%; }
+  .chart-wrap.h-daily { height: 280px; }
+  .chart-wrap.h-small { height: 220px; }
+
+  .empty { color: var(--ink-soft); font-style: italic; padding: 16px 0; }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 14px; padding: 10px 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .filter-bar > label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    color: var(--ink-soft); font-weight: 700; margin-right: 6px;
+  }
+  .preset-btn {
+    font-family: 'Open Sans', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 6px 12px; border: 1px solid var(--border); background: #fff;
+    color: var(--ink-soft); cursor: pointer; border-radius: 6px;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .preset-btn:hover { background: #F1F5F9; color: var(--ink); }
+  .preset-btn.active { background: var(--brand-blue); border-color: var(--brand-blue); color: #fff; }
+  .custom-range { display: flex; align-items: center; gap: 6px; margin-left: 6px; }
+  .custom-range[hidden] { display: none; }
+  .custom-range input[type="date"] {
+    font-family: inherit; font-size: 12px; padding: 5px 8px;
+    border: 1px solid var(--border); border-radius: 6px; background: #fff;
+  }
+  .apply-btn {
+    font-family: inherit; font-size: 12px; font-weight: 700;
+    padding: 5px 12px; border: none; background: var(--brand-blue);
+    color: #fff; cursor: pointer; border-radius: 6px;
+  }
+  .apply-btn:hover { background: var(--brand-blue-deep); }
+  .filter-bar .range-info { margin-left: auto; font-size: 12px; color: var(--ink-soft); }
+
+  /* Tabs */
+  .tab-bar {
+    display: flex; gap: 2px; flex-wrap: wrap;
+    border-bottom: 2px solid var(--border); margin-bottom: 20px;
+  }
+  .tab {
+    font-family: 'Open Sans', sans-serif; font-size: 13px; font-weight: 600;
+    padding: 10px 16px; border: none; background: transparent;
+    color: var(--ink-soft); cursor: pointer; text-transform: uppercase;
+    letter-spacing: .5px; border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: color .15s, border-color .15s;
+  }
+  .tab:hover:not(.active) { color: var(--ink); }
+  .tab.active { color: var(--brand-blue-deep); border-bottom-color: var(--brand-blue); }
+  .tab-panel.hidden { display: none; }
+
+  /* Tier summary cards in overview */
+  .tier-summary-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 0;
+  }
+  .tier-summary-card h3 { margin: 0 0 10px 0; font-size: 14px; color: var(--brand-blue-deep); }
+  .tier-summary-card table { font-size: 12px; }
+  .tier-summary-card th, .tier-summary-card td { padding: 6px 8px; }
+  .tier-summary-card .tier-totals {
+    display: flex; gap: 16px; margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .tier-summary-card .tier-totals span {
+    font-size: 11px; color: var(--ink-soft); font-weight: 600;
+  }
+  .tier-summary-card .tier-totals strong {
+    font-family: 'Oswald', sans-serif; font-size: 14px; color: var(--ink); margin-left: 3px;
+  }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <header class="topbar">
+    <div>
+      <h1>NSO Paid Ads Dashboard</h1>
+      <div class="meta"><span id="generatedAt">Loading…</span></div>
+    </div>
+    <div class="campaign-picker">
+      <label for="campaignSelect" style="font-weight:600;color:var(--ink-soft);">NSO Campaign:</label>
+      <select id="campaignSelect"></select>
+      <span class="period" id="periodLabel"></span>
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <label>Period:</label>
+    <button class="preset-btn active" data-preset="all">Full campaign</button>
+    <button class="preset-btn" data-preset="7">Last 7 days</button>
+    <button class="preset-btn" data-preset="30">Last 30 days</button>
+    <button class="preset-btn" data-preset="90">Last 90 days</button>
+    <button class="preset-btn" data-preset="custom">Custom</button>
+    <div class="custom-range" hidden>
+      <input type="date" id="dateStart">
+      <span style="color:var(--ink-soft)">→</span>
+      <input type="date" id="dateEnd">
+      <button class="apply-btn" id="applyCustom">Apply</button>
+    </div>
+    <span class="range-info" id="rangeInfo"></span>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="tier_99">$99 Tier</button>
+    <button class="tab" data-tab="bti_129">BTI to $129</button>
+    <button class="tab" data-tab="tier_129">$129 Tier</button>
+    <button class="tab" data-tab="bti_149">BTI to $149</button>
+    <button class="tab" data-tab="tier_149">$149 Tier</button>
+    <button class="tab" data-tab="prev_week">Prev Week</button>
+    <button class="tab" data-tab="opening">Opening</button>
+  </div>
+
+  <!-- ── Overview ──────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="panel-overview">
+
+    <div class="kpi-grid" id="kpiGrid"></div>
+
+    <!-- Daily Trend -->
+    <div class="card">
+      <h2>Daily Trend</h2>
+      <div class="chart-wrap h-daily"><canvas id="dailyChart"></canvas></div>
+    </div>
+
+    <!-- 4 charts -->
+    <div class="grid-2">
+      <div class="card">
+        <h2>Spend by Tier</h2>
+        <div class="chart-wrap h-small"><canvas id="spendChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>CPL Comparativo</h2>
+        <div class="chart-wrap h-small"><canvas id="cplChart"></canvas></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h2>Impressions &amp; Reach by Tier</h2>
+        <div class="chart-wrap h-small"><canvas id="impressionsChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>CTR by Tier</h2>
+        <div class="chart-wrap h-small"><canvas id="ctrChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Ads & Results table -->
+    <div class="card">
+      <h2>Ads &amp; Results</h2>
+      <div class="table-scroll">
+        <table id="adsTable">
+          <thead>
+            <tr>
+              <th data-k="ad_name">Ad</th>
+              <th data-k="tier" class="no-sort">Tier</th>
+              <th class="num" data-k="spend">Spend</th>
+              <th class="num" data-k="leads">Leads</th>
+              <th class="num" data-k="cpl">CPL</th>
+              <th class="num" data-k="impressions">Impr.</th>
+              <th class="num" data-k="reach">Reach</th>
+              <th class="num" data-k="ctr">CTR%</th>
+            </tr>
+          </thead>
+          <tbody id="adsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6 tier summary tables -->
+    <div class="grid-3" id="tierSummariesGrid"></div>
+
+  </div><!-- /#panel-overview -->
+
+  <!-- ── Tier tabs (generated dynamically) ─────────────────────────── -->
+  <div class="tab-panel hidden" id="panel-tier_99"></div>
+  <div class="tab-panel hidden" id="panel-bti_129"></div>
+  <div class="tab-panel hidden" id="panel-tier_129"></div>
+  <div class="tab-panel hidden" id="panel-bti_149"></div>
+  <div class="tab-panel hidden" id="panel-tier_149"></div>
+  <div class="tab-panel hidden" id="panel-prev_week"></div>
+  <div class="tab-panel hidden" id="panel-opening"></div>
+
+</div><!-- /.container -->
+
+<script>
+// ── Constants ──────────────────────────────────────────────────────
+const TIERS = [
+  { key: "tier_99",   label: "$99 Tier" },
+  { key: "bti_129",  label: "BTI to $129" },
+  { key: "tier_129", label: "$129 Tier" },
+  { key: "bti_149",  label: "BTI to $149" },
+  { key: "tier_149", label: "$149 Tier" },
+  { key: "prev_week",label: "Prev Week" },
+  { key: "opening",  label: "Opening" },
+];
+
+const BRAND = {
+  blue:     "#00A3E0",
+  blueDeep: "#0084B5",
+  palette:  ["#00A3E0","#0084B5","#F59E0B","#10B981","#6366F1","#EC4899"],
+};
+
+// Color per tier (consistent across all charts)
+const TIER_COLOR = {};
+TIERS.forEach((t, i) => { TIER_COLOR[t.label] = BRAND.palette[i % BRAND.palette.length]; });
+
+// ── State ──────────────────────────────────────────────────────────
+let DATA = null;
+let currentKey = null;
+let charts = {};
+let dateFilter = { type: "all", start: null, end: null };
+let adsSort = { col: "spend", dir: "desc" };
+
+// ── Formatters ─────────────────────────────────────────────────────
+const fmtMoney = n => "$" + (Number(n)||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtInt   = n => (Number(n)||0).toLocaleString("en-US");
+const fmtPct   = n => (Number(n)||0).toFixed(2) + "%";
+
+// ── Bootstrap ──────────────────────────────────────────────────────
+async function bootstrap() {
+  try {
+    const res = await fetch("nso-ads-data.json?t=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    DATA = await res.json();
+  } catch(e) {
+    document.body.innerHTML = `<div class="container"><div class="card" style="color:var(--bad)">
+      <h2>Could not load nso-ads-data.json</h2>
+      <p>Run <code>python fetch_nso_ads.py</code> to generate data, then serve locally:<br>
+      <code>python -m http.server 8080</code></p>
+      <pre style="color:var(--ink-soft);font-size:12px">${String(e)}</pre>
+    </div></div>`;
+    return;
+  }
+
+  document.getElementById("generatedAt").textContent =
+    "Updated " + new Date(DATA.generated_at).toLocaleString();
+
+  const sel = document.getElementById("campaignSelect");
+
+  // "All Studios" option at the top
+  const allOpt = document.createElement("option");
+  allOpt.value = "__all__";
+  allOpt.textContent = "All Studios (Consolidated)";
+  sel.appendChild(allOpt);
+
+  DATA.campaigns_index.forEach(ci => {
+    const opt = document.createElement("option");
+    opt.value = ci.key;
+    opt.textContent = ci.display_name;
+    if (ci.is_default) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener("change", () => {
+    currentKey = sel.value;
+    resetFilterToAll();
+    render();
+  });
+  currentKey = sel.value || DATA.active_campaign;
+
+  initTabs();
+  initFilters();
+  buildTierTabShells();
+  render();
+}
+
+function resetFilterToAll() {
+  dateFilter = { type: "all", start: null, end: null };
+  document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector('.preset-btn[data-preset="all"]').classList.add("active");
+  document.querySelector(".custom-range").hidden = true;
+}
+
+function initFilters() {
+  document.querySelectorAll(".preset-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const preset     = btn.dataset.preset;
+      const customWrap = document.querySelector(".custom-range");
+      if (preset === "custom") {
+        const c  = DATA.campaigns[currentKey];
+        const ds = (c && c.daily_series) || {};
+        document.getElementById("dateStart").value = ds.window_start || (c && c.date_start) || "";
+        document.getElementById("dateEnd").value   = ds.window_end   || (c && c.date_end)   || "";
+        customWrap.hidden = false;
+      } else {
+        customWrap.hidden = true;
+        dateFilter = { type: preset, start: null, end: null };
+        render();
+      }
+    });
+  });
+  document.getElementById("applyCustom").addEventListener("click", () => {
+    const start = document.getElementById("dateStart").value;
+    const end   = document.getElementById("dateEnd").value;
+    if (!start || !end) { alert("Please select both dates."); return; }
+    if (start > end)    { alert("Start date must be before end date."); return; }
+    dateFilter = { type: "custom", start, end };
+    render();
+  });
+}
+
+function initTabs() {
+  document.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.add("hidden"));
+      btn.classList.add("active");
+      const panel = document.getElementById("panel-" + btn.dataset.tab);
+      if (panel) panel.classList.remove("hidden");
+      // Re-render the tier chart now that the canvas is visible
+      const tier = TIERS.find(t => t.key === btn.dataset.tab);
+      if (tier && DATA) {
+        const c = DATA.campaigns[currentKey];
+        if (c) {
+          const view = buildView(c);
+          const ads  = view.ads || c.ads || [];
+          renderTierTab(tier, view.tiers || [], ads, view.daily_series);
+        }
+      } else {
+        Object.values(charts).forEach(ch => { if (ch) ch.resize(); });
+      }
+    });
+  });
+}
+
+// Pre-build the HTML skeleton for each tier tab
+function buildTierTabShells() {
+  TIERS.forEach(t => {
+    const panel = document.getElementById("panel-" + t.key);
+    if (!panel) return;
+    panel.innerHTML = `
+      <div class="tier-kpi-strip" id="tkpis-${t.key}"></div>
+      <div class="card">
+        <h2>${t.label} — Ads &amp; Results</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr>
+              <th data-k="ad_name" data-tier="${t.key}">Ad</th>
+              <th class="num" data-k="spend" data-tier="${t.key}">Spend</th>
+              <th class="num" data-k="leads" data-tier="${t.key}">Leads</th>
+              <th class="num" data-k="cpl"   data-tier="${t.key}">CPL</th>
+              <th class="num" data-k="impressions" data-tier="${t.key}">Impr.</th>
+              <th class="num" data-k="reach" data-tier="${t.key}">Reach</th>
+              <th class="num" data-k="ctr"   data-tier="${t.key}">CTR%</th>
+            </tr></thead>
+            <tbody id="tier-tbody-${t.key}"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h2>${t.label} — Daily Trend</h2>
+        <div class="chart-wrap h-daily"><canvas id="tier-chart-${t.key}"></canvas></div>
+      </div>
+    `;
+  });
+}
+
+// ── Date filtering ─────────────────────────────────────────────────
+function resolveDateRange(c) {
+  const ds       = c.daily_series || {};
+  const winStart = ds.window_start || c.date_start;
+  const winEnd   = ds.window_end   || c.date_end;
+  if (dateFilter.type === "all")    return { start: c.date_start, end: c.date_end };
+  if (dateFilter.type === "custom") return { start: dateFilter.start || winStart, end: dateFilter.end || winEnd };
+  const days      = parseInt(dateFilter.type, 10) || 30;
+  const endDate   = new Date(winEnd + "T00:00:00Z");
+  const startDate = new Date(endDate);
+  startDate.setUTCDate(startDate.getUTCDate() - days + 1);
+  let computedStart = startDate.toISOString().slice(0, 10);
+  if (computedStart < winStart) computedStart = winStart;
+  return { start: computedStart, end: winEnd };
+}
+
+function inDateRange(d, start, end) { return d >= start && d <= end; }
+
+function buildView(c) {
+  const range = resolveDateRange(c);
+  if (dateFilter.type === "all") return { ...c, _range: range, _filtered: false };
+
+  const { start, end } = range;
+  const ds  = c.daily_series || {};
+  const inR = r => inDateRange(r.date, start, end);
+
+  // Re-aggregate tiers from daily by_tier series
+  const tierAgg = {};
+  (ds.by_tier || []).filter(inR).forEach(r => {
+    if (!tierAgg[r.tier]) tierAgg[r.tier] = { tier: r.tier, spend:0, impressions:0, clicks:0, reach:0, leads:0 };
+    const a = tierAgg[r.tier];
+    a.spend       += r.spend       || 0;
+    a.impressions += r.impressions || 0;
+    a.clicks      += r.clicks      || 0;
+    a.reach       += r.reach       || 0;
+    a.leads       += r.leads       || 0;
+  });
+  const tiers = Object.values(tierAgg).map(a => ({
+    ...a,
+    cpl: a.leads       ? a.spend / a.leads                   : 0,
+    ctr: a.impressions ? a.clicks / a.impressions * 100       : 0,
+  }));
+
+  // Daily for totals + trend
+  const filteredDaily = (c.daily || []).filter(inR);
+  const totals = { spend:0, impressions:0, clicks:0, reach:0, leads:0 };
+  filteredDaily.forEach(r => {
+    totals.spend       += r.spend       || 0;
+    totals.impressions += r.impressions || 0;
+    totals.clicks      += r.clicks      || 0;
+    totals.reach       += r.reach       || 0;
+    totals.leads       += r.leads       || 0;
+  });
+  totals.cpl = totals.leads       ? totals.spend / totals.leads                   : 0;
+  totals.ctr = totals.impressions ? totals.clicks / totals.impressions * 100       : 0;
+  totals.cpm = totals.impressions ? totals.spend / totals.impressions * 1000       : 0;
+
+  return {
+    ...c,
+    _range:    range,
+    _filtered: true,
+    totals,
+    tiers,
+    daily:     filteredDaily,
+    daily_series: { ...ds, by_tier: (ds.by_tier || []).filter(inR), window_start: start, window_end: end },
+  };
+}
+
+// ── Consolidate all campaigns into one virtual campaign ────────────
+function buildAllCampaigns() {
+  const allCamps = Object.values(DATA.campaigns);
+  if (!allCamps.length) return null;
+
+  // Aggregate totals
+  const totals = { spend:0, impressions:0, clicks:0, reach:0, leads:0,
+                   purchases:0, trials:0, cpl:0, ctr:0, cpm:0 };
+  allCamps.forEach(c => {
+    totals.spend       += c.totals.spend       || 0;
+    totals.impressions += c.totals.impressions || 0;
+    totals.clicks      += c.totals.clicks      || 0;
+    totals.reach       += c.totals.reach       || 0;
+    totals.leads       += c.totals.leads       || 0;
+    totals.purchases   += c.totals.purchases   || 0;
+    totals.trials      += c.totals.trials      || 0;
+  });
+  totals.cpl = totals.leads       ? totals.spend / totals.leads                   : 0;
+  totals.ctr = totals.impressions ? totals.clicks / totals.impressions * 100       : 0;
+  totals.cpm = totals.impressions ? totals.spend / totals.impressions * 1000       : 0;
+
+  // Aggregate tiers
+  const tierAgg = {};
+  allCamps.forEach(c => {
+    (c.tiers || []).forEach(t => {
+      if (!tierAgg[t.tier]) tierAgg[t.tier] = { tier: t.tier, spend:0, impressions:0, clicks:0, reach:0, leads:0 };
+      const a = tierAgg[t.tier];
+      a.spend       += t.spend       || 0;
+      a.impressions += t.impressions || 0;
+      a.clicks      += (t.ctr && t.impressions ? t.ctr / 100 * t.impressions : 0);
+      a.reach       += t.reach       || 0;
+      a.leads       += t.leads       || 0;
+    });
+  });
+  const tiers = Object.values(tierAgg).map(a => ({
+    ...a,
+    cpl: a.leads       ? a.spend / a.leads                   : 0,
+    ctr: a.impressions ? a.clicks / a.impressions * 100       : 0,
+  }));
+
+  // Aggregate ads (same ad name across campaigns → sum)
+  const adsAgg = {};
+  allCamps.forEach(c => {
+    (c.ads || []).forEach(a => {
+      const k = a.ad_name + "||" + a.tier;
+      if (!adsAgg[k]) adsAgg[k] = { ad_name: a.ad_name, tier: a.tier,
+        spend:0, impressions:0, clicks:0, reach:0, leads:0 };
+      const r = adsAgg[k];
+      r.spend       += a.spend       || 0;
+      r.impressions += a.impressions || 0;
+      r.clicks      += (a.ctr && a.impressions ? a.ctr / 100 * a.impressions : 0);
+      r.reach       += a.reach       || 0;
+      r.leads       += a.leads       || 0;
+    });
+  });
+  const ads = Object.values(adsAgg).map(a => ({
+    ...a,
+    cpl: a.leads       ? a.spend / a.leads                   : 0,
+    ctr: a.impressions ? a.clicks / a.impressions * 100       : 0,
+  })).sort((a, b) => b.spend - a.spend);
+
+  // Aggregate daily series (by date)
+  const dailyAgg = {};
+  allCamps.forEach(c => {
+    (c.daily || []).forEach(r => {
+      if (!dailyAgg[r.date]) dailyAgg[r.date] = { date: r.date, spend:0, impressions:0, clicks:0, reach:0, leads:0 };
+      const d = dailyAgg[r.date];
+      d.spend       += r.spend       || 0;
+      d.impressions += r.impressions || 0;
+      d.clicks      += r.clicks      || 0;
+      d.reach       += r.reach       || 0;
+      d.leads       += r.leads       || 0;
+    });
+  });
+  const daily = Object.values(dailyAgg).sort((a, b) => a.date.localeCompare(b.date)).map(d => ({
+    ...d,
+    cpl: d.leads ? d.spend / d.leads : 0,
+    ctr: d.impressions ? d.clicks / d.impressions * 100 : 0,
+  }));
+
+  // Aggregate by_tier daily series
+  const byTierAgg = {};
+  allCamps.forEach(c => {
+    ((c.daily_series || {}).by_tier || []).forEach(r => {
+      const k = r.tier + "||" + r.date;
+      if (!byTierAgg[k]) byTierAgg[k] = { tier: r.tier, date: r.date, spend:0, impressions:0, clicks:0, reach:0, leads:0 };
+      const d = byTierAgg[k];
+      d.spend       += r.spend       || 0;
+      d.impressions += r.impressions || 0;
+      d.clicks      += r.clicks      || 0;
+      d.reach       += r.reach       || 0;
+      d.leads       += r.leads       || 0;
+    });
+  });
+  const byTier = Object.values(byTierAgg).sort((a, b) => a.date.localeCompare(b.date));
+
+  // Date range
+  const allDates = daily.map(d => d.date);
+  const date_start = allDates[0] || "";
+  const date_end   = allDates[allDates.length - 1] || "";
+
+  return {
+    display_name: "All Studios (Consolidated)",
+    period_label: date_start + " — " + date_end,
+    date_start, date_end,
+    totals, tiers, ads, daily,
+    daily_series: { by_tier: byTier, window_start: date_start, window_end: date_end },
+  };
+}
+
+// ── Main render ────────────────────────────────────────────────────
+function render() {
+  const c = currentKey === "__all__" ? buildAllCampaigns() : DATA.campaigns[currentKey];
+  if (!c) return;
+
+  const view = buildView(c);
+
+  document.getElementById("periodLabel").textContent =
+    c.period_label + "  ·  " + view._range.start + " → " + view._range.end;
+  const ri = document.getElementById("rangeInfo");
+  if (ri) ri.textContent = view._filtered
+    ? "Filtered: " + view._range.start + " → " + view._range.end
+    : "Full campaign window";
+
+  const tiers = view.tiers || [];
+  const ads   = view.ads   || c.ads || [];
+
+  renderKpis(view.totals);
+  renderDaily(view.daily || []);
+  renderTierCharts(tiers);
+  renderAdsTable(ads);
+  renderTierSummaries(tiers, ads);
+  TIERS.forEach(t => renderTierTab(t, tiers, ads, view.daily_series));
+}
+
+// ── KPI cards ──────────────────────────────────────────────────────
+function renderKpis(t) {
+  const cards = [
+    { label: "Spend",       value: fmtMoney(t.spend),     accent: true },
+    { label: "Leads",       value: fmtInt(t.leads),        sub: "CPL " + fmtMoney(t.cpl) },
+    { label: "Impressions", value: fmtInt(t.impressions),  sub: "CPM " + fmtMoney(t.cpm) },
+    { label: "Reach",       value: fmtInt(t.reach) },
+    { label: "CTR",         value: fmtPct(t.ctr) },
+  ];
+  document.getElementById("kpiGrid").innerHTML = cards.map(c => `
+    <div class="kpi${c.accent ? " accent" : ""}">
+      <div class="label">${c.label}</div>
+      <div class="value">${c.value}</div>
+      ${c.sub ? `<div class="sub">${c.sub}</div>` : ""}
+    </div>`).join("");
+}
+
+// ── Daily Trend ────────────────────────────────────────────────────
+function renderDaily(daily) {
+  if (charts.daily) charts.daily.destroy();
+  const labels = daily.map(d => d.date);
+  const cpl    = daily.map(d => d.leads > 0 ? +(d.spend / d.leads).toFixed(2) : null);
+  const leads  = daily.map(d => d.leads);
+  charts.daily = new Chart(document.getElementById("dailyChart").getContext("2d"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        { label: "CPL", data: cpl, yAxisID: "y",
+          borderColor: BRAND.blue, backgroundColor: "rgba(0,163,224,.15)",
+          tension: .3, fill: true, pointRadius: 2, spanGaps: true },
+        { label: "Leads", data: leads, yAxisID: "y1",
+          borderColor: "#F59E0B", backgroundColor: "rgba(245,158,11,.15)",
+          tension: .3, pointRadius: 2 },
+      ],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        y:  { position: "left",  beginAtZero: true, title: { display: true, text: "CPL ($)" } },
+        y1: { position: "right", beginAtZero: true, grid: { drawOnChartArea: false }, title: { display: true, text: "Leads" } },
+      },
+      plugins: {
+        legend: { position: "bottom" },
+        tooltip: { callbacks: { label: ctx => {
+          const v = ctx.parsed.y;
+          if (v === null || v === undefined) return ctx.dataset.label + ": —";
+          return ctx.dataset.label + ": " + (ctx.dataset.label === "CPL" ? fmtMoney(v) : fmtInt(v));
+        }}},
+      },
+    },
+  });
+}
+
+// ── 4 Tier charts ──────────────────────────────────────────────────
+function renderTierCharts(tiers) {
+  // Sort by spend desc for most charts
+  const bySpend = [...tiers].sort((a, b) => b.spend - a.spend);
+  // Sort by CPL asc for CPL comparativo (best first)
+  const byCpl   = [...tiers].filter(t => t.leads > 0).sort((a, b) => a.cpl - b.cpl);
+
+  const kill = name => { if (charts[name]) { charts[name].destroy(); charts[name] = null; } };
+
+  // 1. Spend by Tier
+  kill("spend");
+  charts.spend = new Chart(document.getElementById("spendChart").getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: bySpend.map(t => t.tier),
+      datasets: [{ label: "Spend", data: bySpend.map(t => t.spend),
+        backgroundColor: bySpend.map(t => TIER_COLOR[t.tier] || BRAND.blue) }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { y: { beginAtZero: true, ticks: { callback: v => "$" + v.toLocaleString() } } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => "Spend: " + fmtMoney(ctx.parsed.y) } },
+      },
+    },
+  });
+
+  // 2. CPL Comparativo (horizontal, sorted best → worst)
+  kill("cpl");
+  const avgCpl = tiers.reduce((s,t) => s + (t.leads ? t.spend/t.leads : 0), 0) /
+                 (tiers.filter(t => t.leads > 0).length || 1);
+  charts.cpl = new Chart(document.getElementById("cplChart").getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: byCpl.map(t => t.tier),
+      datasets: [{ label: "CPL", data: byCpl.map(t => +t.cpl.toFixed(2)),
+        backgroundColor: byCpl.map(t => TIER_COLOR[t.tier] || BRAND.blue) }],
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true, maintainAspectRatio: false,
+      scales: { x: { beginAtZero: true, ticks: { callback: v => "$" + v } } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => "CPL: " + fmtMoney(ctx.parsed.x) } },
+      },
+    },
+  });
+
+  // 3. Impressions & Reach by Tier
+  kill("impressions");
+  charts.impressions = new Chart(document.getElementById("impressionsChart").getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: bySpend.map(t => t.tier),
+      datasets: [
+        { label: "Impressions", data: bySpend.map(t => t.impressions),
+          backgroundColor: bySpend.map(t => TIER_COLOR[t.tier] || BRAND.blue) },
+        { label: "Reach",       data: bySpend.map(t => t.reach),
+          backgroundColor: bySpend.map(t => (TIER_COLOR[t.tier] || BRAND.blue) + "88") },
+      ],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() } } },
+      plugins: {
+        legend: { position: "bottom" },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ": " + fmtInt(ctx.parsed.y) } },
+      },
+    },
+  });
+
+  // 4. CTR by Tier
+  kill("ctr");
+  charts.ctr = new Chart(document.getElementById("ctrChart").getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: bySpend.map(t => t.tier),
+      datasets: [{ label: "CTR", data: bySpend.map(t => +t.ctr.toFixed(2)),
+        backgroundColor: bySpend.map(t => TIER_COLOR[t.tier] || BRAND.blue) }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { y: { beginAtZero: true, ticks: { callback: v => v + "%" } } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => "CTR: " + fmtPct(ctx.parsed.y) } },
+      },
+    },
+  });
+}
+
+// ── Ads & Results table ────────────────────────────────────────────
+function renderAdsTable(ads) {
+  const sorted = [...ads].sort((a, b) => {
+    const { col, dir } = adsSort;
+    const av = a[col], bv = b[col];
+    const cmp = typeof av === "string" ? av.localeCompare(bv) : (Number(av) - Number(bv));
+    return dir === "asc" ? cmp : -cmp;
+  });
+
+  document.getElementById("adsTableBody").innerHTML = sorted.map(a => `
+    <tr>
+      <td class="ad-name-cell">${a.ad_name}</td>
+      <td><span class="tier-chip" style="background:${(TIER_COLOR[a.tier]||BRAND.blue)}22;color:${TIER_COLOR[a.tier]||BRAND.blueDeep}">${a.tier}</span></td>
+      <td class="num">${fmtMoney(a.spend)}</td>
+      <td class="num">${fmtInt(a.leads)}</td>
+      <td class="num">${a.leads ? fmtMoney(a.cpl) : "—"}</td>
+      <td class="num">${fmtInt(a.impressions)}</td>
+      <td class="num">${fmtInt(a.reach)}</td>
+      <td class="num">${fmtPct(a.ctr)}</td>
+    </tr>`).join("");
+
+  // Sortable headers
+  document.querySelectorAll("#adsTable th[data-k]").forEach(th => {
+    th.classList.remove("sort-asc", "sort-desc");
+    if (th.dataset.k === adsSort.col) th.classList.add(adsSort.dir === "asc" ? "sort-asc" : "sort-desc");
+    th.onclick = () => {
+      const k = th.dataset.k;
+      if (adsSort.col === k) adsSort.dir = adsSort.dir === "asc" ? "desc" : "asc";
+      else { adsSort.col = k; adsSort.dir = typeof (ads[0] || {})[k] === "string" ? "asc" : "desc"; }
+      renderAdsTable(ads);
+    };
+  });
+}
+
+// ── 6 Tier summary cards (overview) ───────────────────────────────
+function renderTierSummaries(tiers, ads) {
+  const grid = document.getElementById("tierSummariesGrid");
+  const tierMap = {};
+  tiers.forEach(t => { tierMap[t.tier] = t; });
+
+  grid.innerHTML = TIERS.map(t => {
+    const summary = tierMap[t.label] || {};
+    const tierAds = ads.filter(a => a.tier === t.label).sort((a, b) => b.spend - a.spend).slice(0, 5);
+    const spend   = summary.spend || 0;
+    const cpl     = summary.cpl   || 0;
+    const leads   = summary.leads || 0;
+
+    return `
+      <div class="tier-summary-card">
+        <h3>${t.label}</h3>
+        <div class="tier-totals">
+          <span>Spend <strong>${fmtMoney(spend)}</strong></span>
+          <span>Leads <strong>${fmtInt(leads)}</strong></span>
+          <span>CPL <strong>${leads ? fmtMoney(cpl) : "—"}</strong></span>
+          <span>CTR <strong>${fmtPct(summary.ctr || 0)}</strong></span>
+        </div>
+        ${tierAds.length ? `
+        <table>
+          <thead><tr>
+            <th class="no-sort">Ad</th>
+            <th class="num no-sort">Spend</th>
+            <th class="num no-sort">Leads</th>
+            <th class="num no-sort">CPL</th>
+            <th class="num no-sort">CTR%</th>
+          </tr></thead>
+          <tbody>${tierAds.map(a => `
+            <tr>
+              <td class="ad-name-cell" style="font-size:11px">${a.ad_name}</td>
+              <td class="num">${fmtMoney(a.spend)}</td>
+              <td class="num">${fmtInt(a.leads)}</td>
+              <td class="num">${a.leads ? fmtMoney(a.cpl) : "—"}</td>
+              <td class="num">${fmtPct(a.ctr)}</td>
+            </tr>`).join("")}
+          </tbody>
+        </table>` : `<div class="empty">No ads in this tier</div>`}
+      </div>`;
+  }).join("");
+}
+
+// ── Individual tier tabs ───────────────────────────────────────────
+function renderTierTab(tier, allTiers, allAds, dailySeries) {
+  const tierData = allTiers.find(t => t.tier === tier.label) || {};
+  const tierAds  = allAds.filter(a => a.tier === tier.label).sort((a, b) => b.spend - a.spend);
+
+  // KPI strip
+  const kpiEl = document.getElementById("tkpis-" + tier.key);
+  if (kpiEl) {
+    kpiEl.innerHTML = [
+      { label: "Spend",       value: fmtMoney(tierData.spend || 0) },
+      { label: "CPL",         value: tierData.leads ? fmtMoney(tierData.cpl) : "—" },
+      { label: "Impressions", value: fmtInt(tierData.impressions || 0) },
+      { label: "Reach",       value: fmtInt(tierData.reach || 0) },
+      { label: "CTR",         value: fmtPct(tierData.ctr || 0) },
+    ].map(k => `
+      <div class="tier-kpi">
+        <div class="t-label">${k.label}</div>
+        <div class="t-value">${k.value}</div>
+      </div>`).join("");
+  }
+
+  // Ads table
+  const tbody = document.getElementById("tier-tbody-" + tier.key);
+  if (tbody) {
+    tbody.innerHTML = tierAds.length
+      ? tierAds.map(a => `
+        <tr>
+          <td class="ad-name-cell">${a.ad_name}</td>
+          <td class="num">${fmtMoney(a.spend)}</td>
+          <td class="num">${fmtInt(a.leads)}</td>
+          <td class="num">${a.leads ? fmtMoney(a.cpl) : "—"}</td>
+          <td class="num">${fmtInt(a.impressions)}</td>
+          <td class="num">${fmtInt(a.reach)}</td>
+          <td class="num">${fmtPct(a.ctr)}</td>
+        </tr>`).join("")
+      : `<tr><td colspan="7" class="empty">No ads in this tier yet.</td></tr>`;
+  }
+
+  // Daily trend for this tier
+  const tierDailyRows = (dailySeries && dailySeries.by_tier || []).filter(r => r.tier === tier.label).sort((a, b) => a.date.localeCompare(b.date));
+  const chartId  = "tier-chart-" + tier.key;
+  const chartKey = "tier-" + tier.key;
+  if (charts[chartKey]) { charts[chartKey].destroy(); charts[chartKey] = null; }
+
+  // Always rebuild the chart container so we have a fresh canvas
+  const chartCard = document.querySelector(`#panel-${tier.key} .card:last-child`);
+  if (chartCard) {
+    if (!tierDailyRows.length) {
+      chartCard.querySelector(".chart-wrap").innerHTML = "<div class='empty'>No daily data for this tier in the selected period.</div>";
+    } else {
+      chartCard.querySelector(".chart-wrap").innerHTML = `<canvas id="${chartId}"></canvas>`;
+    }
+  }
+  const canvas = document.getElementById(chartId);
+  if (canvas) {
+    const dates = tierDailyRows.map(r => r.date);
+    const cpl   = tierDailyRows.map(r => r.leads > 0 ? +(r.spend / r.leads).toFixed(2) : null);
+    const leads  = tierDailyRows.map(r => r.leads);
+    charts[chartKey] = new Chart(canvas.getContext("2d"), {
+      type: "line",
+      data: {
+        labels: dates,
+        datasets: [
+          { label: "CPL", data: cpl, yAxisID: "y",
+            borderColor: TIER_COLOR[tier.label] || BRAND.blue,
+            backgroundColor: (TIER_COLOR[tier.label] || BRAND.blue) + "22",
+            tension: .3, fill: true, pointRadius: 2, spanGaps: true },
+          { label: "Leads", data: leads, yAxisID: "y1",
+            borderColor: "#F59E0B", backgroundColor: "rgba(245,158,11,.15)",
+            tension: .3, pointRadius: 2 },
+        ],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        scales: {
+          y:  { position: "left",  beginAtZero: true, title: { display: true, text: "CPL ($)" } },
+          y1: { position: "right", beginAtZero: true, grid: { drawOnChartArea: false }, title: { display: true, text: "Leads" } },
+        },
+        plugins: {
+          legend: { position: "bottom" },
+          tooltip: { callbacks: { label: ctx => {
+            const v = ctx.parsed.y;
+            if (v === null || v === undefined) return ctx.dataset.label + ": —";
+            return ctx.dataset.label + ": " + (ctx.dataset.label === "CPL" ? fmtMoney(v) : fmtInt(v));
+          }}},
+        },
+      },
+    });
+  }
+}
+
+bootstrap();
+</script>
+</body>
+</html>
