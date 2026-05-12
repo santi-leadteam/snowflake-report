@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12T03:38:51.077150+00:00",
+  "generated_at": "2026-05-12T14:42:53.510477+00:00",
   "date_windows": {
     "daily_from": "2026-01-01",
     "daily_to": "2026-05-12",
@@ -11,7 +11,7 @@
     "Austin - Zilker",
     "Boca Raton",
     "Capitol View",
-    "Charlotte - NoDa",
+    "Charlotte - Noda",
     "Coral Gables",
     "Coral Springs",
     "Dallas - Prestonwood",
@@ -41,14 +41,14 @@
     "West Palm Beach"
   ],
   "totals": {
-    "spend": 129050.27,
-    "impressions": 3540229,
-    "clicks": 54415,
-    "leads": 946,
-    "calls": 697,
-    "directions": 1965,
-    "opportunities": 1814.3,
-    "cost_per_opp": 71.13
+    "spend": 129290.83,
+    "impressions": 3542692,
+    "clicks": 54503,
+    "leads": 948,
+    "calls": 699,
+    "directions": 1973,
+    "opportunities": 1819.5,
+    "cost_per_opp": 71.06
   },
   "daily": [
     {
@@ -1471,8 +1471,20 @@
       "date": "2026-05-11",
       "studio": "Austin - Highland",
       "spend": 11.06,
-      "impressions": 153,
+      "impressions": 156,
       "clicks": 6,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Austin - Highland",
+      "spend": 0.0,
+      "impressions": 19,
+      "clicks": 0,
       "leads": 0,
       "calls": 0,
       "directions": 0,
@@ -2900,6 +2912,18 @@
       "studio": "Austin - Zilker",
       "spend": 21.03,
       "impressions": 231,
+      "clicks": 4,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Austin - Zilker",
+      "spend": 8.51,
+      "impressions": 85,
       "clicks": 4,
       "leads": 0,
       "calls": 0,
@@ -4461,11 +4485,11 @@
       "spend": 23.83,
       "impressions": 169,
       "clicks": 8,
-      "leads": 3,
+      "leads": 5,
       "calls": 0,
       "directions": 0,
-      "opportunities": 3.0,
-      "cost_per_opp": 7.94
+      "opportunities": 5.0,
+      "cost_per_opp": 4.77
     },
     {
       "date": "2026-05-11",
@@ -4478,6 +4502,18 @@
       "directions": 0,
       "opportunities": 1.0,
       "cost_per_opp": 52.01
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Boca Raton",
+      "spend": 6.08,
+      "impressions": 117,
+      "clicks": 1,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     },
     {
       "date": "2026-01-01",
@@ -4913,7 +4949,7 @@
     },
     {
       "date": "2026-01-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 52.81,
       "impressions": 2000,
       "clicks": 38,
@@ -4925,7 +4961,7 @@
     },
     {
       "date": "2026-01-02",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 48.56,
       "impressions": 992,
       "clicks": 26,
@@ -4937,7 +4973,7 @@
     },
     {
       "date": "2026-01-03",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 32.22,
       "impressions": 786,
       "clicks": 20,
@@ -4949,7 +4985,7 @@
     },
     {
       "date": "2026-01-04",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 38.15,
       "impressions": 642,
       "clicks": 18,
@@ -4961,7 +4997,7 @@
     },
     {
       "date": "2026-01-05",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 31.18,
       "impressions": 1327,
       "clicks": 24,
@@ -4973,7 +5009,7 @@
     },
     {
       "date": "2026-01-06",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 31.43,
       "impressions": 1526,
       "clicks": 25,
@@ -4985,7 +5021,7 @@
     },
     {
       "date": "2026-01-07",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 28.3,
       "impressions": 1120,
       "clicks": 29,
@@ -4997,7 +5033,7 @@
     },
     {
       "date": "2026-01-08",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 15.29,
       "impressions": 755,
       "clicks": 14,
@@ -5009,7 +5045,7 @@
     },
     {
       "date": "2026-01-09",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 25.81,
       "impressions": 1876,
       "clicks": 13,
@@ -5021,7 +5057,7 @@
     },
     {
       "date": "2026-01-10",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 27.2,
       "impressions": 2006,
       "clicks": 17,
@@ -5033,7 +5069,7 @@
     },
     {
       "date": "2026-01-11",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 24.53,
       "impressions": 1706,
       "clicks": 13,
@@ -5045,7 +5081,7 @@
     },
     {
       "date": "2026-01-12",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 80.62,
       "impressions": 1697,
       "clicks": 23,
@@ -5057,7 +5093,7 @@
     },
     {
       "date": "2026-01-13",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 81.71,
       "impressions": 1798,
       "clicks": 25,
@@ -5069,7 +5105,7 @@
     },
     {
       "date": "2026-01-14",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 64.47,
       "impressions": 1288,
       "clicks": 16,
@@ -5081,7 +5117,7 @@
     },
     {
       "date": "2026-01-15",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 59.55,
       "impressions": 1279,
       "clicks": 13,
@@ -5093,7 +5129,7 @@
     },
     {
       "date": "2026-01-16",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 43.98,
       "impressions": 1250,
       "clicks": 9,
@@ -5105,7 +5141,7 @@
     },
     {
       "date": "2026-01-17",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 63.31,
       "impressions": 1024,
       "clicks": 13,
@@ -5117,7 +5153,7 @@
     },
     {
       "date": "2026-01-18",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 37.49,
       "impressions": 916,
       "clicks": 13,
@@ -5129,7 +5165,7 @@
     },
     {
       "date": "2026-01-19",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 38.5,
       "impressions": 901,
       "clicks": 16,
@@ -5141,7 +5177,7 @@
     },
     {
       "date": "2026-01-20",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 16.59,
       "impressions": 739,
       "clicks": 6,
@@ -5153,7 +5189,7 @@
     },
     {
       "date": "2026-01-21",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 15.97,
       "impressions": 713,
       "clicks": 4,
@@ -5165,7 +5201,7 @@
     },
     {
       "date": "2026-01-22",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 10.74,
       "impressions": 704,
       "clicks": 10,
@@ -5177,7 +5213,7 @@
     },
     {
       "date": "2026-01-23",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 17.98,
       "impressions": 800,
       "clicks": 4,
@@ -5189,7 +5225,7 @@
     },
     {
       "date": "2026-01-24",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 31.27,
       "impressions": 1010,
       "clicks": 15,
@@ -5201,7 +5237,7 @@
     },
     {
       "date": "2026-01-25",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 44.74,
       "impressions": 987,
       "clicks": 14,
@@ -5213,7 +5249,7 @@
     },
     {
       "date": "2026-01-26",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 54.75,
       "impressions": 1367,
       "clicks": 21,
@@ -5225,7 +5261,7 @@
     },
     {
       "date": "2026-01-27",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 79.37,
       "impressions": 1601,
       "clicks": 21,
@@ -5237,7 +5273,7 @@
     },
     {
       "date": "2026-01-28",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 79.07,
       "impressions": 1168,
       "clicks": 24,
@@ -5249,7 +5285,7 @@
     },
     {
       "date": "2026-01-29",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 77.01,
       "impressions": 1023,
       "clicks": 17,
@@ -5261,7 +5297,7 @@
     },
     {
       "date": "2026-01-30",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 36.44,
       "impressions": 1066,
       "clicks": 17,
@@ -5273,7 +5309,7 @@
     },
     {
       "date": "2026-01-31",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 36.3,
       "impressions": 1189,
       "clicks": 16,
@@ -5285,7 +5321,7 @@
     },
     {
       "date": "2026-02-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 46.65,
       "impressions": 1465,
       "clicks": 20,
@@ -5297,7 +5333,7 @@
     },
     {
       "date": "2026-02-02",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 59.43,
       "impressions": 1116,
       "clicks": 12,
@@ -5309,7 +5345,7 @@
     },
     {
       "date": "2026-02-03",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 55.66,
       "impressions": 1760,
       "clicks": 16,
@@ -5321,7 +5357,7 @@
     },
     {
       "date": "2026-02-04",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 36.19,
       "impressions": 815,
       "clicks": 13,
@@ -5333,7 +5369,7 @@
     },
     {
       "date": "2026-02-05",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 60.33,
       "impressions": 1046,
       "clicks": 17,
@@ -5345,7 +5381,7 @@
     },
     {
       "date": "2026-02-06",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 36.66,
       "impressions": 1372,
       "clicks": 19,
@@ -5357,7 +5393,7 @@
     },
     {
       "date": "2026-02-07",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 40.99,
       "impressions": 1060,
       "clicks": 22,
@@ -5369,7 +5405,7 @@
     },
     {
       "date": "2026-02-08",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 24.87,
       "impressions": 986,
       "clicks": 8,
@@ -5381,7 +5417,7 @@
     },
     {
       "date": "2026-02-09",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 28.98,
       "impressions": 1073,
       "clicks": 10,
@@ -5393,7 +5429,7 @@
     },
     {
       "date": "2026-02-10",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 48.73,
       "impressions": 1046,
       "clicks": 18,
@@ -5405,7 +5441,7 @@
     },
     {
       "date": "2026-02-11",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 81.73,
       "impressions": 1331,
       "clicks": 28,
@@ -5417,7 +5453,7 @@
     },
     {
       "date": "2026-02-12",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 81.73,
       "impressions": 963,
       "clicks": 24,
@@ -5429,7 +5465,7 @@
     },
     {
       "date": "2026-02-13",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 63.6,
       "impressions": 884,
       "clicks": 19,
@@ -5441,7 +5477,7 @@
     },
     {
       "date": "2026-02-14",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 55.36,
       "impressions": 1082,
       "clicks": 16,
@@ -5453,7 +5489,7 @@
     },
     {
       "date": "2026-02-15",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 54.73,
       "impressions": 831,
       "clicks": 12,
@@ -5465,7 +5501,7 @@
     },
     {
       "date": "2026-02-16",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 54.91,
       "impressions": 636,
       "clicks": 6,
@@ -5477,7 +5513,7 @@
     },
     {
       "date": "2026-02-17",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 36.77,
       "impressions": 971,
       "clicks": 17,
@@ -5489,7 +5525,7 @@
     },
     {
       "date": "2026-02-18",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 48.49,
       "impressions": 804,
       "clicks": 13,
@@ -5501,7 +5537,7 @@
     },
     {
       "date": "2026-02-19",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 31.05,
       "impressions": 831,
       "clicks": 9,
@@ -5513,7 +5549,7 @@
     },
     {
       "date": "2026-02-20",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 17.23,
       "impressions": 759,
       "clicks": 9,
@@ -5525,7 +5561,7 @@
     },
     {
       "date": "2026-02-21",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 60.64,
       "impressions": 935,
       "clicks": 24,
@@ -5537,7 +5573,7 @@
     },
     {
       "date": "2026-02-22",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 77.79,
       "impressions": 857,
       "clicks": 16,
@@ -5549,7 +5585,7 @@
     },
     {
       "date": "2026-02-23",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 64.4,
       "impressions": 866,
       "clicks": 15,
@@ -5561,7 +5597,7 @@
     },
     {
       "date": "2026-02-24",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 46.44,
       "impressions": 822,
       "clicks": 12,
@@ -5573,7 +5609,7 @@
     },
     {
       "date": "2026-02-25",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 47.22,
       "impressions": 734,
       "clicks": 15,
@@ -5585,7 +5621,7 @@
     },
     {
       "date": "2026-02-26",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 44.82,
       "impressions": 637,
       "clicks": 14,
@@ -5597,7 +5633,7 @@
     },
     {
       "date": "2026-02-27",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 35.04,
       "impressions": 667,
       "clicks": 14,
@@ -5609,7 +5645,7 @@
     },
     {
       "date": "2026-02-28",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 38.7,
       "impressions": 830,
       "clicks": 11,
@@ -5621,7 +5657,7 @@
     },
     {
       "date": "2026-03-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 37.1,
       "impressions": 888,
       "clicks": 12,
@@ -5633,7 +5669,7 @@
     },
     {
       "date": "2026-03-02",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 46.28,
       "impressions": 346,
       "clicks": 12,
@@ -5645,7 +5681,7 @@
     },
     {
       "date": "2026-03-03",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 42.73,
       "impressions": 243,
       "clicks": 16,
@@ -5657,7 +5693,7 @@
     },
     {
       "date": "2026-03-04",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 27.46,
       "impressions": 248,
       "clicks": 12,
@@ -5669,7 +5705,7 @@
     },
     {
       "date": "2026-03-05",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 7.62,
       "impressions": 54,
       "clicks": 4,
@@ -5681,7 +5717,7 @@
     },
     {
       "date": "2026-03-17",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 29.5,
       "impressions": 378,
       "clicks": 11,
@@ -5693,7 +5729,7 @@
     },
     {
       "date": "2026-03-18",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.37,
       "impressions": 459,
       "clicks": 15,
@@ -5705,7 +5741,7 @@
     },
     {
       "date": "2026-03-19",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.34,
       "impressions": 620,
       "clicks": 15,
@@ -5717,7 +5753,7 @@
     },
     {
       "date": "2026-03-20",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.41,
       "impressions": 391,
       "clicks": 11,
@@ -5729,7 +5765,7 @@
     },
     {
       "date": "2026-03-21",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 66.96,
       "impressions": 600,
       "clicks": 19,
@@ -5741,7 +5777,7 @@
     },
     {
       "date": "2026-03-22",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.36,
       "impressions": 356,
       "clicks": 13,
@@ -5753,7 +5789,7 @@
     },
     {
       "date": "2026-03-23",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.36,
       "impressions": 209,
       "clicks": 6,
@@ -5765,7 +5801,7 @@
     },
     {
       "date": "2026-03-24",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.39,
       "impressions": 528,
       "clicks": 12,
@@ -5777,7 +5813,7 @@
     },
     {
       "date": "2026-03-25",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 67.59,
       "impressions": 660,
       "clicks": 15,
@@ -5789,7 +5825,7 @@
     },
     {
       "date": "2026-03-26",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 69.69,
       "impressions": 544,
       "clicks": 16,
@@ -5801,7 +5837,7 @@
     },
     {
       "date": "2026-03-27",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.33,
       "impressions": 295,
       "clicks": 15,
@@ -5813,7 +5849,7 @@
     },
     {
       "date": "2026-03-28",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 21.33,
       "impressions": 571,
       "clicks": 13,
@@ -5825,7 +5861,7 @@
     },
     {
       "date": "2026-03-29",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.39,
       "impressions": 578,
       "clicks": 19,
@@ -5837,7 +5873,7 @@
     },
     {
       "date": "2026-03-30",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.39,
       "impressions": 478,
       "clicks": 21,
@@ -5849,7 +5885,7 @@
     },
     {
       "date": "2026-03-31",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 24.06,
       "impressions": 229,
       "clicks": 12,
@@ -5861,7 +5897,7 @@
     },
     {
       "date": "2026-04-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 26.08,
       "impressions": 360,
       "clicks": 11,
@@ -5873,7 +5909,7 @@
     },
     {
       "date": "2026-04-02",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 45.86,
       "impressions": 466,
       "clicks": 18,
@@ -5885,7 +5921,7 @@
     },
     {
       "date": "2026-04-03",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 39.82,
       "impressions": 496,
       "clicks": 14,
@@ -5897,7 +5933,7 @@
     },
     {
       "date": "2026-04-04",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 39.24,
       "impressions": 205,
       "clicks": 6,
@@ -5909,7 +5945,7 @@
     },
     {
       "date": "2026-04-05",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 26.68,
       "impressions": 411,
       "clicks": 16,
@@ -5921,7 +5957,7 @@
     },
     {
       "date": "2026-04-06",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 37.63,
       "impressions": 424,
       "clicks": 10,
@@ -5933,7 +5969,7 @@
     },
     {
       "date": "2026-04-07",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 25.14,
       "impressions": 494,
       "clicks": 16,
@@ -5945,7 +5981,7 @@
     },
     {
       "date": "2026-04-08",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 29.4,
       "impressions": 382,
       "clicks": 12,
@@ -5957,7 +5993,7 @@
     },
     {
       "date": "2026-04-09",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 33.95,
       "impressions": 347,
       "clicks": 17,
@@ -5969,7 +6005,7 @@
     },
     {
       "date": "2026-04-10",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 58.36,
       "impressions": 217,
       "clicks": 10,
@@ -5981,7 +6017,7 @@
     },
     {
       "date": "2026-04-11",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 15.28,
       "impressions": 280,
       "clicks": 8,
@@ -5993,7 +6029,7 @@
     },
     {
       "date": "2026-04-12",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 56.68,
       "impressions": 302,
       "clicks": 17,
@@ -6005,7 +6041,7 @@
     },
     {
       "date": "2026-04-13",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 30.7,
       "impressions": 458,
       "clicks": 16,
@@ -6017,7 +6053,7 @@
     },
     {
       "date": "2026-04-14",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 38.46,
       "impressions": 294,
       "clicks": 9,
@@ -6029,7 +6065,7 @@
     },
     {
       "date": "2026-04-15",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 26.11,
       "impressions": 372,
       "clicks": 17,
@@ -6041,7 +6077,7 @@
     },
     {
       "date": "2026-04-16",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 31.32,
       "impressions": 375,
       "clicks": 13,
@@ -6053,7 +6089,7 @@
     },
     {
       "date": "2026-04-17",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 15.21,
       "impressions": 234,
       "clicks": 10,
@@ -6065,7 +6101,7 @@
     },
     {
       "date": "2026-04-18",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 14.19,
       "impressions": 184,
       "clicks": 6,
@@ -6077,7 +6113,7 @@
     },
     {
       "date": "2026-04-19",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 35.27,
       "impressions": 227,
       "clicks": 8,
@@ -6089,7 +6125,7 @@
     },
     {
       "date": "2026-04-20",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 68.41,
       "impressions": 418,
       "clicks": 14,
@@ -6101,7 +6137,7 @@
     },
     {
       "date": "2026-04-21",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 63.58,
       "impressions": 361,
       "clicks": 16,
@@ -6113,7 +6149,7 @@
     },
     {
       "date": "2026-04-22",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 36.68,
       "impressions": 328,
       "clicks": 9,
@@ -6125,7 +6161,7 @@
     },
     {
       "date": "2026-04-23",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 46.33,
       "impressions": 300,
       "clicks": 10,
@@ -6137,7 +6173,7 @@
     },
     {
       "date": "2026-04-24",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 23.8,
       "impressions": 65,
       "clicks": 6,
@@ -6149,7 +6185,7 @@
     },
     {
       "date": "2026-04-25",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 30.44,
       "impressions": 53,
       "clicks": 5,
@@ -6161,7 +6197,7 @@
     },
     {
       "date": "2026-04-26",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 12.8,
       "impressions": 227,
       "clicks": 8,
@@ -6173,7 +6209,7 @@
     },
     {
       "date": "2026-04-27",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 45.09,
       "impressions": 300,
       "clicks": 11,
@@ -6185,7 +6221,7 @@
     },
     {
       "date": "2026-04-28",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 31.26,
       "impressions": 317,
       "clicks": 19,
@@ -6197,7 +6233,7 @@
     },
     {
       "date": "2026-04-29",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 29.56,
       "impressions": 282,
       "clicks": 13,
@@ -6209,7 +6245,7 @@
     },
     {
       "date": "2026-04-30",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 26.76,
       "impressions": 156,
       "clicks": 11,
@@ -6221,7 +6257,7 @@
     },
     {
       "date": "2026-05-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 39.63,
       "impressions": 136,
       "clicks": 12,
@@ -6233,7 +6269,7 @@
     },
     {
       "date": "2026-05-02",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 9.73,
       "impressions": 199,
       "clicks": 9,
@@ -6245,7 +6281,7 @@
     },
     {
       "date": "2026-05-03",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 2.4,
       "impressions": 233,
       "clicks": 4,
@@ -6257,7 +6293,7 @@
     },
     {
       "date": "2026-05-04",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 67.98,
       "impressions": 415,
       "clicks": 18,
@@ -6269,7 +6305,7 @@
     },
     {
       "date": "2026-05-05",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 60.33,
       "impressions": 249,
       "clicks": 11,
@@ -6281,7 +6317,7 @@
     },
     {
       "date": "2026-05-06",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 28.68,
       "impressions": 368,
       "clicks": 10,
@@ -6293,7 +6329,7 @@
     },
     {
       "date": "2026-05-07",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 48.24,
       "impressions": 312,
       "clicks": 13,
@@ -6305,7 +6341,7 @@
     },
     {
       "date": "2026-05-08",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 29.02,
       "impressions": 323,
       "clicks": 13,
@@ -6317,7 +6353,7 @@
     },
     {
       "date": "2026-05-09",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 22.58,
       "impressions": 114,
       "clicks": 6,
@@ -6329,7 +6365,7 @@
     },
     {
       "date": "2026-05-10",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 31.44,
       "impressions": 323,
       "clicks": 12,
@@ -6341,7 +6377,7 @@
     },
     {
       "date": "2026-05-11",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 36.85,
       "impressions": 397,
       "clicks": 6,
@@ -6350,6 +6386,18 @@
       "directions": 1,
       "opportunities": 0.3,
       "cost_per_opp": 122.83
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Charlotte - Noda",
+      "spend": 9.74,
+      "impressions": 85,
+      "clicks": 5,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     },
     {
       "date": "2026-01-01",
@@ -7785,6 +7833,18 @@
       "spend": 32.86,
       "impressions": 160,
       "clicks": 9,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Coral Gables",
+      "spend": 10.36,
+      "impressions": 66,
+      "clicks": 4,
       "leads": 0,
       "calls": 0,
       "directions": 0,
@@ -9230,6 +9290,18 @@
       "directions": 0,
       "opportunities": 0.0,
       "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Coral Springs",
+      "spend": 5.8,
+      "impressions": 47,
+      "clicks": 5,
+      "leads": 0,
+      "calls": 0,
+      "directions": 1,
+      "opportunities": 0.3,
+      "cost_per_opp": 19.33
     },
     {
       "date": "2026-01-01",
@@ -11980,6 +12052,18 @@
       "cost_per_opp": 38.86
     },
     {
+      "date": "2026-05-12",
+      "studio": "Deerfield Beach",
+      "spend": 5.65,
+      "impressions": 101,
+      "clicks": 4,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
       "date": "2026-01-01",
       "studio": "Doral",
       "spend": 54.6,
@@ -13418,6 +13502,18 @@
       "directions": 1,
       "opportunities": 0.3,
       "cost_per_opp": 167.1
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Doral",
+      "spend": 4.02,
+      "impressions": 55,
+      "clicks": 5,
+      "leads": 0,
+      "calls": 0,
+      "directions": 2,
+      "opportunities": 0.6,
+      "cost_per_opp": 6.7
     },
     {
       "date": "2026-01-01",
@@ -14980,6 +15076,18 @@
       "cost_per_opp": 95.36
     },
     {
+      "date": "2026-05-12",
+      "studio": "Eastchester",
+      "spend": 18.55,
+      "impressions": 63,
+      "clicks": 8,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
       "date": "2026-01-01",
       "studio": "Fort Lauderdale - Las Olas",
       "spend": 40.27,
@@ -16418,6 +16526,18 @@
       "directions": 0,
       "opportunities": 0.0,
       "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Fort Lauderdale - Las Olas",
+      "spend": 13.7,
+      "impressions": 75,
+      "clicks": 4,
+      "leads": 0,
+      "calls": 0,
+      "directions": 1,
+      "opportunities": 0.3,
+      "cost_per_opp": 45.67
     },
     {
       "date": "2026-01-01",
@@ -17860,6 +17980,18 @@
       "cost_per_opp": 113.93
     },
     {
+      "date": "2026-05-12",
+      "studio": "Miami - Brickell",
+      "spend": 6.08,
+      "impressions": 49,
+      "clicks": 1,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
       "date": "2026-01-01",
       "studio": "Miami - Coconut Grove",
       "spend": 46.23,
@@ -19300,6 +19432,18 @@
       "cost_per_opp": 73.43
     },
     {
+      "date": "2026-05-12",
+      "studio": "Miami - Coconut Grove",
+      "spend": 1.04,
+      "impressions": 45,
+      "clicks": 2,
+      "leads": 0,
+      "calls": 0,
+      "directions": 1,
+      "opportunities": 0.3,
+      "cost_per_opp": 3.47
+    },
+    {
       "date": "2026-01-01",
       "studio": "Miami - Midtown",
       "spend": 29.29,
@@ -20731,8 +20875,20 @@
       "date": "2026-05-11",
       "studio": "Miami - Midtown",
       "spend": 13.38,
-      "impressions": 171,
+      "impressions": 175,
       "clicks": 6,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Miami - Midtown",
+      "spend": 0.0,
+      "impressions": 44,
+      "clicks": 0,
       "leads": 0,
       "calls": 0,
       "directions": 0,
@@ -22170,14 +22326,26 @@
     {
       "date": "2026-05-11",
       "studio": "Miami - Upper East Side",
-      "spend": 17.8,
-      "impressions": 441,
-      "clicks": 9,
+      "spend": 25.44,
+      "impressions": 445,
+      "clicks": 10,
       "leads": 0,
       "calls": 0,
       "directions": 1,
       "opportunities": 0.3,
-      "cost_per_opp": 59.33
+      "cost_per_opp": 84.8
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Miami - Upper East Side",
+      "spend": 5.22,
+      "impressions": 121,
+      "clicks": 5,
+      "leads": 0,
+      "calls": 0,
+      "directions": 2,
+      "opportunities": 0.6,
+      "cost_per_opp": 8.7
     },
     {
       "date": "2026-01-01",
@@ -23611,13 +23779,25 @@
       "date": "2026-05-11",
       "studio": "Miami Beach",
       "spend": 26.83,
-      "impressions": 399,
+      "impressions": 407,
       "clicks": 11,
       "leads": 0,
       "calls": 0,
       "directions": 0,
       "opportunities": 0.0,
       "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Miami Beach",
+      "spend": 11.2,
+      "impressions": 88,
+      "clicks": 3,
+      "leads": 0,
+      "calls": 0,
+      "directions": 1,
+      "opportunities": 0.3,
+      "cost_per_opp": 37.33
     },
     {
       "date": "2026-01-01",
@@ -25058,6 +25238,18 @@
       "directions": 0,
       "opportunities": 0.4,
       "cost_per_opp": 86.0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Miami Lakes",
+      "spend": 12.51,
+      "impressions": 35,
+      "clicks": 4,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     },
     {
       "date": "2026-01-01",
@@ -27472,6 +27664,18 @@
       "cost_per_opp": 36.51
     },
     {
+      "date": "2026-05-12",
+      "studio": "NYC - Chelsea",
+      "spend": 10.96,
+      "impressions": 412,
+      "clicks": 8,
+      "leads": 0,
+      "calls": 1,
+      "directions": 0,
+      "opportunities": 0.4,
+      "cost_per_opp": 27.4
+    },
+    {
       "date": "2026-01-01",
       "studio": "NYC - Park Slope",
       "spend": 79.83,
@@ -28891,13 +29095,25 @@
       "date": "2026-05-11",
       "studio": "NYC - Park Slope",
       "spend": 43.55,
-      "impressions": 637,
+      "impressions": 671,
       "clicks": 18,
       "leads": 0,
       "calls": 1,
       "directions": 0,
       "opportunities": 0.4,
       "cost_per_opp": 108.87
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "NYC - Park Slope",
+      "spend": 9.33,
+      "impressions": 171,
+      "clicks": 6,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     },
     {
       "date": "2026-02-11",
@@ -30784,6 +31000,18 @@
       "cost_per_opp": 0
     },
     {
+      "date": "2026-05-12",
+      "studio": "Ocean Township",
+      "spend": 27.6,
+      "impressions": 50,
+      "clicks": 2,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
       "date": "2026-01-01",
       "studio": "Pembroke Pines",
       "spend": 36.53,
@@ -32215,8 +32443,20 @@
       "date": "2026-05-11",
       "studio": "Pembroke Pines",
       "spend": 25.93,
-      "impressions": 92,
+      "impressions": 91,
       "clicks": 6,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Pembroke Pines",
+      "spend": 0.0,
+      "impressions": 16,
+      "clicks": 0,
       "leads": 0,
       "calls": 0,
       "directions": 0,
@@ -33698,6 +33938,18 @@
       "directions": 1,
       "opportunities": 0.7,
       "cost_per_opp": 48.71
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Pinecrest",
+      "spend": 6.04,
+      "impressions": 263,
+      "clicks": 4,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     },
     {
       "date": "2026-01-01",
@@ -35251,13 +35503,25 @@
       "date": "2026-05-11",
       "studio": "Reston",
       "spend": 20.34,
-      "impressions": 518,
+      "impressions": 527,
       "clicks": 17,
       "leads": 0,
       "calls": 1,
       "directions": 0,
       "opportunities": 0.4,
       "cost_per_opp": 50.85
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Reston",
+      "spend": 0.0,
+      "impressions": 129,
+      "clicks": 0,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     },
     {
       "date": "2026-01-01",
@@ -36700,6 +36964,18 @@
       "cost_per_opp": 0
     },
     {
+      "date": "2026-05-12",
+      "studio": "South Miami",
+      "spend": 11.56,
+      "impressions": 33,
+      "clicks": 1,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
+    },
+    {
       "date": "2026-01-01",
       "studio": "Toms River",
       "spend": 67.14,
@@ -38119,13 +38395,25 @@
       "date": "2026-05-11",
       "studio": "Toms River",
       "spend": 32.05,
-      "impressions": 261,
+      "impressions": 265,
       "clicks": 8,
       "leads": 1,
       "calls": 0,
       "directions": 0,
       "opportunities": 1.0,
       "cost_per_opp": 32.05
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Toms River",
+      "spend": 1.7,
+      "impressions": 72,
+      "clicks": 1,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     },
     {
       "date": "2026-01-01",
@@ -39522,14 +39810,26 @@
     {
       "date": "2026-05-11",
       "studio": "Wall Township",
-      "spend": 32.14,
-      "impressions": 173,
-      "clicks": 8,
+      "spend": 50.3,
+      "impressions": 178,
+      "clicks": 10,
       "leads": 0,
       "calls": 1,
       "directions": 0,
       "opportunities": 0.4,
-      "cost_per_opp": 80.35
+      "cost_per_opp": 125.75
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "Wall Township",
+      "spend": 18.32,
+      "impressions": 66,
+      "clicks": 3,
+      "leads": 0,
+      "calls": 1,
+      "directions": 0,
+      "opportunities": 0.4,
+      "cost_per_opp": 45.8
     },
     {
       "date": "2026-01-01",
@@ -40934,6 +41234,18 @@
       "directions": 0,
       "opportunities": 0.4,
       "cost_per_opp": 144.12
+    },
+    {
+      "date": "2026-05-12",
+      "studio": "West Palm Beach",
+      "spend": 10.79,
+      "impressions": 86,
+      "clicks": 5,
+      "leads": 0,
+      "calls": 0,
+      "directions": 0,
+      "opportunities": 0.0,
+      "cost_per_opp": 0
     }
   ],
   "monthly": [
@@ -41887,7 +42199,7 @@
     },
     {
       "month": "2024-03-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1369.53,
       "impressions": 24506,
       "clicks": 688,
@@ -41899,7 +42211,7 @@
     },
     {
       "month": "2024-04-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1570.55,
       "impressions": 31221,
       "clicks": 687,
@@ -41911,7 +42223,7 @@
     },
     {
       "month": "2024-05-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1118.03,
       "impressions": 28383,
       "clicks": 723,
@@ -41923,7 +42235,7 @@
     },
     {
       "month": "2024-06-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1342.34,
       "impressions": 15659,
       "clicks": 472,
@@ -41935,7 +42247,7 @@
     },
     {
       "month": "2024-07-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 669.63,
       "impressions": 12505,
       "clicks": 551,
@@ -41947,7 +42259,7 @@
     },
     {
       "month": "2024-08-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 745.04,
       "impressions": 16345,
       "clicks": 609,
@@ -41959,7 +42271,7 @@
     },
     {
       "month": "2024-09-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1095.91,
       "impressions": 24791,
       "clicks": 543,
@@ -41971,7 +42283,7 @@
     },
     {
       "month": "2024-10-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 873.25,
       "impressions": 13926,
       "clicks": 396,
@@ -41983,7 +42295,7 @@
     },
     {
       "month": "2024-11-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1100.29,
       "impressions": 34135,
       "clicks": 676,
@@ -41995,7 +42307,7 @@
     },
     {
       "month": "2024-12-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 639.78,
       "impressions": 13666,
       "clicks": 399,
@@ -42007,7 +42319,7 @@
     },
     {
       "month": "2025-01-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1661.33,
       "impressions": 30979,
       "clicks": 1018,
@@ -42019,7 +42331,7 @@
     },
     {
       "month": "2025-02-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1508.65,
       "impressions": 36071,
       "clicks": 749,
@@ -42031,7 +42343,7 @@
     },
     {
       "month": "2025-03-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1646.74,
       "impressions": 8774,
       "clicks": 408,
@@ -42043,7 +42355,7 @@
     },
     {
       "month": "2025-04-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1285.5,
       "impressions": 9398,
       "clicks": 359,
@@ -42055,7 +42367,7 @@
     },
     {
       "month": "2025-05-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1191.73,
       "impressions": 5326,
       "clicks": 302,
@@ -42067,7 +42379,7 @@
     },
     {
       "month": "2025-06-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 780.29,
       "impressions": 4185,
       "clicks": 242,
@@ -42079,7 +42391,7 @@
     },
     {
       "month": "2025-07-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 457.26,
       "impressions": 3067,
       "clicks": 178,
@@ -42091,7 +42403,7 @@
     },
     {
       "month": "2025-08-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 805.7,
       "impressions": 30073,
       "clicks": 459,
@@ -42103,7 +42415,7 @@
     },
     {
       "month": "2025-09-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 446.01,
       "impressions": 40198,
       "clicks": 342,
@@ -42115,7 +42427,7 @@
     },
     {
       "month": "2025-10-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 861.98,
       "impressions": 29975,
       "clicks": 311,
@@ -42127,7 +42439,7 @@
     },
     {
       "month": "2025-11-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 1457.62,
       "impressions": 43618,
       "clicks": 520,
@@ -42139,7 +42451,7 @@
     },
     {
       "month": "2025-12-01",
-      "studio": "Charlotte - NoDa",
+      "studio": "Charlotte - Noda",
       "spend": 109.94,
       "impressions": 3752,
       "clicks": 59,
@@ -47628,29 +47940,29 @@
     "headlines": [
       {
         "text": "Strength Workouts Every 10 Min",
-        "impressions": 157869,
+        "impressions": 157875,
         "clicks": 7121,
         "ctr": 4.51,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Award-Winning Gym Classes",
-        "impressions": 150727,
-        "clicks": 4814,
+        "impressions": 150858,
+        "clicks": 4815,
         "ctr": 3.19,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Top-Rated Gym Classes Near You",
-        "impressions": 145046,
-        "clicks": 5310,
-        "ctr": 3.66,
+        "impressions": 145659,
+        "clicks": 5339,
+        "ctr": 3.67,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Start Where You Are",
-        "impressions": 140055,
-        "clicks": 4410,
+        "impressions": 140737,
+        "clicks": 4428,
         "ctr": 3.15,
         "performance_label": "NOT_APPLICABLE"
       },
@@ -47663,9 +47975,9 @@
       },
       {
         "text": "We Handle the Workout Plan",
-        "impressions": 100898,
-        "clicks": 4468,
-        "ctr": 4.43,
+        "impressions": 101561,
+        "clicks": 4494,
+        "ctr": 4.42,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47684,37 +47996,37 @@
       },
       {
         "text": "Start Your 1st Class Today",
-        "impressions": 57981,
-        "clicks": 2648,
-        "ctr": 4.57,
+        "impressions": 58121,
+        "clicks": 2650,
+        "ctr": 4.56,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "No Pressure. Just Progress",
-        "impressions": 57300,
-        "clicks": 2301,
+        "impressions": 57535,
+        "clicks": 2311,
         "ctr": 4.02,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Find Your Fitness Community",
-        "impressions": 47865,
-        "clicks": 2099,
-        "ctr": 4.39,
+        "impressions": 48051,
+        "clicks": 2105,
+        "ctr": 4.38,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Train Without Pressure",
-        "impressions": 46662,
-        "clicks": 1777,
-        "ctr": 3.81,
+        "impressions": 47038,
+        "clicks": 1802,
+        "ctr": 3.83,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Busy Life. Strong Body.",
-        "impressions": 45432,
-        "clicks": 2120,
-        "ctr": 4.67,
+        "impressions": 45736,
+        "clicks": 2129,
+        "ctr": 4.65,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47747,8 +48059,8 @@
       },
       {
         "text": "New SWEAT440 Pinecrest",
-        "impressions": 31953,
-        "clicks": 1042,
+        "impressions": 31965,
+        "clicks": 1043,
         "ctr": 3.26,
         "performance_label": "NOT_APPLICABLE"
       },
@@ -47761,8 +48073,8 @@
       },
       {
         "text": "Workouts for Busy Schedules",
-        "impressions": 28492,
-        "clicks": 1261,
+        "impressions": 28616,
+        "clicks": 1268,
         "ctr": 4.43,
         "performance_label": "NOT_APPLICABLE"
       },
@@ -47782,16 +48094,16 @@
       },
       {
         "text": "Coach-Guided Strength Training",
-        "impressions": 23834,
-        "clicks": 1352,
+        "impressions": 23895,
+        "clicks": 1356,
         "ctr": 5.67,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Limited-Time Presale Offer",
-        "impressions": 23313,
+        "impressions": 23369,
         "clicks": 779,
-        "ctr": 3.34,
+        "ctr": 3.33,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47838,23 +48150,23 @@
       },
       {
         "text": "Show Up and Build Strength",
-        "impressions": 15674,
-        "clicks": 830,
-        "ctr": 5.3,
+        "impressions": 15711,
+        "clicks": 831,
+        "ctr": 5.29,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Strong Results, Short Sessions",
-        "impressions": 15497,
-        "clicks": 736,
-        "ctr": 4.75,
+        "impressions": 15569,
+        "clicks": 741,
+        "ctr": 4.76,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "New SWEAT440 Reston",
-        "impressions": 12749,
+        "impressions": 12798,
         "clicks": 477,
-        "ctr": 3.74,
+        "ctr": 3.73,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47873,9 +48185,9 @@
       },
       {
         "text": "Guided Strength for Real Life",
-        "impressions": 12055,
+        "impressions": 12073,
         "clicks": 560,
-        "ctr": 4.65,
+        "ctr": 4.64,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47894,9 +48206,16 @@
       },
       {
         "text": "Best Strength Classes Near You",
-        "impressions": 10576,
-        "clicks": 350,
-        "ctr": 3.31,
+        "impressions": 10751,
+        "clicks": 351,
+        "ctr": 3.26,
+        "performance_label": "NOT_APPLICABLE"
+      },
+      {
+        "text": "Pre-Sale is On: $129/Month",
+        "impressions": 9739,
+        "clicks": 361,
+        "ctr": 3.71,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47907,17 +48226,10 @@
         "performance_label": "PENDING"
       },
       {
-        "text": "Pre-Sale is On: $129/Month",
-        "impressions": 9706,
-        "clicks": 361,
-        "ctr": 3.72,
-        "performance_label": "NOT_APPLICABLE"
-      },
-      {
         "text": "Risk a Free Trial Week",
-        "impressions": 7832,
+        "impressions": 7874,
         "clicks": 244,
-        "ctr": 3.12,
+        "ctr": 3.1,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47943,9 +48255,9 @@
       },
       {
         "text": "SWEAT440 Chelsea",
-        "impressions": 6331,
-        "clicks": 133,
-        "ctr": 2.1,
+        "impressions": 6430,
+        "clicks": 136,
+        "ctr": 2.12,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -47957,31 +48269,31 @@
       },
       {
         "text": "Strength Training Classes",
-        "impressions": 5672,
+        "impressions": 5678,
         "clicks": 379,
-        "ctr": 6.68,
+        "ctr": 6.67,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "SWEAT440 Park Slope",
-        "impressions": 5559,
-        "clicks": 133,
+        "impressions": 5609,
+        "clicks": 134,
         "ctr": 2.39,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "SWEAT440 Boca Raton",
-        "impressions": 5052,
-        "clicks": 199,
-        "ctr": 3.94,
+        "impressions": 5157,
+        "clicks": 200,
+        "ctr": 3.88,
         "performance_label": "NOT_APPLICABLE"
       }
     ],
     "descriptions": [
       {
         "text": "Classes start every 10 minutes, so you are never late and never wait to work out. Try free",
-        "impressions": 242384,
-        "clicks": 9112,
+        "impressions": 244315,
+        "clicks": 9184,
         "ctr": 3.76,
         "performance_label": "NOT_APPLICABLE"
       },
@@ -48001,29 +48313,29 @@
       },
       {
         "text": "Classes start every 10 minutes, so you are never late and never wait to work out.",
-        "impressions": 68965,
-        "clicks": 1940,
+        "impressions": 69053,
+        "clicks": 1943,
         "ctr": 2.81,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Workouts that fit your life, making consistency easier. Try Free",
-        "impressions": 59194,
-        "clicks": 2643,
+        "impressions": 59520,
+        "clicks": 2652,
         "ctr": 4.46,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Walk in and start training right away with coach-led strength circuits. Try Free",
-        "impressions": 50598,
-        "clicks": 2303,
+        "impressions": 50746,
+        "clicks": 2308,
         "ctr": 4.55,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "YourWalk in and start training right away with coach-led strength circuits. Try free.",
-        "impressions": 43455,
-        "clicks": 2035,
+        "impressions": 43596,
+        "clicks": 2042,
         "ctr": 4.68,
         "performance_label": "NOT_APPLICABLE"
       },
@@ -48036,30 +48348,30 @@
       },
       {
         "text": "Short, effective strength sessions you can actually keep up with. Try Free",
-        "impressions": 33095,
+        "impressions": 33103,
         "clicks": 1496,
         "ctr": 4.52,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Enjoy Our Special Membership Offer: Founder’s Rate at $129/Month. Reston is Coming!",
-        "impressions": 22477,
+        "impressions": 22598,
         "clicks": 636,
-        "ctr": 2.83,
+        "ctr": 2.81,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Walk in and start training right away with coach-led strength circuits.",
-        "impressions": 18680,
-        "clicks": 935,
-        "ctr": 5.01,
+        "impressions": 18748,
+        "clicks": 936,
+        "ctr": 4.99,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Chelsea today.",
-        "impressions": 8320,
-        "clicks": 169,
-        "ctr": 2.03,
+        "impressions": 8473,
+        "clicks": 171,
+        "ctr": 2.02,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -48078,14 +48390,14 @@
       },
       {
         "text": "Build Strength in Every Workout. Join today. Classes Start Every 10 Minutes.",
-        "impressions": 4861,
+        "impressions": 4877,
         "clicks": 275,
-        "ctr": 5.66,
+        "ctr": 5.64,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Lock in your Founder's Rate at $129/Month. Join now before presale ends.",
-        "impressions": 4356,
+        "impressions": 4357,
         "clicks": 261,
         "ctr": 5.99,
         "performance_label": "NOT_APPLICABLE"
@@ -48106,9 +48418,9 @@
       },
       {
         "text": "SWEAT440 Reston is Coming Soon. Try Us Free for 7 Days.",
-        "impressions": 3296,
+        "impressions": 3317,
         "clicks": 191,
-        "ctr": 5.79,
+        "ctr": 5.76,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -48120,16 +48432,16 @@
       },
       {
         "text": "Workouts that fit your life, making consistency easier.",
-        "impressions": 2502,
+        "impressions": 2509,
         "clicks": 196,
-        "ctr": 7.83,
+        "ctr": 7.81,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Zilker today.",
-        "impressions": 1740,
-        "clicks": 68,
-        "ctr": 3.91,
+        "impressions": 1777,
+        "clicks": 71,
+        "ctr": 4.0,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -48148,9 +48460,9 @@
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Eastchester today.",
-        "impressions": 1581,
-        "clicks": 96,
-        "ctr": 6.07,
+        "impressions": 1602,
+        "clicks": 97,
+        "ctr": 6.05,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -48162,9 +48474,9 @@
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Brickell today.",
-        "impressions": 1247,
-        "clicks": 49,
-        "ctr": 3.93,
+        "impressions": 1263,
+        "clicks": 50,
+        "ctr": 3.96,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -48176,30 +48488,30 @@
       },
       {
         "text": "4 stations, 40 minutes, real results Book your free class at SWEAT440 Pembroke Pines today",
-        "impressions": 933,
+        "impressions": 943,
         "clicks": 54,
-        "ctr": 5.79,
+        "ctr": 5.73,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Park Slope today.",
-        "impressions": 910,
+        "impressions": 920,
         "clicks": 39,
-        "ctr": 4.29,
+        "ctr": 4.24,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes real results Book your free class at SWEAT440 Upper East Side today",
-        "impressions": 883,
-        "clicks": 24,
-        "ctr": 2.72,
+        "impressions": 903,
+        "clicks": 25,
+        "ctr": 2.77,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Boca Raton today.",
-        "impressions": 872,
-        "clicks": 50,
-        "ctr": 5.73,
+        "impressions": 895,
+        "clicks": 51,
+        "ctr": 5.7,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -48211,100 +48523,100 @@
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Wall Township today",
-        "impressions": 752,
-        "clicks": 42,
-        "ctr": 5.59,
+        "impressions": 778,
+        "clicks": 45,
+        "ctr": 5.78,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results Book your free class at SWEAT440 Ocean Township today",
-        "impressions": 676,
+        "impressions": 691,
         "clicks": 31,
-        "ctr": 4.59,
+        "ctr": 4.49,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 NoDa today.",
-        "impressions": 675,
+        "impressions": 680,
         "clicks": 28,
-        "ctr": 4.15,
+        "ctr": 4.12,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "Experience the SWEAT440 difference at Wall Township with a Free Class",
-        "impressions": 613,
-        "clicks": 28,
-        "ctr": 4.57,
+        "impressions": 619,
+        "clicks": 30,
+        "ctr": 4.85,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Doral today.",
-        "impressions": 602,
+        "impressions": 611,
         "clicks": 28,
-        "ctr": 4.65,
-        "performance_label": "NOT_APPLICABLE"
-      },
-      {
-        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Miami Lakes today.",
-        "impressions": 573,
-        "clicks": 29,
-        "ctr": 5.06,
+        "ctr": 4.58,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Coral Gables today.",
-        "impressions": 571,
-        "clicks": 26,
-        "ctr": 4.55,
+        "impressions": 586,
+        "clicks": 28,
+        "ctr": 4.78,
+        "performance_label": "NOT_APPLICABLE"
+      },
+      {
+        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Miami Lakes today.",
+        "impressions": 577,
+        "clicks": 30,
+        "ctr": 5.2,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Coconut Grove today",
-        "impressions": 530,
+        "impressions": 539,
         "clicks": 21,
-        "ctr": 3.96,
+        "ctr": 3.9,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Miami Beach today.",
-        "impressions": 525,
-        "clicks": 28,
-        "ctr": 5.33,
+        "impressions": 532,
+        "clicks": 29,
+        "ctr": 5.45,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Toms River today.",
-        "impressions": 486,
+        "impressions": 508,
         "clicks": 32,
-        "ctr": 6.58,
-        "performance_label": "NOT_APPLICABLE"
-      },
-      {
-        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Midtown Miami today",
-        "impressions": 472,
-        "clicks": 21,
-        "ctr": 4.45,
-        "performance_label": "NOT_APPLICABLE"
-      },
-      {
-        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Coral Springs today",
-        "impressions": 458,
-        "clicks": 46,
-        "ctr": 10.04,
-        "performance_label": "NOT_APPLICABLE"
-      },
-      {
-        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Las Olas today.",
-        "impressions": 446,
-        "clicks": 28,
-        "ctr": 6.28,
+        "ctr": 6.3,
         "performance_label": "NOT_APPLICABLE"
       },
       {
         "text": "4 stations, 40 minutes real results Book your free class at SWEAT440 Deerfield Beach today",
-        "impressions": 437,
+        "impressions": 474,
         "clicks": 17,
-        "ctr": 3.89,
+        "ctr": 3.59,
+        "performance_label": "NOT_APPLICABLE"
+      },
+      {
+        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Midtown Miami today",
+        "impressions": 473,
+        "clicks": 21,
+        "ctr": 4.44,
+        "performance_label": "NOT_APPLICABLE"
+      },
+      {
+        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Coral Springs today",
+        "impressions": 462,
+        "clicks": 48,
+        "ctr": 10.39,
+        "performance_label": "NOT_APPLICABLE"
+      },
+      {
+        "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 Las Olas today.",
+        "impressions": 458,
+        "clicks": 29,
+        "ctr": 6.33,
         "performance_label": "NOT_APPLICABLE"
       },
       {
@@ -48316,9 +48628,9 @@
       },
       {
         "text": "4 stations, 40 minutes, real results. Book your free class at SWEAT440 South Miami today.",
-        "impressions": 229,
+        "impressions": 233,
         "clicks": 10,
-        "ctr": 4.37,
+        "ctr": 4.29,
         "performance_label": "NOT_APPLICABLE"
       },
       {
