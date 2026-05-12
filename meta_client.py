@@ -39,8 +39,32 @@ class MetaClient:
         url = f"{BASE}/{self.version}/{path.lstrip('/')}"
         params = {**(params or {}), "access_token": self.token}
         r = self.session.get(url, params=params, timeout=60)
-        if r.status_code == 429 or (r.status_code == 400 and "rate limit" in r.text.lower()):
-            time.sleep(30)
+
+        # Reintenta con backoff exponencial si Meta tira rate-limit.
+        # Meta usa varios códigos: 17 (user request limit), 4 (app request
+        # limit), 32 (page request limit), 613 (unknown). También responde
+        # 429 a veces, y 400 con texto "rate limit" / "too many calls".
+        retry_codes = {4, 17, 32, 613}
+        for attempt, delay in enumerate([30, 60, 120], start=1):
+            if r.status_code == 200:
+                break
+            should_retry = False
+            if r.status_code == 429:
+                should_retry = True
+            elif r.status_code == 400:
+                txt = r.text.lower()
+                if "rate limit" in txt or "too many calls" in txt or "request limit" in txt:
+                    should_retry = True
+                else:
+                    try:
+                        err = r.json().get("error", {})
+                        if err.get("code") in retry_codes:
+                            should_retry = True
+                    except Exception:
+                        pass
+            if not should_retry:
+                break
+            time.sleep(delay)
             r = self.session.get(url, params=params, timeout=60)
         if not r.ok:
             try:
@@ -78,11 +102,54 @@ class MetaClient:
         ))
 
     def list_ads(self, campaign_id: str) -> list[dict]:
+        # IMPORTANTE: la expansión `creative{...}` desde este endpoint dropea
+        # silenciosamente la mayoría de los sub-fields. Aquí solo pedimos
+        # id + object_type del creative; el detalle (asset_feed_spec, etc.)
+        # se trae después con get_creatives_by_ids() en batch.
         return list(self._paginate(
             f"{campaign_id}/ads",
-            params={"fields": "id,name,adset_id,status",
-                    "limit": 500},
+            params={
+                "fields": "id,name,adset_id,status,creative{id,object_type}",
+                "limit": 100,
+            },
         ))
+
+    def get_creatives_by_ids(self, creative_ids: list[str]) -> dict[str, dict]:
+        """
+        Batch fetch de creatives por ID. Meta acepta hasta 50 IDs por request
+        usando GET /v21.0/?ids=<id1>,<id2>,...&fields=...
+
+        Devuelve dict {creative_id: creative_dict_completo}.
+        Si un chunk falla (rate limit, etc.), se ignora ese chunk.
+        """
+        if not creative_ids:
+            return {}
+        unique_ids = list({cid for cid in creative_ids if cid})
+        out: dict[str, dict] = {}
+        # Pedimos solo los sub-fields que necesitamos para clasificar.
+        # asset_feed_spec con sub-selección {videos,images} para no traer
+        # bodies/titles/descriptions (que son enormes y no nos sirven).
+        fields = (
+            "id,object_type,video_id,image_hash,thumbnail_url,"
+            "asset_feed_spec{videos,images}"
+        )
+        chunk_size = 50
+        for i in range(0, len(unique_ids), chunk_size):
+            chunk = unique_ids[i:i + chunk_size]
+            try:
+                data = self._get(
+                    "",
+                    params={"ids": ",".join(chunk), "fields": fields},
+                )
+                # Response shape: {"id1": {...}, "id2": {...}, ...}
+                for cid, cdata in data.items():
+                    if isinstance(cdata, dict):
+                        out[cid] = cdata
+            except Exception:
+                # Si Meta rechaza un chunk completo, seguimos con los demás.
+                # Los ads cuyo creative no se pudo traer caerán al fallback.
+                pass
+        return out
 
     def get_insights(
         self,
@@ -122,6 +189,31 @@ class MetaClient:
             # time_increment=1 → una fila por día por objeto (ad/adset/campaign).
             params["time_increment"] = str(time_increment)
         return list(self._paginate(f"{object_id}/insights", params=params))
+
+    def list_campaigns(
+        self,
+        ad_account_id: str,
+        name_filter: str | None = None,
+        status_filter: list[str] | None = None,
+    ) -> list[dict]:
+        """
+        List campaigns from an ad account.
+        name_filter: optional substring to match in campaign name (case-insensitive via Meta API).
+        status_filter: optional list of statuses to include (e.g. ["ACTIVE", "PAUSED"]).
+        """
+        import json as _json
+        params: dict = {
+            "fields": "id,name,status,start_time,stop_time,objective,daily_budget,lifetime_budget",
+            "limit": 200,
+        }
+        filters: list[dict] = []
+        if name_filter:
+            filters.append({"field": "name", "operator": "CONTAIN", "value": name_filter})
+        if status_filter:
+            filters.append({"field": "effective_status", "operator": "IN", "value": status_filter})
+        if filters:
+            params["filtering"] = _json.dumps(filters)
+        return list(self._paginate(f"{ad_account_id}/campaigns", params=params))
 
     def get_daily_insights(
         self,
