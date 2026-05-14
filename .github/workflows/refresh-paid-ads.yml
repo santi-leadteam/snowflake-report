@@ -9,9 +9,9 @@ on:
   push:
     branches: [paid-ads-dashboard]
     paths:
-      - "fetch_paid_ads.py"
-      - "meta_client.py"
-      - "config.yaml"
+      - "paid-ads-dashboards/fetch_paid_ads.py"
+      - "paid-ads-dashboards/meta_client.py"
+      - "paid-ads-dashboards/config.yaml"
       - ".github/workflows/refresh-paid-ads.yml"
 
 permissions:
@@ -33,29 +33,32 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-          cache-dependency-path: requirements-paid-ads.txt
+          cache-dependency-path: paid-ads-dashboards/requirements-paid-ads.txt
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-paid-ads.txt
+          pip install -r paid-ads-dashboards/requirements-paid-ads.txt
 
-      - name: Run ETL (Meta → paid-ads-data.json + daniel-paid-ads-data.json)
+      - name: Run ETL (Meta → paid-ads-dashboards/paid-ads-data.json + daniel-paid-ads-data.json)
         env:
           # meta_client.py acepta META_TOKEN o META_ACCESS_TOKEN.
           META_TOKEN:        ${{ secrets.META_TOKEN }}
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
           META_API_VERSION:  ${{ secrets.META_API_VERSION }}
         run: |
+          cd paid-ads-dashboards
           python fetch_paid_ads.py
           # Sync a daniel-paid-ads-data.json (leído por paid-ads.html)
           cp paid-ads-data.json daniel-paid-ads-data.json
+          # También mantener copia en root para otros dashboards (index.html, etc.)
+          cp paid-ads-data.json ../paid-ads-data.json
 
       - name: Commit updated data
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add paid-ads-data.json daniel-paid-ads-data.json
+          git add paid-ads-dashboards/paid-ads-data.json paid-ads-dashboards/daniel-paid-ads-data.json paid-ads-data.json
           if git diff --cached --quiet; then
             echo "No changes in data files"
           else

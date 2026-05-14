@@ -43,7 +43,10 @@ jobs:
       - name: Fetch Meta Ads creative data
         env:
           META_TOKEN:   ${{ secrets.META_TOKEN }}
-        run: python fetch_paid_ads.py
+        run: |
+          python paid-ads-dashboards/fetch_paid_ads.py
+          # Keep root copy in sync for index.html and other shared dashboards
+          cp paid-ads-dashboards/paid-ads-data.json paid-ads-data.json
         continue-on-error: true
 
       - name: Fetch Google Ads data
@@ -60,6 +63,6 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json paid-ads-data.json google-ads-data.json
+          git add data.json paid-ads-data.json paid-ads-dashboards/paid-ads-data.json google-ads-data.json
           git diff --cached --quiet || git commit -m "chore: refresh data $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push

@@ -41,12 +41,13 @@ campaigns:
 
     # Pilares de producto (los buscamos como tokens en el nombre del ad)
     pillar_tokens:
-      DR:    ["DR"]
-      DF:    ["DF"]
-      "P&R": ["P&R", "P+R"]
-      PS:    ["PS"]
-      SSB:   ["SSB"]
-      HYROX: ["HYROX"]
+      "Decision Relief":      ["DR"]
+      "Value Confidence":     ["VC"]
+      "Psychological Safety": ["PS"]
+      "Performance & Results": ["P&R", "P+R", "PR"]
+      "Social Safety":        ["SSB", "SS"]
+      HYROX:                  ["HYROX"]
+      DC:                     ["DC"]
 
     studios:
       - { code: "FL-001", name: "Miami Beach",                  state: "FL", match: "Miami Beach" }
@@ -98,12 +99,13 @@ campaigns:
       SAHP:  ["SAHP"]
 
     pillar_tokens:
-      DR:    ["DR"]
-      DF:    ["DF"]
-      "P&R": ["P&R", "P+R"]
-      PS:    ["PS"]
-      SSB:   ["SSB"]
-      HYROX: ["HYROX"]
+      "Decision Relief":      ["DR"]
+      "Value Confidence":     ["VC"]
+      "Psychological Safety": ["PS"]
+      "Performance & Results": ["P&R", "P+R", "PR"]
+      "Social Safety":        ["SSB", "SS"]
+      HYROX:                  ["HYROX"]
+      DC:                     ["DC"]
 
     # Reutilizamos el mismo mapeo de studios. Si tu proxima campana es
     # solo para algunos studios, elimina los que no apliquen y el
@@ -155,12 +157,13 @@ campaigns:
       SAHP:  ["SAHP"]
 
     pillar_tokens:
-      DR:    ["DR"]
-      DF:    ["DF"]
-      "P&R": ["P&R", "P+R"]
-      PS:    ["PS"]
-      SSB:   ["SSB"]
-      HYROX: ["HYROX"]
+      "Decision Relief":      ["DR"]
+      "Value Confidence":     ["VC"]
+      "Psychological Safety": ["PS"]
+      "Performance & Results": ["P&R", "P+R", "PR"]
+      "Social Safety":        ["SSB", "SS"]
+      HYROX:                  ["HYROX"]
+      DC:                     ["DC"]
 
     studios:
       - { code: "FL-001", name: "Miami Beach",                  state: "FL", match: "Miami Beach" }
