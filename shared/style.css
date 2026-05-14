@@ -177,3 +177,18 @@
 .ring-legend-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ring-legend-vol{text-align:right;font-weight:600;color:#5a7a8a;font-size:10px;min-width:40px}
 .ring-legend-pct{text-align:right;font-weight:700;color:#1a1a2e;min-width:36px}
+/* ── Sortable table headers ─────────────────────────────────────────── */
+.data-table th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
+.data-table th.sortable::after{content:' ⇅';opacity:.3;font-size:10px}
+.data-table th.sort-asc::after{content:' ▲';opacity:.8}
+.data-table th.sort-desc::after{content:' ▼';opacity:.8}
+.data-table th[data-sort]{cursor:pointer;user-select:none}
+.data-table th[data-sort]::after{content:' ⇅';opacity:.3;font-size:10px}
+.data-table th[data-sort].sort-asc::after{content:' ▲';opacity:.8}
+.data-table th[data-sort].sort-desc::after{content:' ▼';opacity:.8}
+
+/* ── Table footer totals ──────────────────────────────────────────────── */
+.data-table tfoot td{font-family:Oswald,sans-serif;font-weight:600;font-size:11px;color:#1a1a2e;border-top:2px solid #c0d4df;background:#edf5fb;padding:7px 10px}
+
+/* ── Row number column ────────────────────────────────────────────────── */
+.data-table .row-num,.data-table th.row-num{color:#8aabbf;font-size:11px;text-align:right;padding-right:6px;min-width:28px;user-select:none;font-weight:400}

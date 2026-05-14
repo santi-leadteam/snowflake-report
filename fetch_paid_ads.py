@@ -1,7 +1,7 @@
 """
 fetch_paid_ads.py
 ─────────────────────────────────────────────────────────────
-ETL Meta Ads → daniel-paid-ads-data.json
+ETL Meta Ads → paid-ads-data.json
 """
 from __future__ import annotations
 import json
@@ -21,9 +21,9 @@ from meta_client import MetaClient, leads_of, purchases_of, trials_of
 
 REPO_ROOT = Path(__file__).resolve().parent
 CONFIG_PATH = REPO_ROOT / "config.yaml"
-OUT_PATH = REPO_ROOT / "daniel-paid-ads-data.json"
+OUT_PATH = REPO_ROOT / "paid-ads-data.json"
 
-DAILY_WINDOW_DAYS = 90
+DAILY_AD_STUDIO_START = "2026-04-01"  # earliest date for daily_ad_studio; grows forward indefinitely
 
 
 logging.basicConfig(
@@ -555,54 +555,29 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
                 "cpl": cpl,
             })
 
-    daily_out = []
-    for d in daily:
-        daily_out.append({
-            "date": d.get("date_start"),
-            "impressions": int(safe_float(d.get("impressions"))),
-            "clicks": int(safe_float(d.get("clicks"))),
-            "spend": round(safe_float(d.get("spend")), 2),
-            "reach": int(safe_float(d.get("reach"))),
-            "leads": leads_of(d),
-            "purchases": purchases_of(d),
-            "trials": trials_of(d),
-        })
+    # daily_out removed — superseded by top-level daily_ad_studio
 
-    today = date.today()
-    window_start = (today - timedelta(days=DAILY_WINDOW_DAYS)).isoformat()
-    today_iso = today.isoformat()
-    daily_start = max(c["date_start"], window_start)
-    daily_end   = min(c["date_end"], today_iso)
+    # ── daily ad×studio rows (Apr 2026 onward, grows indefinitely) ───────
+    # Window: DAILY_AD_STUDIO_START → today, clipped to campaign bounds.
+    # These are returned as a list of raw rows; run() merges them into the
+    # top-level daily_ad_studio array across all campaigns.
+    today_iso    = date.today().isoformat()
+    das_start    = max(c["date_start"], DAILY_AD_STUDIO_START)
+    das_end      = min(c["date_end"],   today_iso)
 
-    daily_series: dict = {
-        "window_start": daily_start,
-        "window_end":   daily_end,
-        "window_days":  DAILY_WINDOW_DAYS,
-        "campaign":             [],
-        "by_studio":            [],
-        "by_audience":          [],
-        "by_pillar":            [],
-        "by_concept":           [],
-        "by_media_type":        [],
-        "by_studio_audience":   [],
-        "by_studio_pillar":     [],
-        "by_studio_concept":    [],
-        "by_studio_media_type": [],
-    }
+    ad_first_seen: dict[str, str] = {}
+    das_rows: list[dict] = []  # [{date, studio_code, ad_id, spend, impressions, clicks, leads, trials}]
 
-    ad_first_seen: dict[str, str] = {}  # populated below if daily window is valid
-    if daily_start > daily_end:
-        log.info(f"  daily series: ventana vacía (start={daily_start} > end={daily_end}), skip.")
-    else:
-        log.info(f"  fetching daily ad×day insights [{daily_start} → {daily_end}] …")
+    if das_start <= das_end:
+        log.info(f"  fetching daily ad×studio [{das_start} -> {das_end}] ...")
         daily_ad_insights: list[dict] = []
         for adset in ad_sets:
             try:
                 rows = meta.get_insights(
                     adset["id"],
                     level="ad",
-                    date_start=daily_start,
-                    date_end=daily_end,
+                    date_start=das_start,
+                    date_end=das_end,
                     time_increment=1,
                 )
                 daily_ad_insights.extend(rows)
@@ -610,133 +585,52 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
                 log.warning(f"  daily ad-level failed for adset {adset.get('name','?')} ({adset['id']}): {e}")
         log.info(f"  {len(daily_ad_insights)} ad×day rows")
 
-        def _empty_d():
-            return {"spend": 0.0, "impressions": 0, "clicks": 0,
-                    "reach": 0, "leads": 0, "trials": 0, "purchases": 0}
-
-        camp_d         = defaultdict(_empty_d)
-        d_studio       = defaultdict(_empty_d)
-        d_aud          = defaultdict(_empty_d)
-        d_pillar       = defaultdict(_empty_d)
-        d_concept      = defaultdict(_empty_d)
-        d_media_type   = defaultdict(_empty_d)
-        d_stu_aud      = defaultdict(_empty_d)
-        d_stu_pillar   = defaultdict(_empty_d)
-        d_stu_concept  = defaultdict(_empty_d)
-        d_stu_media    = defaultdict(_empty_d)
-
-        def _bump_d(bucket, spend, impressions, clicks, reach, leads, trials, purchases):
-            bucket["spend"]       += spend
-            bucket["impressions"] += impressions
-            bucket["clicks"]      += clicks
-            bucket["reach"]       += reach
-            bucket["leads"]       += leads
-            bucket["trials"]      += trials
-            bucket["purchases"]   += purchases
+        d_ad_studio: dict[tuple, dict] = defaultdict(
+            lambda: {"spend": 0.0, "impressions": 0, "clicks": 0, "leads": 0, "trials": 0}
+        )
 
         for row in daily_ad_insights:
             ad_id = row.get("ad_id")
-            dims = ad_dims.get(ad_id)
+            dims  = ad_dims.get(ad_id)
             if not dims:
                 continue
             d = row.get("date_start")
             if not d:
                 continue
 
-            # Record earliest date this ad had spend
-            if safe_float(row.get("spend")) > 0:
-                if ad_id not in ad_first_seen or d < ad_first_seen[ad_id]:
-                    ad_first_seen[ad_id] = d
-
-            spend       = safe_float(row.get("spend"))
-            impressions = int(safe_float(row.get("impressions")))
-            clicks      = int(safe_float(row.get("clicks")))
-            reach       = int(safe_float(row.get("reach")))
-            leads       = leads_of(row)
-            trials      = trials_of(row)
-            purchases   = purchases_of(row)
-
-            _bump_d(camp_d[d], spend, impressions, clicks, reach, leads, trials, purchases)
+            spend = safe_float(row.get("spend"))
+            if spend > 0 and (ad_id not in ad_first_seen or d < ad_first_seen[ad_id]):
+                ad_first_seen[ad_id] = d
 
             sc = dims["studio_code"]
-            _bump_d(d_studio[(sc, d)], spend, impressions, clicks, reach, leads, trials, purchases)
+            b  = d_ad_studio[(d, sc, ad_id)]
+            b["spend"]       += spend
+            b["impressions"] += int(safe_float(row.get("impressions")))
+            b["clicks"]      += int(safe_float(row.get("clicks")))
+            b["leads"]       += leads_of(row)
+            b["trials"]      += trials_of(row)
 
-            if dims["audience"]:
-                a = dims["audience"]
-                _bump_d(d_aud[(a, d)],          spend, impressions, clicks, reach, leads, trials, purchases)
-                _bump_d(d_stu_aud[(sc, a, d)],  spend, impressions, clicks, reach, leads, trials, purchases)
-            if dims["pillar"]:
-                p = dims["pillar"]
-                _bump_d(d_pillar[(p, d)],         spend, impressions, clicks, reach, leads, trials, purchases)
-                _bump_d(d_stu_pillar[(sc, p, d)], spend, impressions, clicks, reach, leads, trials, purchases)
-            if dims["concept"]:
-                co = dims["concept"]
-                _bump_d(d_concept[(co, d)],         spend, impressions, clicks, reach, leads, trials, purchases)
-                _bump_d(d_stu_concept[(sc, co, d)], spend, impressions, clicks, reach, leads, trials, purchases)
-            mt = dims.get("media_type") or "Other"
-            _bump_d(d_media_type[(mt, d)],     spend, impressions, clicks, reach, leads, trials, purchases)
-            _bump_d(d_stu_media[(sc, mt, d)],  spend, impressions, clicks, reach, leads, trials, purchases)
-
-        def _row_metrics(b: dict) -> dict:
-            return {
+        for (d, sc, ad_id), b in sorted(d_ad_studio.keys()):
+            b = d_ad_studio[(d, sc, ad_id)]
+            das_rows.append({
+                "date":        d,
+                "studio_code": sc,
+                "ad_id":       ad_id,
                 "spend":       round(b["spend"], 2),
                 "impressions": b["impressions"],
                 "clicks":      b["clicks"],
-                "reach":       b["reach"],
                 "leads":       b["leads"],
                 "trials":      b["trials"],
-                "purchases":   b["purchases"],
-                "cpl": round(b["spend"] / b["leads"], 2)     if b["leads"]     else 0,
-                "cpt": round(b["spend"] / b["trials"], 2)    if b["trials"]    else 0,
-                "cpp": round(b["spend"] / b["purchases"], 2) if b["purchases"] else 0,
-                "ctr": round(b["clicks"] / b["impressions"] * 100, 2) if b["impressions"] else 0,
-                "cpm": round(b["spend"] / b["impressions"] * 1000, 2) if b["impressions"] else 0,
-            }
+            })
 
-        def _emit(data_dict, key_names):
-            out = []
-            for k in sorted(data_dict.keys()):
-                if not isinstance(k, tuple):
-                    k = (k,)
-                row = dict(zip(key_names, k))
-                row.update(_row_metrics(data_dict[k]))
-                out.append(row)
-            return out
+        log.info(f"  daily_ad_studio: {len(das_rows)} rows")
+    else:
+        log.info(f"  daily_ad_studio: window empty ({das_start} > {das_end}), skip.")
 
-        campaign_series = [
-            {"date": dt, **_row_metrics(camp_d[dt])}
-            for dt in sorted(camp_d.keys())
-        ]
 
-        daily_series.update({
-            "campaign":             campaign_series,
-            "by_studio":            _emit(d_studio,      ["studio_code", "date"]),
-            "by_audience":          _emit(d_aud,         ["audience",    "date"]),
-            "by_pillar":            _emit(d_pillar,      ["pillar",      "date"]),
-            "by_concept":           _emit(d_concept,     ["concept",     "date"]),
-            "by_media_type":        _emit(d_media_type,  ["media_type",  "date"]),
-            "by_studio_audience":   _emit(d_stu_aud,     ["studio_code", "audience",   "date"]),
-            "by_studio_pillar":     _emit(d_stu_pillar,  ["studio_code", "pillar",     "date"]),
-            "by_studio_concept":    _emit(d_stu_concept, ["studio_code", "concept",    "date"]),
-            "by_studio_media_type": _emit(d_stu_media,   ["studio_code", "media_type", "date"]),
-        })
 
-        log.info(
-            f"  daily series: {len(campaign_series)} days | "
-            f"{len(daily_series['by_studio'])} studio×day | "
-            f"{len(daily_series['by_audience'])} aud×day | "
-            f"{len(daily_series['by_pillar'])} pillar×day | "
-            f"{len(daily_series['by_concept'])} concept×day | "
-            f"{len(daily_series['by_media_type'])} media×day"
-        )
-
-    # ── ads — per-ad row for the Active Ads table in index.html ──────────
-    # All data already computed above — zero extra API calls.
-    # ad_insights:     aggregated metrics per ad_id (whole campaign window)
-    # ads:             list_ads() result → status per ad_id
-    # creative_by_ad:  thumbnail_url / object_type per ad_id
-    # ad_dims:         studio_code, audience, pillar, concept, media_type per ad_id
-
+    # ── ads — metadata only (thumb, name, status) for the Active Ads table ──
+    # Metrics come from daily_ad_studio filtered by date; no metrics stored here.
     # Build status map from list_ads() result
     status_by_ad: dict[str, str] = {
         ad["id"]: ad.get("status", "UNKNOWN")
@@ -744,93 +638,47 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
         if ad.get("id")
     }
 
-    # Aggregate ad_insights to one row per ad_id (campaign totals, not daily)
-    ad_metrics: dict[str, dict] = {}
-    for ins in ad_insights:
-        ad_id = ins.get("ad_id")
-        if not ad_id:
-            continue
-        if ad_id not in ad_metrics:
-            ad_metrics[ad_id] = {
-                "ad_id":       ad_id,
-                "name":        ins.get("ad_name", ""),
-                "spend":       0.0,
-                "impressions": 0,
-                "clicks":      0,
-                "leads":       0,
-                "trials":      0,
-                "purchases":   0,
-            }
-        m = ad_metrics[ad_id]
-        m["spend"]       += safe_float(ins.get("spend"))
-        m["impressions"] += int(safe_float(ins.get("impressions")))
-        m["clicks"]      += int(safe_float(ins.get("clicks")))
-        m["leads"]       += leads_of(ins)
-        m["trials"]      += trials_of(ins)
-        m["purchases"]   += purchases_of(ins)
-
     ads_out = []
-    for ad_id, m in ad_metrics.items():
-        dims     = ad_dims.get(ad_id, {})
+    for ad_id, dims in ad_dims.items():
         creative = creative_by_ad.get(ad_id, {})
-
-        # thumbnail_url: video ads return it directly; static ads use image_url
         thumb = (
             creative.get("thumbnail_url")
             or creative.get("image_url")
             or ""
         )
-
-        spend       = round(m["spend"], 2)
-        impressions = m["impressions"]
-        clicks      = m["clicks"]
-        leads       = m["leads"]
-        trials      = m["trials"]
-        purchases   = m["purchases"]
-
         ads_out.append({
             "ad_id":        ad_id,
-            "name":         m["name"],
+            "name":         next(
+                (ins.get("ad_name", "") for ins in ad_insights if ins.get("ad_id") == ad_id),
+                ad_id,
+            ),
             "status":       status_by_ad.get(ad_id, "UNKNOWN"),
             "media_type":   dims.get("media_type", "Other"),
             "studio_code":  dims.get("studio_code"),
-            "audience":     dims.get("audience"),
-            "concept":      dims.get("concept"),
-            "spend":        spend,
-            "impressions":  impressions,
-            "clicks":       clicks,
-            "ctr":          round(clicks / impressions * 100, 2) if impressions else 0,
-            "leads":        leads,
-            "cpl":          round(spend / leads, 2) if leads else 0,
-            "trials":       trials,
-            "cpt":          round(spend / trials, 2) if trials else 0,
-            "purchases":    purchases,
             "thumbnail_url": thumb,
             "library_url":  f"https://www.facebook.com/ads/library/?id={ad_id}&country=US",
             "first_seen":   ad_first_seen.get(ad_id),
         })
 
-    # Sort by leads desc, then spend desc
-    ads_out.sort(key=lambda x: (-x["leads"], -x["spend"]))
-    log.info(f"  ads_out: {len(ads_out)} ad rows")
+    ads_out.sort(key=lambda x: x.get("first_seen") or "")
+    log.info(f"  ads_out: {len(ads_out)} ad metadata rows")
 
     return {
         "display_name": c["display_name"],
         "period_label": c["period_label"],
-        "date_start": c["date_start"],
-        "date_end": c["date_end"],
-        "totals": totals,
-        "studios": studios_out,
-        "audiences": audiences_out,
-        "pillars": pillars_out,
-        "concepts": concepts_out,
-        "media_types": media_types_out,
-        "studio_pillars": studio_pillars_out,
-        "studio_concepts": studio_concepts_out,
+        "date_start":   c["date_start"],
+        "date_end":     c["date_end"],
+        "totals":            totals,
+        "studios":           studios_out,
+        "audiences":         audiences_out,
+        "pillars":           pillars_out,
+        "concepts":          concepts_out,
+        "media_types":       media_types_out,
+        "studio_pillars":    studio_pillars_out,
+        "studio_concepts":   studio_concepts_out,
         "studio_media_types": studio_media_types_out,
-        "daily": daily_out,
-        "daily_series": daily_series,
-        "ads": ads_out,         # NEW — used by index.html Meta Ads tab; ignored by paid-ads.html
+        "ads":               ads_out,   # metadata only: ad_id, name, status, media_type, studio_code, thumbnail_url, library_url, first_seen
+        "_das_rows":         das_rows,  # internal — merged into top-level daily_ad_studio by run()
     }
 
 
@@ -869,22 +717,39 @@ def run():
             "is_default": key == active,
         })
 
-    # Preserve manually-baked static data (monthly_spend etc.) from existing file
-    existing_static = {}
+    # Preserve manually-baked static data (monthly_spend) and the growing
+    # daily_ad_studio array from the existing file.
+    existing_das: list[dict] = []
+    existing_static: dict = {}
     if OUT_PATH.exists():
         try:
             existing = json.loads(OUT_PATH.read_text(encoding="utf-8"))
             for key in ("monthly_spend",):
                 if key in existing:
                     existing_static[key] = existing[key]
+            existing_das = existing.get("daily_ad_studio", [])
         except Exception:
             pass
 
+    # Merge _das_rows from all campaigns into the existing daily_ad_studio.
+    # Key: (date, studio_code, ad_id) — new data overwrites old for same key.
+    das_index: dict[tuple, dict] = {
+        (r["date"], r["studio_code"], r["ad_id"]): r
+        for r in existing_das
+    }
+    for data in campaigns_data.values():
+        for r in data.pop("_das_rows", []):
+            das_index[(r["date"], r["studio_code"], r["ad_id"])] = r
+
+    daily_ad_studio = sorted(das_index.values(), key=lambda r: (r["date"], r["studio_code"], r["ad_id"]))
+    log.info(f"  daily_ad_studio total rows: {len(daily_ad_studio)} (was {len(existing_das)})")
+
     output = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at":    datetime.now(timezone.utc).isoformat(),
         "active_campaign": active,
         "campaigns_index": campaigns_index,
-        "campaigns": campaigns_data,
+        "campaigns":       campaigns_data,
+        "daily_ad_studio": daily_ad_studio,
         **existing_static,
     }
 
