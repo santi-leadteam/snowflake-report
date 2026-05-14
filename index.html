@@ -423,7 +423,7 @@ function toggleControls() {
 async function loadData() {
   const [rawRes, metaRes, googleRes] = await Promise.allSettled([
     fetch('data.json?_='            + Date.now()),
-    fetch('paid-ads-dashboards/paid-ads-data.json?_='   + Date.now()),
+    fetch('paid-ads-data.json?_='   + Date.now()),
     fetch('google-ads-data.json?_=' + Date.now()),
   ]);
   try {
@@ -1252,7 +1252,7 @@ function creativeShortName(adName) {
 async function ensureMetaAds() {
   if (META_ADS_RAW) return META_ADS_RAW;
   try {
-    const res = await fetch('paid-ads-dashboards/paid-ads-data.json?_=' + Date.now());
+    const res = await fetch('paid-ads-data.json?_=' + Date.now());
     META_ADS_RAW = await res.json();
   } catch(e) {
     console.warn('paid-ads-data.json not available:', e);

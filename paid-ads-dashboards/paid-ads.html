@@ -747,7 +747,25 @@ function buildView(c) {
   const sf = studioFilter;
 
   if (dateFilter.type === "all" && !sf) {
-    return Object.assign({}, c, { _range: range, _filtered: false, _studio_filter: null });
+    const ds0 = c.daily_series || {};
+    // Compute campaign-level daily totals from by_studio when top-level daily is missing
+    let daily = c.daily;
+    if (!daily) {
+      const dayMap = {};
+      (ds0.by_studio || []).forEach(r => {
+        if (!dayMap[r.date]) dayMap[r.date] = { date: r.date, spend: 0, impressions: 0, clicks: 0, reach: 0, leads: 0, trials: 0, purchases: 0 };
+        const d = dayMap[r.date];
+        d.spend       += r.spend       || 0;
+        d.impressions += r.impressions || 0;
+        d.clicks      += r.clicks      || 0;
+        d.reach       += r.reach       || 0;
+        d.leads       += r.leads       || 0;
+        d.trials      += r.trials      || 0;
+        d.purchases   += r.purchases   || 0;
+      });
+      daily = Object.values(dayMap).sort((a, b) => a.date.localeCompare(b.date));
+    }
+    return Object.assign({}, c, { _range: range, _filtered: false, _studio_filter: null, daily });
   }
 
   const { start, end } = range;
@@ -791,7 +809,19 @@ function buildView(c) {
     fByConcept  = fByStuConcept.map(stripStudio("concept"));
     fByMedia    = fByStuMedia.map(stripStudio("media_type"));
   } else {
-    fDaily      = (c.daily || []).filter(inR);
+    // Build campaign daily from c.daily or aggregate from by_studio if missing
+    const srcDaily = c.daily || (() => {
+      const dm = {};
+      (ds.by_studio || []).forEach(r => {
+        if (!dm[r.date]) dm[r.date] = { date: r.date, spend: 0, impressions: 0, clicks: 0, reach: 0, leads: 0, trials: 0, purchases: 0 };
+        const d = dm[r.date];
+        d.spend += r.spend || 0; d.impressions += r.impressions || 0;
+        d.clicks += r.clicks || 0; d.reach += r.reach || 0;
+        d.leads += r.leads || 0; d.trials += r.trials || 0; d.purchases += r.purchases || 0;
+      });
+      return Object.values(dm).sort((a, b) => a.date.localeCompare(b.date));
+    })();
+    fDaily      = srcDaily.filter(inR);
     fByAudience = (ds.by_audience || []).filter(inR);
     fByPillar   = (ds.by_pillar || []).filter(inR);
     fByConcept  = (ds.by_concept || []).filter(inR);

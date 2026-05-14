@@ -784,12 +784,29 @@ def run_one(meta: MetaClient, campaign_key: str, c: dict) -> dict:
     ads_out.sort(key=lambda x: x.get("first_seen") or "")
     log.info(f"  ads_out: {len(ads_out)} ad metadata rows")
 
+    # Build campaign-level daily totals (aggregated from by_studio) for renderDaily chart
+    daily_from_studio: dict = {}
+    for r in daily_series.get("by_studio", []):
+        d_ = r["date"]
+        if d_ not in daily_from_studio:
+            daily_from_studio[d_] = {"date": d_, "spend": 0, "impressions": 0, "clicks": 0, "reach": 0, "leads": 0, "trials": 0, "purchases": 0}
+        row = daily_from_studio[d_]
+        row["spend"]       += r.get("spend",       0)
+        row["impressions"] += r.get("impressions", 0)
+        row["clicks"]      += r.get("clicks",      0)
+        row["reach"]       += r.get("reach",       0)
+        row["leads"]       += r.get("leads",       0)
+        row["trials"]      += r.get("trials",      0)
+        row["purchases"]   += r.get("purchases",   0)
+    daily_out = sorted(daily_from_studio.values(), key=lambda x: x["date"])
+
     return {
         "display_name": c["display_name"],
         "period_label": c["period_label"],
         "date_start":   c["date_start"],
         "date_end":     c["date_end"],
         "totals":            totals,
+        "daily":             daily_out,              # campaign-level daily totals — used by renderDaily chart
         "studios":           studios_out,
         "audiences":         audiences_out,
         "pillars":           pillars_out,
