@@ -45,7 +45,7 @@ from meta_client import MetaClient, leads_of, purchases_of, trials_of
 REPO_ROOT      = Path(__file__).resolve().parent
 CONFIG_PATH    = REPO_ROOT / "config-meta.yaml"
 OUT_PATH       = REPO_ROOT / "meta-ads-data.json"
-PAID_ADS_PATH  = REPO_ROOT / "paid-ads-data.json"  # seed source for baked monthly spend
+PAID_ADS_PATH  = REPO_ROOT / "meta-ads-baked.json"  # static baked monthly spend, never overwritten
 
 # Earliest date we want daily data for (grows forward from here indefinitely)
 DAILY_START = "2026-04-01"
@@ -173,35 +173,18 @@ def run():
     existing_ad_meta      = existing.get("ad_meta",        {})
 
     # ── baked monthly spend (Jan 2025 – Mar 2026) ────────────────────
-    # Source priority:
-    #   1. meta-ads-data.json studio_monthly (rows already normalized)
-    #   2. paid-ads-data.json monthly_spend  (seed on first run)
-    # Months stored as "YYYY-MM-DD" in the old file — normalize to "YYYY-MM".
-    # Only keep rows before Apr 2026; Apr 2026+ are recomputed from studio_daily.
-
-    def _normalize_month(r: dict) -> dict:
-        """Ensure month field is 'YYYY-MM' not 'YYYY-MM-DD'."""
-        m = r.get("month", "")
-        if len(m) == 10:  # "YYYY-MM-DD"
-            m = m[:7]
-        return {**r, "month": m}
-
-    raw_baked = existing.get("studio_monthly", [])
-    if not raw_baked and PAID_ADS_PATH.exists():
-        # First run — seed from paid-ads-data.json
+    # Reads from meta-ads-baked.json — a static file committed once, never overwritten.
+    # Apr 2026+ is computed from studio_daily each run.
+    baked_monthly = []
+    if PAID_ADS_PATH.exists():
         try:
-            seed = json.loads(PAID_ADS_PATH.read_text(encoding="utf-8"))
-            raw_baked = seed.get("monthly_spend", [])
-            log.info(f"  Seeding baked monthly from paid-ads-data.json: {len(raw_baked)} rows")
+            baked = json.loads(PAID_ADS_PATH.read_text(encoding="utf-8"))
+            baked_monthly = baked.get("studio_monthly", [])
+            log.info(f"  Baked monthly rows (pre Apr 2026): {len(baked_monthly)}")
         except Exception as e:
-            log.warning(f"  Could not read paid-ads-data.json for seed: {e}")
-
-    baked_monthly = [
-        _normalize_month(r)
-        for r in raw_baked
-        if _normalize_month(r).get("month", "") < "2026-04"
-    ]
-    log.info(f"  Baked monthly rows (pre Apr 2026): {len(baked_monthly)}")
+            log.warning(f"  Could not read meta-ads-baked.json: {e}")
+    else:
+        log.warning("  meta-ads-baked.json not found — studio_monthly will only have Apr 2026+")
 
     meta = MetaClient()
 
