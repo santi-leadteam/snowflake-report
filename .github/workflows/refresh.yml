@@ -2,9 +2,8 @@ name: Refresh Dashboard Data
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # 7:00 AM EST (12:00 UTC)
-    - cron: "0 19 * * *"   # 2:00 PM EST (19:00 UTC)
-  workflow_dispatch:      # Manual trigger from GitHub UI
+    - cron: "0 8 * * *"   # Every day at 8:00 AM UTC
+  workflow_dispatch:        # Manual trigger from GitHub UI
 
 permissions:
   contents: write
@@ -40,13 +39,10 @@ jobs:
           META_ACT:     ${{ secrets.META_ACT }}
         run: python fetch_data.py
 
-      - name: Fetch Meta Ads creative data
+      - name: Fetch Meta Ads (Santi - account view)
         env:
-          META_TOKEN:   ${{ secrets.META_TOKEN }}
-        run: |
-          python paid-ads-dashboards/fetch_paid_ads.py
-          # Keep root copy in sync for index.html and other shared dashboards
-          cp paid-ads-dashboards/paid-ads-data.json paid-ads-data.json
+          META_TOKEN: ${{ secrets.META_TOKEN }}
+        run: python fetch_meta_ads.py
         continue-on-error: true
 
       - name: Fetch Google Ads data
@@ -63,6 +59,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json paid-ads-data.json paid-ads-dashboards/paid-ads-data.json google-ads-data.json
+          git add data.json meta-ads-data.json google-ads-data.json
           git diff --cached --quiet || git commit -m "chore: refresh data $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase origin main
           git push
