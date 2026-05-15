@@ -423,7 +423,7 @@ function toggleControls() {
 async function loadData() {
   const [rawRes, metaRes, googleRes] = await Promise.allSettled([
     fetch('data.json?_='            + Date.now()),
-    fetch('paid-ads-data.json?_='   + Date.now()),
+    fetch('meta-ads-data.json?_='   + Date.now()),
     fetch('google-ads-data.json?_=' + Date.now()),
   ]);
   try {
@@ -433,7 +433,7 @@ async function loadData() {
   } catch(e) {
     console.warn('Using mock data:', e); RAW = getMock();
   }
-  try { META_ADS_RAW   = await metaRes.value.json();   } catch(e) { console.warn('paid-ads-data.json unavailable:', e); }
+  try { META_ADS_RAW   = await metaRes.value.json();   } catch(e) { console.warn('meta-ads-data.json unavailable:', e); }
   try { GOOGLE_ADS_RAW = await googleRes.value.json(); } catch(e) { console.warn('google-ads-data.json unavailable:', e); }
   // Set default date range: year to date
   const _today = new Date();
@@ -930,19 +930,17 @@ function buildSummaryTab() {
   function mFor(f,t) {
     if(!f||!t||!META_ADS_RAW) return 0;
     const fT=f.getTime(),tT=t.getTime(),bySt=selStudios.length>0;
-    const liveCovered=new Set();
     let tot=0;
-    for(const camp of Object.values(META_ADS_RAW.campaigns||{})){
-      for(const row of((camp.daily_series||{}).by_studio||[])){
-        const d=new Date(row.date+'T00:00:00Z').getTime();
-        if(d<fT||d>tT) continue;
-        const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
-        if(bySt&&!selStudios.includes(nm)) continue;
-        tot+=row.spend||0;
-        liveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
-      }
+    const liveCovered=new Set();
+    for(const row of(META_ADS_RAW.studio_daily||[])){
+      const d=new Date(row.date+'T00:00:00Z').getTime();
+      if(d<fT||d>tT) continue;
+      const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
+      if(bySt&&!selStudios.includes(nm)) continue;
+      tot+=row.spend||0;
+      liveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
     }
-    for(const row of(META_ADS_RAW.monthly_spend||[])){
+    for(const row of(META_ADS_RAW.studio_monthly||[])){
       const d=new Date(row.month+'T00:00:00Z').getTime();
       if(d<fT||d>tT) continue;
       const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
@@ -1034,20 +1032,16 @@ function buildCPRTab() {
     if(!f||!t||!META_ADS_RAW)return 0;
     const fT=f.getTime(),tT=t.getTime(),bySt=selStudios.length>0;
     let tot=0;
-    // Track which studio+month combos are covered by live daily data
     const liveCovered=new Set();
-    for(const camp of Object.values(META_ADS_RAW.campaigns||{})){
-      for(const row of((camp.daily_series||{}).by_studio||[])){
-        const d=new Date(row.date+'T00:00:00Z').getTime();
-        if(d<fT||d>tT)continue;
-        const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
-        if(bySt&&!selStudios.includes(nm))continue;
-        tot+=row.spend||0;
-        liveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
-      }
+    for(const row of(META_ADS_RAW.studio_daily||[])){
+      const d=new Date(row.date+'T00:00:00Z').getTime();
+      if(d<fT||d>tT)continue;
+      const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
+      if(bySt&&!selStudios.includes(nm))continue;
+      tot+=row.spend||0;
+      liveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
     }
-    // Add baked historical monthly spend, skipping months already covered by live data
-    for(const row of(META_ADS_RAW.monthly_spend||[])){
+    for(const row of(META_ADS_RAW.studio_monthly||[])){
       const d=new Date(row.month+'T00:00:00Z').getTime();
       if(d<fT||d>tT)continue;
       const nm=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
@@ -1084,15 +1078,12 @@ function buildCPRTab() {
   const allMetaRows=[];
   const metaLiveCovered=new Set();
   if(META_ADS_RAW){
-    for(const camp of Object.values(META_ADS_RAW.campaigns||{})){
-      for(const row of((camp.daily_series||{}).by_studio||[])){
-        const name=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
-        allMetaRows.push({date:row.date,studio:name,spend:row.spend||0});
-        metaLiveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
-      }
+    for(const row of(META_ADS_RAW.studio_daily||[])){
+      const name=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
+      allMetaRows.push({date:row.date,studio:name,spend:row.spend||0});
+      metaLiveCovered.add(row.studio_code+'|'+row.date.slice(0,7));
     }
-    // Distribute monthly baked spend evenly across each day so weekly/daily buckets get proportional spend
-    for(const row of(META_ADS_RAW.monthly_spend||[])){
+    for(const row of(META_ADS_RAW.studio_monthly||[])){
       if(metaLiveCovered.has(row.studio_code+'|'+row.month.slice(0,7)))continue;
       const name=META_CODE_TO_STUDIO[row.studio_code]||row.studio_code;
       const mStart=new Date(row.month+'T00:00:00Z');
@@ -1252,10 +1243,10 @@ function creativeShortName(adName) {
 async function ensureMetaAds() {
   if (META_ADS_RAW) return META_ADS_RAW;
   try {
-    const res = await fetch('paid-ads-data.json?_=' + Date.now());
+    const res = await fetch('meta-ads-data.json?_=' + Date.now());
     META_ADS_RAW = await res.json();
   } catch(e) {
-    console.warn('paid-ads-data.json not available:', e);
+    console.warn('meta-ads-data.json not available:', e);
     META_ADS_RAW = null;
   }
   return META_ADS_RAW;
@@ -1267,56 +1258,47 @@ async function buildMetaTab() {
   if (!kpisEl) return;
 
   if (!data) {
-    kpisEl.innerHTML = '<div style="color:#888;padding:20px;grid-column:1/-1">No paid-ads-data.json found.</div>';
+    kpisEl.innerHTML = '<div style="color:#888;padding:20px;grid-column:1/-1">No meta-ads-data.json found.</div>';
     return;
   }
 
-  // ---- Read filters directly from DOM ----
   const fromStr = document.getElementById('fFrom')?.value;
   const toStr   = document.getElementById('fTo')?.value;
   if (!fromStr || !toStr) return;
 
-  const from  = new Date(fromStr + 'T00:00:00Z');
-  const to    = new Date(toStr   + 'T23:59:59Z');
-  const fTime = from.getTime();
-  const tTime = to.getTime();
+  const fTime = new Date(fromStr + 'T00:00:00Z').getTime();
+  const tTime = new Date(toStr   + 'T23:59:59Z').getTime();
 
-  // Studio filter
   const selectedStudios = new Set(
     typeof getSelected === 'function' ? getSelected('studioMenu') : []
   );
   const filterByStudio = selectedStudios.size > 0;
 
-  const allCamps = Object.values(data.campaigns || {})
-    .sort((a, b) => a.date_start.localeCompare(b.date_start));
-
-  // ---- Aggregate totals + per-studio breakdown from daily_series ----
+  // ---- Aggregate KPIs + studio breakdown from studio_daily ----
   let spend=0, impressions=0, clicks=0, leads=0, trials=0, hasData=false;
   const studioMap = {};
 
-  for (const camp of allCamps) {
-    for (const row of ((camp.daily_series || {}).by_studio || [])) {
-      const d = new Date(row.date + 'T00:00:00Z').getTime();
-      if (d < fTime || d > tTime) continue;
-      const canonicalName = META_CODE_TO_STUDIO[row.studio_code] || row.studio_code;
-      if (filterByStudio && !selectedStudios.has(canonicalName)) continue;
-      hasData = true;
-      spend       += row.spend       || 0;
-      impressions += row.impressions || 0;
-      clicks      += row.clicks      || 0;
-      leads       += row.leads       || 0;
-      trials      += row.trials      || 0;
-      if (!studioMap[canonicalName]) studioMap[canonicalName] = { spend:0, impressions:0, clicks:0, leads:0, trials:0 };
-      studioMap[canonicalName].spend       += row.spend       || 0;
-      studioMap[canonicalName].impressions += row.impressions || 0;
-      studioMap[canonicalName].clicks      += row.clicks      || 0;
-      studioMap[canonicalName].leads       += row.leads       || 0;
-      studioMap[canonicalName].trials      += row.trials      || 0;
-    }
+  for (const row of (data.studio_daily || [])) {
+    const d = new Date(row.date + 'T00:00:00Z').getTime();
+    if (d < fTime || d > tTime) continue;
+    const name = META_CODE_TO_STUDIO[row.studio_code] || row.studio_code;
+    if (filterByStudio && !selectedStudios.has(name)) continue;
+    hasData = true;
+    spend       += row.spend       || 0;
+    impressions += row.impressions || 0;
+    clicks      += row.clicks      || 0;
+    leads       += row.leads       || 0;
+    trials      += row.trials      || 0;
+    if (!studioMap[name]) studioMap[name] = { spend:0, impressions:0, clicks:0, leads:0, trials:0 };
+    studioMap[name].spend       += row.spend       || 0;
+    studioMap[name].impressions += row.impressions || 0;
+    studioMap[name].clicks      += row.clicks      || 0;
+    studioMap[name].leads       += row.leads       || 0;
+    studioMap[name].trials      += row.trials      || 0;
   }
 
-  const adsTb  = document.querySelector('#meta-ads-table tbody');
-  const stTb   = document.querySelector('#meta-studio-table tbody');
+  const adsTb = document.querySelector('#meta-ads-table tbody');
+  const stTb  = document.querySelector('#meta-studio-table tbody');
 
   if (!hasData) {
     kpisEl.innerHTML = '<div style="color:#888;padding:20px;grid-column:1/-1">No Meta Ads data for selected period.</div>';
@@ -1340,128 +1322,61 @@ async function buildMetaTab() {
     kpiCard('Trials',       trials,       null, null, v=>v) +
     kpiCard('Cost / Lead',  cpl,          null, null, f$2);
 
-  // ---- Active Ads table ----
-  // Build a lookup of per-ad metadata (status, studio, creative assets) from all campaigns
-  const adMeta = {}; // ad_id -> {name, status, media_type, studio_code, first_seen, last_seen, thumbnail_url, library_url}
-  for (const camp of allCamps) {
-    for (const ad of (camp.ads || [])) {
-      if (!adMeta[ad.ad_id]) {
-        adMeta[ad.ad_id] = {
-          name:          ad.name,
-          status:        ad.status,
-          media_type:    ad.media_type,
-          studio_code:   ad.studio_code,
-          first_seen:    ad.first_seen || camp.date_start,
-          last_seen:     ad.last_seen  || camp.date_end,
-          camp_start:    camp.date_start,
-          thumbnail_url: ad.thumbnail_url || '',
-          library_url:   ad.library_url   || '',
-        };
-      } else {
-        // Keep most recent status; update first/last seen
-        if (ad.status === 'ACTIVE') adMeta[ad.ad_id].status = 'ACTIVE';
-        if (ad.first_seen && ad.first_seen < adMeta[ad.ad_id].first_seen) adMeta[ad.ad_id].first_seen = ad.first_seen;
-        if (ad.last_seen  && ad.last_seen  > adMeta[ad.ad_id].last_seen)  adMeta[ad.ad_id].last_seen  = ad.last_seen;
-        if (!adMeta[ad.ad_id].thumbnail_url && ad.thumbnail_url) adMeta[ad.ad_id].thumbnail_url = ad.thumbnail_url;
-        if (!adMeta[ad.ad_id].library_url   && ad.library_url)   adMeta[ad.ad_id].library_url   = ad.library_url;
-      }
-    }
-  }
-
-  // Aggregate date-filtered metrics from daily_series.by_ad
-  // Fall back to lifetime ad metrics if by_ad is unavailable (older data.json)
-  const byAdRows = (allCamps[0]?.daily_series?.by_ad) || null;
+  // ---- Active Ads table — metrics from ad_daily, metadata from ad_meta ----
+  const adMeta    = data.ad_meta || {};
   const adMetrics = {}; // ad_id -> {spend, impressions, clicks, leads, trials}
 
-  if (byAdRows) {
-    // Use date-filtered daily series - most accurate
-    for (const camp of allCamps) {
-      for (const row of ((camp.daily_series || {}).by_ad || [])) {
-        const d = new Date(row.date + 'T00:00:00Z').getTime();
-        if (d < fTime || d > tTime) continue;
-        const meta = adMeta[row.ad_id];
-        if (!meta) continue;
-        const canonicalName = META_CODE_TO_STUDIO[meta.studio_code] || meta.studio_code;
-        if (filterByStudio && !selectedStudios.has(canonicalName)) continue;
-        if (!adMetrics[row.ad_id]) adMetrics[row.ad_id] = {spend:0, impressions:0, clicks:0, leads:0, trials:0};
-        adMetrics[row.ad_id].spend       += row.spend       || 0;
-        adMetrics[row.ad_id].impressions += row.impressions || 0;
-        adMetrics[row.ad_id].clicks      += row.clicks      || 0;
-        adMetrics[row.ad_id].leads       += row.leads       || 0;
-        adMetrics[row.ad_id].trials      += row.trials      || 0;
-      }
-    }
-  } else {
-    // Fallback: use lifetime ad totals for ads whose window overlaps the selected range
-    for (const camp of allCamps) {
-      const campStart = new Date(camp.date_start + 'T00:00:00Z').getTime();
-      const campEnd   = new Date(camp.date_end   + 'T23:59:59Z').getTime();
-      if (campStart > tTime || campEnd < fTime) continue;
-      for (const ad of (camp.ads || [])) {
-        const canonicalName = META_CODE_TO_STUDIO[ad.studio_code] || ad.studio_code;
-        if (filterByStudio && !selectedStudios.has(canonicalName)) continue;
-        if (ad.first_seen && new Date(ad.first_seen + 'T00:00:00Z').getTime() > tTime) continue;
-        if (!adMetrics[ad.ad_id]) adMetrics[ad.ad_id] = {spend:0, impressions:0, clicks:0, leads:0, trials:0};
-        adMetrics[ad.ad_id].spend       += ad.spend       || 0;
-        adMetrics[ad.ad_id].impressions += ad.impressions || 0;
-        adMetrics[ad.ad_id].clicks      += ad.clicks      || 0;
-        adMetrics[ad.ad_id].leads       += ad.leads       || 0;
-        adMetrics[ad.ad_id].trials      += ad.trials      || 0;
-      }
-    }
+  for (const row of (data.ad_daily || [])) {
+    const d = new Date(row.date + 'T00:00:00Z').getTime();
+    if (d < fTime || d > tTime) continue;
+    const name = META_CODE_TO_STUDIO[row.studio_code] || row.studio_code;
+    if (filterByStudio && !selectedStudios.has(name)) continue;
+    if (!adMetrics[row.ad_id]) adMetrics[row.ad_id] = {spend:0, impressions:0, clicks:0, leads:0, trials:0};
+    adMetrics[row.ad_id].spend       += row.spend       || 0;
+    adMetrics[row.ad_id].impressions += row.impressions || 0;
+    adMetrics[row.ad_id].clicks      += row.clicks      || 0;
+    adMetrics[row.ad_id].leads       += row.leads       || 0;
+    adMetrics[row.ad_id].trials      += row.trials      || 0;
   }
 
-  // Group ads by creative short name, aggregating date-filtered metrics
+  // Group by creative short name
   const creativeMap = {};
   for (const [ad_id, metrics] of Object.entries(adMetrics)) {
     const meta = adMeta[ad_id];
-    if (!meta) continue;
-    const shortName = creativeShortName(meta.name);
+    const adName = (meta?.name) || (data.ad_daily?.find(r => r.ad_id === ad_id)?.ad_name) || ad_id;
+    const shortName = creativeShortName(adName);
     if (!shortName) continue;
-
     if (!creativeMap[shortName]) {
       creativeMap[shortName] = {
-        name:        shortName,
-        media_type:  meta.media_type,
-        spend:       0, impressions: 0, clicks: 0, leads: 0, trials: 0,
+        name: shortName,
+        media_type:  meta?.media_type || 'Other',
+        spend:0, impressions:0, clicks:0, leads:0, trials:0,
         isActive:    false,
-        first_seen:  meta.first_seen || '',
-        camp_start:  meta.camp_start || '',
         thumbnail:   '',
         library_url: '',
         _adIds:      [],
       };
     }
-
     const g = creativeMap[shortName];
     g.spend       += metrics.spend;
     g.impressions += metrics.impressions;
     g.clicks      += metrics.clicks;
     g.leads       += metrics.leads;
     g.trials      += metrics.trials;
-    if (meta.status === 'ACTIVE') g.isActive = true;
-    if (meta.first_seen && meta.first_seen < g.first_seen) g.first_seen = meta.first_seen;
+    if (meta?.status === 'ACTIVE') g.isActive = true;
+    if (!g.thumbnail   && meta?.thumbnail_url) g.thumbnail   = meta.thumbnail_url;
+    if (!g.library_url && meta?.library_url)   g.library_url = meta.library_url;
     g._adIds.push(ad_id);
   }
+  // Clean up _adIds
+  for (const g of Object.values(creativeMap)) delete g._adIds;
 
-  // Pick best thumbnail (from ad with most leads)
-  for (const g of Object.values(creativeMap)) {
-    const sorted = g._adIds
-      .map(id => ({ ...adMeta[id], leads: adMetrics[id]?.leads || 0 }))
-      .sort((a, b) => b.leads - a.leads);
-    g.thumbnail   = sorted.find(a => a.thumbnail_url)?.thumbnail_url || '';
-    g.library_url = sorted.find(a => a.library_url)?.library_url   || '';
-    delete g._adIds;
-  }
-
-  const creativeRows = Object.values(creativeMap)
-    .sort((a, b) => b.leads - a.leads);
+  const creativeRows = Object.values(creativeMap).sort((a, b) => b.leads - a.leads);
 
   if (adsTb) {
     if (!creativeRows.length) {
       adsTb.innerHTML = '<tr><td colspan="10" style="color:#8aabbf;text-align:center;padding:20px">No ads found for selected period.</td></tr>';
     } else {
-      // Add ctr_num for sorting
       const adsData = creativeRows.map(g => ({
         ...g,
         ctr_num: g.impressions > 0 ? g.clicks/g.impressions*100 : 0,
@@ -1471,13 +1386,9 @@ async function buildMetaTab() {
         'meta-ads-table',
         adsData,
         (g, i) => {
-          const isNew = g.first_seen > g.camp_start;
           const statusBadge = g.isActive
             ? '<span style="background:#00a86b;color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">ACTIVE</span>'
             : '<span style="background:#f59e0b;color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">PAUSED</span>';
-          const newBadge = isNew
-            ? '<span style="background:#00A3E0;color:#fff;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:5px">NEW</span>'
-            : '';
           const ctrStr = g.impressions > 0 ? (g.clicks/g.impressions*100).toFixed(2)+'%' : '—';
           const adCpl  = g.leads > 0 ? f$2(g.spend/g.leads) : '—';
           const thumbFallback = '<div style="width:44px;height:44px;background:#0084b5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px">&#9654;</div>';
@@ -1490,7 +1401,7 @@ async function buildMetaTab() {
             <td class="row-num">${i}</td>
             <td style="padding:8px 6px">${thumbCell}</td>
             <td>
-              <div style="font-weight:600;font-size:13px">${g.name}${newBadge}</div>
+              <div style="font-weight:600;font-size:13px">${g.name}</div>
               <div style="font-size:11px;color:#8aabbf;margin-top:2px">${mediaIcon} ${g.media_type}</div>
             </td>
             <td class="num">${fK(g.impressions)}</td>
@@ -1555,22 +1466,20 @@ async function buildMetaTab() {
           <td class="num">${s.trials}</td>
         </tr>`,
         (sorted) => {
-          const tImp = sorted.reduce((s,r)=>s+r.impressions,0);
-          const tClk = sorted.reduce((s,r)=>s+r.clicks,0);
+          const tImp   = sorted.reduce((s,r)=>s+r.impressions,0);
+          const tClk   = sorted.reduce((s,r)=>s+r.clicks,0);
           const tSpend = sorted.reduce((s,r)=>s+r.spend,0);
           const tLeads = sorted.reduce((s,r)=>s+r.leads,0);
           const tTrials = sorted.reduce((s,r)=>s+r.trials,0);
-          const tCPL = tLeads > 0 ? f$2(tSpend/tLeads) : '—';
-          const tCTR = tImp > 0 ? (tClk/tImp*100).toFixed(2)+'%' : '—';
           return `<tr>
             <td class="row-num"></td>
             <td>Total (${sorted.length})</td>
             <td class="num">${fK(tImp)}</td>
             <td class="num">${fN(tClk)}</td>
-            <td class="num">${tCTR}</td>
+            <td class="num">${tImp>0?(tClk/tImp*100).toFixed(2)+'%':'—'}</td>
             <td class="num">${f$(tSpend)}</td>
             <td class="num">${tLeads}</td>
-            <td class="num">${tCPL}</td>
+            <td class="num">${tLeads>0?f$2(tSpend/tLeads):'—'}</td>
             <td class="num">${tTrials}</td>
           </tr>`;
         }
