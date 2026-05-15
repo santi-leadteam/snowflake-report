@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------
+# SWEAT440 Paid Ads Dashboard — Meta account config
+# ---------------------------------------------------------------------
+# No campaign IDs needed. The ETL queries the ad account directly
+# and attributes spend to studios via adset name matching.
+# To add a studio: add an entry to the studios list below.
+# To change the fetch start date: edit DAILY_START in fetch_paid_ads.py
+# ---------------------------------------------------------------------
+
+meta_account:
+  ad_account_id: "act_1553887681409034"   # SWEAT440 - Corporate Studios
+
+  studios:
+    - { code: "FL-001", name: "Miami Beach",                state: "FL", match: "Miami Beach" }
+    - { code: "FL-002", name: "Miami - Brickell",           state: "FL", match: "Brickell" }
+    - { code: "FL-003", name: "Coral Gables",               state: "FL", match: "Coral Gables" }
+    - { code: "FL-004", name: "Doral",                      state: "FL", match: "Doral" }
+    - { code: "FL-005", name: "Miami Lakes",                state: "FL", match: "Miami Lakes" }
+    - { code: "FL-006", name: "Deerfield Beach",            state: "FL", match: "Deerfield" }
+    - { code: "FL-007", name: "Miami - Upper East Side",    state: "FL", match: "Upper East" }
+    - { code: "FL-008", name: "Coral Springs",              state: "FL", match: "Coral Springs" }
+    - { code: "FL-009", name: "South Miami",                state: "FL", match: "South Miami" }
+    - { code: "FL-010", name: "Miami - Midtown",            state: "FL", match: "Midtown" }
+    - { code: "FL-011", name: "Miami - Coconut Grove",      state: "FL", match: "Coconut Grove" }
+    - { code: "FL-012", name: "Miramar",                    state: "FL", match: "Miramar" }
+    - { code: "FL-013", name: "Fort Lauderdale - Las Olas", state: "FL", match: "Las Olas" }
+    - { code: "FL-014", name: "Pembroke Pines",             state: "FL", match: "Pembroke" }
+    - { code: "FL-015", name: "West Palm Beach",            state: "FL", match: "West Palm" }
+    - { code: "FL-016", name: "Boca Raton",                 state: "FL", match: "Boca" }
+    - { code: "NC-001", name: "Charlotte - Noda",           state: "NC", match: "Charlotte" }
+    - { code: "NJ-001", name: "Toms River",                 state: "NJ", match: "Toms River" }
+    - { code: "NJ-002", name: "Ocean Township",             state: "NJ", match: "Ocean Township" }
+    - { code: "NJ-003", name: "Wall Township",              state: "NJ", match: "Wall" }
+    - { code: "NY-002", name: "NYC - Chelsea",              state: "NY", match: "Chelsea" }
+    - { code: "NY-003", name: "NYC - Park Slope",           state: "NY", match: "Park Slope" }
+    - { code: "NY-004", name: "Eastchester",                state: "NY", match: "Eastchester" }
+    - { code: "TX-001", name: "Austin - Zilker",            state: "TX", match: "Zilker" }
+    - { code: "TX-002", name: "Austin - Highland",          state: "TX", match: "Highland" }
+
+
+# ---------------------------------------------------------------------
+# Daniel's dashboard (paid-ads.html) uses its own separate config.
+# This file is only for fetch_paid_ads.py → paid-ads-data.json
+# ---------------------------------------------------------------------
