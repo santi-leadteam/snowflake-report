@@ -1,0 +1,1838 @@
+{
+  "generated_at": "2026-05-15T00:00:00Z",
+  "ad_daily": [],
+  "studio_daily": [],
+  "studio_monthly": [
+    {
+      "studio_code": "FL-001",
+      "month": "2025-01",
+      "spend": 952.07
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-02",
+      "spend": 733.54
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-03",
+      "spend": 811.41
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-04",
+      "spend": 854.53
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-05",
+      "spend": 1105.41
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-06",
+      "spend": 909.1
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-07",
+      "spend": 983.94
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-08",
+      "spend": 1317.15
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-09",
+      "spend": 1428.48
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-10",
+      "spend": 608.27
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-11",
+      "spend": 1431.09
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2025-12",
+      "spend": 701.86
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2026-01",
+      "spend": 1946.87
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2026-02",
+      "spend": 1896.01
+    },
+    {
+      "studio_code": "FL-001",
+      "month": "2026-03",
+      "spend": 1111.22
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-01",
+      "spend": 1079.36
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-02",
+      "spend": 818.75
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-03",
+      "spend": 886.24
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-04",
+      "spend": 845.93
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-05",
+      "spend": 995.25
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-06",
+      "spend": 953.61
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-07",
+      "spend": 976.41
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-08",
+      "spend": 1410.52
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-09",
+      "spend": 1602.31
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-10",
+      "spend": 666.67
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-11",
+      "spend": 1559.85
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2025-12",
+      "spend": 919.21
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2026-01",
+      "spend": 2090.45
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2026-02",
+      "spend": 2061.85
+    },
+    {
+      "studio_code": "FL-002",
+      "month": "2026-03",
+      "spend": 1190.98
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-01",
+      "spend": 667.51
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-02",
+      "spend": 564.78
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-03",
+      "spend": 667.56
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-04",
+      "spend": 635.34
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-05",
+      "spend": 820.24
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-06",
+      "spend": 746.39
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-07",
+      "spend": 620.28
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-08",
+      "spend": 986.18
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-09",
+      "spend": 1145.04
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-10",
+      "spend": 522.28
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-11",
+      "spend": 1236.83
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2025-12",
+      "spend": 705.66
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2026-01",
+      "spend": 1532.1
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2026-02",
+      "spend": 1540.46
+    },
+    {
+      "studio_code": "FL-003",
+      "month": "2026-03",
+      "spend": 914.0
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-01",
+      "spend": 800.75
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-02",
+      "spend": 613.1
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-03",
+      "spend": 666.31
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-04",
+      "spend": 637.14
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-05",
+      "spend": 807.23
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-06",
+      "spend": 747.58
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-07",
+      "spend": 772.49
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-08",
+      "spend": 1049.87
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-09",
+      "spend": 1158.83
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-10",
+      "spend": 491.16
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-11",
+      "spend": 1144.74
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2025-12",
+      "spend": 671.77
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2026-01",
+      "spend": 1511.37
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2026-02",
+      "spend": 1527.57
+    },
+    {
+      "studio_code": "FL-004",
+      "month": "2026-03",
+      "spend": 904.29
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-01",
+      "spend": 795.03
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-02",
+      "spend": 670.82
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-03",
+      "spend": 746.0
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-04",
+      "spend": 662.16
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-05",
+      "spend": 827.33
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-06",
+      "spend": 755.28
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-07",
+      "spend": 768.88
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-08",
+      "spend": 1058.8
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-09",
+      "spend": 1194.13
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-10",
+      "spend": 523.68
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-11",
+      "spend": 1174.54
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2025-12",
+      "spend": 724.87
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2026-01",
+      "spend": 1527.15
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2026-02",
+      "spend": 1546.09
+    },
+    {
+      "studio_code": "FL-005",
+      "month": "2026-03",
+      "spend": 918.94
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-01",
+      "spend": 565.32
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-02",
+      "spend": 582.74
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-03",
+      "spend": 666.98
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-04",
+      "spend": 533.06
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-05",
+      "spend": 521.59
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-06",
+      "spend": 508.65
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-07",
+      "spend": 400.79
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-08",
+      "spend": 425.12
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-09",
+      "spend": 601.43
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-10",
+      "spend": 308.65
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-11",
+      "spend": 585.18
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2025-12",
+      "spend": 361.49
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2026-01",
+      "spend": 830.66
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2026-02",
+      "spend": 837.52
+    },
+    {
+      "studio_code": "FL-006",
+      "month": "2026-03",
+      "spend": 587.13
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-01",
+      "spend": 285.71
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-02",
+      "spend": 357.98
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-03",
+      "spend": 444.01
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-04",
+      "spend": 754.56
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-05",
+      "spend": 926.69
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-06",
+      "spend": 753.76
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-07",
+      "spend": 770.4
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-08",
+      "spend": 831.0
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-09",
+      "spend": 853.28
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-10",
+      "spend": 615.9
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-11",
+      "spend": 1168.79
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2025-12",
+      "spend": 699.22
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2026-01",
+      "spend": 1403.81
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2026-02",
+      "spend": 1406.66
+    },
+    {
+      "studio_code": "FL-007",
+      "month": "2026-03",
+      "spend": 837.77
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-01",
+      "spend": 602.11
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-02",
+      "spend": 590.73
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-03",
+      "spend": 666.23
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-04",
+      "spend": 553.36
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-05",
+      "spend": 529.74
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-06",
+      "spend": 508.18
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-07",
+      "spend": 401.1
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-08",
+      "spend": 426.13
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-09",
+      "spend": 422.07
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-10",
+      "spend": 308.71
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-11",
+      "spend": 584.24
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2025-12",
+      "spend": 364.86
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2026-01",
+      "spend": 827.95
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2026-02",
+      "spend": 837.97
+    },
+    {
+      "studio_code": "FL-008",
+      "month": "2026-03",
+      "spend": 576.72
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-01",
+      "spend": 1043.35
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-02",
+      "spend": 939.3
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-03",
+      "spend": 1083.5
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-04",
+      "spend": 1088.19
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-05",
+      "spend": 1208.99
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-06",
+      "spend": 1102.0
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-07",
+      "spend": 1363.13
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-08",
+      "spend": 1664.87
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-09",
+      "spend": 1677.34
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-10",
+      "spend": 735.06
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-11",
+      "spend": 1655.17
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2025-12",
+      "spend": 1060.42
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2026-01",
+      "spend": 2070.18
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2026-02",
+      "spend": 1816.11
+    },
+    {
+      "studio_code": "FL-009",
+      "month": "2026-03",
+      "spend": 1293.2
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-01",
+      "spend": 800.22
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-02",
+      "spend": 612.49
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-03",
+      "spend": 644.17
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-04",
+      "spend": 639.06
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-05",
+      "spend": 735.75
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-06",
+      "spend": 749.95
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-07",
+      "spend": 764.32
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-08",
+      "spend": 1056.36
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-09",
+      "spend": 1168.94
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-10",
+      "spend": 521.49
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-11",
+      "spend": 1165.86
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2025-12",
+      "spend": 749.62
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2026-01",
+      "spend": 1527.65
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2026-02",
+      "spend": 1538.98
+    },
+    {
+      "studio_code": "FL-010",
+      "month": "2026-03",
+      "spend": 915.73
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-01",
+      "spend": 737.39
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-02",
+      "spend": 457.97
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-03",
+      "spend": 221.87
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-04",
+      "spend": 662.22
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-05",
+      "spend": 514.25
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-06",
+      "spend": 603.89
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-07",
+      "spend": 614.78
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-08",
+      "spend": 741.45
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-09",
+      "spend": 774.53
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-10",
+      "spend": 581.83
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-11",
+      "spend": 1082.06
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2025-12",
+      "spend": 759.78
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2026-01",
+      "spend": 1291.44
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2026-02",
+      "spend": 1294.27
+    },
+    {
+      "studio_code": "FL-011",
+      "month": "2026-03",
+      "spend": 765.23
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-01",
+      "spend": 925.07
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-02",
+      "spend": 839.82
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-03",
+      "spend": 934.59
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-04",
+      "spend": 892.92
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-05",
+      "spend": 1213.46
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-06",
+      "spend": 1521.75
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-07",
+      "spend": 1534.62
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-08",
+      "spend": 1641.47
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-09",
+      "spend": 1410.29
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-10",
+      "spend": 616.71
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-11",
+      "spend": 1433.46
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2025-12",
+      "spend": 920.24
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2026-01",
+      "spend": 1871.33
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2026-02",
+      "spend": 1835.09
+    },
+    {
+      "studio_code": "FL-012",
+      "month": "2026-03",
+      "spend": 1089.81
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-01",
+      "spend": 748.47
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-02",
+      "spend": 774.98
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-03",
+      "spend": 888.49
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-04",
+      "spend": 743.7
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-05",
+      "spend": 871.93
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-06",
+      "spend": 904.71
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-07",
+      "spend": 920.99
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-08",
+      "spend": 924.45
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-09",
+      "spend": 895.11
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-10",
+      "spend": 614.65
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-11",
+      "spend": 1168.95
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2025-12",
+      "spend": 542.26
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2026-01",
+      "spend": 1377.3
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2026-02",
+      "spend": 1402.58
+    },
+    {
+      "studio_code": "FL-013",
+      "month": "2026-03",
+      "spend": 838.94
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-01",
+      "spend": 939.23
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-02",
+      "spend": 827.22
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-03",
+      "spend": 903.32
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-04",
+      "spend": 846.0
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-05",
+      "spend": 962.71
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-06",
+      "spend": 988.34
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-07",
+      "spend": 1001.19
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-08",
+      "spend": 1127.41
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-09",
+      "spend": 1404.47
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-10",
+      "spend": 615.56
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-11",
+      "spend": 1413.88
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2025-12",
+      "spend": 871.26
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2026-01",
+      "spend": 1826.18
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2026-02",
+      "spend": 1845.15
+    },
+    {
+      "studio_code": "FL-014",
+      "month": "2026-03",
+      "spend": 1093.42
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2025-06",
+      "spend": 332.51
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2025-07",
+      "spend": 1888.11
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2025-08",
+      "spend": 1779.67
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2025-09",
+      "spend": 1575.21
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2025-10",
+      "spend": 1247.33
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2025-11",
+      "spend": 1202.19
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2025-12",
+      "spend": 1376.11
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2026-01",
+      "spend": 2042.88
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2026-02",
+      "spend": 2010.26
+    },
+    {
+      "studio_code": "FL-015",
+      "month": "2026-03",
+      "spend": 1200.66
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2025-06",
+      "spend": 1214.9
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2025-07",
+      "spend": 1688.11
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2025-08",
+      "spend": 1595.85
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2025-09",
+      "spend": 1466.17
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2025-10",
+      "spend": 1452.77
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2025-11",
+      "spend": 1477.93
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2025-12",
+      "spend": 1509.32
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2026-01",
+      "spend": 1435.62
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2026-02",
+      "spend": 1117.8
+    },
+    {
+      "studio_code": "FL-016",
+      "month": "2026-03",
+      "spend": 932.2
+    },
+    {
+      "studio_code": "FL-017",
+      "month": "2025-12",
+      "spend": 833.09
+    },
+    {
+      "studio_code": "FL-017",
+      "month": "2026-01",
+      "spend": 1794.84
+    },
+    {
+      "studio_code": "FL-017",
+      "month": "2026-02",
+      "spend": 2014.09
+    },
+    {
+      "studio_code": "FL-017",
+      "month": "2026-03",
+      "spend": 2396.88
+    },
+    {
+      "studio_code": "FL-019",
+      "month": "2026-02",
+      "spend": 1426.42
+    },
+    {
+      "studio_code": "FL-019",
+      "month": "2026-03",
+      "spend": 2699.82
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-01",
+      "spend": 1192.75
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-02",
+      "spend": 1012.8
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-03",
+      "spend": 1105.39
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-04",
+      "spend": 1208.81
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-05",
+      "spend": 1384.29
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-06",
+      "spend": 1332.69
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-07",
+      "spend": 1387.6
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-08",
+      "spend": 1545.11
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-09",
+      "spend": 647.12
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-10",
+      "spend": 572.05
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-11",
+      "spend": 1988.75
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2025-12",
+      "spend": 1060.4
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2026-01",
+      "spend": 1897.55
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2026-02",
+      "spend": 1909.23
+    },
+    {
+      "studio_code": "NC-001",
+      "month": "2026-03",
+      "spend": 1136.33
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-01",
+      "spend": 682.33
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-02",
+      "spend": 710.51
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-03",
+      "spend": 912.83
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-04",
+      "spend": 1023.86
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-05",
+      "spend": 1217.95
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-06",
+      "spend": 1005.93
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-07",
+      "spend": 770.63
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-08",
+      "spend": 1065.88
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-09",
+      "spend": 1397.64
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-10",
+      "spend": 714.56
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-11",
+      "spend": 1583.94
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2025-12",
+      "spend": 867.28
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2026-01",
+      "spend": 1953.38
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2026-02",
+      "spend": 2096.33
+    },
+    {
+      "studio_code": "NJ-001",
+      "month": "2026-03",
+      "spend": 1156.26
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-01",
+      "spend": 496.69
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-02",
+      "spend": 655.61
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-03",
+      "spend": 1058.36
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-04",
+      "spend": 1065.32
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-05",
+      "spend": 1166.68
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-06",
+      "spend": 1012.52
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-07",
+      "spend": 769.58
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-08",
+      "spend": 1263.02
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-09",
+      "spend": 1588.9
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-10",
+      "spend": 731.55
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-11",
+      "spend": 1644.3
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2025-12",
+      "spend": 997.57
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2026-01",
+      "spend": 1991.58
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2026-02",
+      "spend": 1972.07
+    },
+    {
+      "studio_code": "NJ-002",
+      "month": "2026-03",
+      "spend": 1395.83
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2025-07",
+      "spend": 1003.63
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2025-08",
+      "spend": 2854.97
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2025-09",
+      "spend": 3118.98
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2025-10",
+      "spend": 2176.08
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2025-11",
+      "spend": 1843.7
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2025-12",
+      "spend": 577.0
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2026-01",
+      "spend": 2420.08
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2026-02",
+      "spend": 2878.29
+    },
+    {
+      "studio_code": "NJ-003",
+      "month": "2026-03",
+      "spend": 1239.54
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-01",
+      "spend": 1039.17
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-02",
+      "spend": 912.8
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-03",
+      "spend": 1024.35
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-04",
+      "spend": 1006.38
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-05",
+      "spend": 1244.41
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-06",
+      "spend": 1173.87
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-07",
+      "spend": 985.84
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-08",
+      "spend": 1005.81
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-09",
+      "spend": 1835.04
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-10",
+      "spend": 782.96
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-11",
+      "spend": 1757.6
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2025-12",
+      "spend": 1084.77
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2026-01",
+      "spend": 2227.24
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2026-02",
+      "spend": 2309.78
+    },
+    {
+      "studio_code": "NY-002",
+      "month": "2026-03",
+      "spend": 1376.13
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2025-07",
+      "spend": 97.17
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2025-08",
+      "spend": 2840.78
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2025-09",
+      "spend": 2671.9
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2025-10",
+      "spend": 2159.75
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2025-11",
+      "spend": 1826.93
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2025-12",
+      "spend": 1802.7
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2026-01",
+      "spend": 2175.96
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2026-02",
+      "spend": 2284.4
+    },
+    {
+      "studio_code": "NY-003",
+      "month": "2026-03",
+      "spend": 1375.68
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2025-07",
+      "spend": 711.94
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2025-08",
+      "spend": 3026.79
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2025-09",
+      "spend": 2635.32
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2025-10",
+      "spend": 2762.55
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2025-11",
+      "spend": 2473.86
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2025-12",
+      "spend": 2528.34
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2026-01",
+      "spend": 2697.44
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2026-02",
+      "spend": 2312.88
+    },
+    {
+      "studio_code": "NY-004",
+      "month": "2026-03",
+      "spend": 1540.48
+    },
+    {
+      "studio_code": "TN-001",
+      "month": "2025-03",
+      "spend": 207.74
+    },
+    {
+      "studio_code": "TN-001",
+      "month": "2025-04",
+      "spend": 638.7
+    },
+    {
+      "studio_code": "TN-001",
+      "month": "2025-05",
+      "spend": 436.36
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-01",
+      "spend": 797.91
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-02",
+      "spend": 732.63
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-03",
+      "spend": 613.67
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-04",
+      "spend": 541.04
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-05",
+      "spend": 435.72
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-06",
+      "spend": 373.23
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-07",
+      "spend": 464.0
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-08",
+      "spend": 1075.05
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-09",
+      "spend": 1579.24
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-10",
+      "spend": 738.03
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-11",
+      "spend": 1599.16
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2025-12",
+      "spend": 1029.3
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2026-01",
+      "spend": 2669.65
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2026-02",
+      "spend": 2785.06
+    },
+    {
+      "studio_code": "TX-001",
+      "month": "2026-03",
+      "spend": 1358.8
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-01",
+      "spend": 744.61
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-02",
+      "spend": 579.08
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-03",
+      "spend": 283.46
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-04",
+      "spend": 401.89
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-05",
+      "spend": 336.68
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-06",
+      "spend": 373.75
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-07",
+      "spend": 462.91
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-08",
+      "spend": 1079.48
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-09",
+      "spend": 1585.05
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-10",
+      "spend": 740.3
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-11",
+      "spend": 1596.67
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2025-12",
+      "spend": 1021.61
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2026-01",
+      "spend": 2678.52
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2026-02",
+      "spend": 2780.32
+    },
+    {
+      "studio_code": "TX-002",
+      "month": "2026-03",
+      "spend": 1357.12
+    },
+    {
+      "studio_code": "TX-003",
+      "month": "2025-11",
+      "spend": 1445.63
+    },
+    {
+      "studio_code": "TX-003",
+      "month": "2025-12",
+      "spend": 2182.59
+    },
+    {
+      "studio_code": "TX-003",
+      "month": "2026-01",
+      "spend": 2513.98
+    },
+    {
+      "studio_code": "TX-003",
+      "month": "2026-02",
+      "spend": 2690.08
+    },
+    {
+      "studio_code": "TX-003",
+      "month": "2026-03",
+      "spend": 2211.54
+    },
+    {
+      "studio_code": "VA-001",
+      "month": "2025-11",
+      "spend": 993.73
+    },
+    {
+      "studio_code": "VA-001",
+      "month": "2025-12",
+      "spend": 2355.64
+    },
+    {
+      "studio_code": "VA-001",
+      "month": "2026-01",
+      "spend": 2261.72
+    },
+    {
+      "studio_code": "VA-001",
+      "month": "2026-02",
+      "spend": 1859.08
+    },
+    {
+      "studio_code": "VA-001",
+      "month": "2026-03",
+      "spend": 2115.44
+    }
+  ],
+  "ad_meta": {}
+}
