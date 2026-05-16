@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-15T20:07:53.352273+00:00",
+  "generated_at": "2026-05-16T09:30:42.210815+00:00",
   "ad_daily": [
     {
       "date": "2026-04-01",
@@ -73508,8 +73508,8 @@
       "studio_code": "FL-008",
       "ad_id": "120248078633230249",
       "ad_name": "26-FL-008-02 - PS - SAHP - Judgment",
-      "spend": 9.31,
-      "impressions": 318,
+      "spend": 9.32,
+      "impressions": 319,
       "clicks": 2,
       "leads": 0,
       "trials": 1
@@ -73596,8 +73596,8 @@
       "studio_code": "FL-009",
       "ad_id": "120248143128190249",
       "ad_name": "26-FL-009-02 - DR - DINKS - 4Classes",
-      "spend": 13.0,
-      "impressions": 547,
+      "spend": 13.01,
+      "impressions": 548,
       "clicks": 4,
       "leads": 0,
       "trials": 0
@@ -73662,8 +73662,8 @@
       "studio_code": "FL-010",
       "ad_id": "120248143128130249",
       "ad_name": "26-FL-010-02 - DR - DINKS - 4Classes",
-      "spend": 8.18,
-      "impressions": 318,
+      "spend": 8.2,
+      "impressions": 319,
       "clicks": 1,
       "leads": 0,
       "trials": 0
@@ -73750,8 +73750,8 @@
       "studio_code": "FL-012",
       "ad_id": "120248075197160249",
       "ad_name": "26-FL-012-02 - VC - PYC - Video - StillWondering",
-      "spend": 11.94,
-      "impressions": 196,
+      "spend": 11.95,
+      "impressions": 197,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -73915,8 +73915,8 @@
       "studio_code": "FL-014",
       "ad_id": "120248078633280249",
       "ad_name": "26-FL-014-02 - PS - SAHP - Judgment",
-      "spend": 13.04,
-      "impressions": 423,
+      "spend": 13.05,
+      "impressions": 424,
       "clicks": 5,
       "leads": 0,
       "trials": 1
@@ -73970,9 +73970,9 @@
       "studio_code": "FL-015",
       "ad_id": "120248075197090249",
       "ad_name": "26-FL-015-02 - VC - PYC - Video - StillWondering",
-      "spend": 9.44,
-      "impressions": 237,
-      "clicks": 3,
+      "spend": 9.46,
+      "impressions": 238,
+      "clicks": 4,
       "leads": 0,
       "trials": 0
     },
@@ -74014,8 +74014,8 @@
       "studio_code": "FL-015",
       "ad_id": "120248143128150249",
       "ad_name": "26-FL-015-02 - DR - DINKS - 4Classes",
-      "spend": 17.53,
-      "impressions": 663,
+      "spend": 17.55,
+      "impressions": 664,
       "clicks": 3,
       "leads": 0,
       "trials": 0
@@ -74300,8 +74300,8 @@
       "studio_code": "NJ-002",
       "ad_id": "120248143128180249",
       "ad_name": "26-NJ-002-02 - DR - DINKS - 4Classes",
-      "spend": 22.38,
-      "impressions": 1010,
+      "spend": 22.41,
+      "impressions": 1012,
       "clicks": 4,
       "leads": 0,
       "trials": 0
@@ -74355,8 +74355,8 @@
       "studio_code": "NJ-003",
       "ad_id": "120248078633360249",
       "ad_name": "26-NJ-003-02 - PS - SAHP - Judgment",
-      "spend": 15.0,
-      "impressions": 433,
+      "spend": 15.04,
+      "impressions": 434,
       "clicks": 6,
       "leads": 0,
       "trials": 0
@@ -74476,8 +74476,8 @@
       "studio_code": "NY-003",
       "ad_id": "120248075197250249",
       "ad_name": "26-NY-003-02 - VC - PYC - Video - StillWondering",
-      "spend": 12.6,
-      "impressions": 329,
+      "spend": 12.61,
+      "impressions": 330,
       "clicks": 2,
       "leads": 0,
       "trials": 0
@@ -74553,8 +74553,8 @@
       "studio_code": "NY-004",
       "ad_id": "120248075197260249",
       "ad_name": "26-NY-004-02 - VC - PYC - Video - StillWondering",
-      "spend": 2.97,
-      "impressions": 61,
+      "spend": 3.06,
+      "impressions": 63,
       "clicks": 2,
       "leads": 0,
       "trials": 0
@@ -74773,9 +74773,20 @@
       "studio_code": "FL-001",
       "ad_id": "120248073278510249",
       "ad_name": "26-FL-001-02 - VC - PYC - Video - StillWondering",
-      "spend": 16.47,
-      "impressions": 349,
-      "clicks": 7,
+      "spend": 35.68,
+      "impressions": 743,
+      "clicks": 9,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-001",
+      "ad_id": "120248142094730249",
+      "ad_name": "26-FL-001-02 - DR - DINKS - 4Classes",
+      "spend": 0.02,
+      "impressions": 1,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
     },
@@ -74784,8 +74795,8 @@
       "studio_code": "FL-001",
       "ad_id": "120248145550050249",
       "ad_name": "26-FL-001-02 - PR - POC - NoPlateaus",
-      "spend": 0.49,
-      "impressions": 15,
+      "spend": 1.46,
+      "impressions": 49,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -74806,8 +74817,8 @@
       "studio_code": "FL-002",
       "ad_id": "120248078633200249",
       "ad_name": "26-FL-002-02 - PS - SAHP - Judgment",
-      "spend": 4.55,
-      "impressions": 88,
+      "spend": 5.68,
+      "impressions": 115,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -74839,9 +74850,9 @@
       "studio_code": "FL-002",
       "ad_id": "120248143128100249",
       "ad_name": "26-FL-002-02 - DR - DINKS - 4Classes",
-      "spend": 15.04,
-      "impressions": 507,
-      "clicks": 3,
+      "spend": 32.78,
+      "impressions": 1131,
+      "clicks": 7,
       "leads": 0,
       "trials": 0
     },
@@ -74861,8 +74872,8 @@
       "studio_code": "FL-003",
       "ad_id": "120248075197290249",
       "ad_name": "26-FL-003-02 - VC - PYC - Video - StillWondering",
-      "spend": 2.89,
-      "impressions": 52,
+      "spend": 3.39,
+      "impressions": 65,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -74872,9 +74883,20 @@
       "studio_code": "FL-003",
       "ad_id": "120248078633190249",
       "ad_name": "26-FL-003-02 - PS - SAHP - Judgment",
-      "spend": 1.96,
-      "impressions": 30,
+      "spend": 2.04,
+      "impressions": 31,
       "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-003",
+      "ad_id": "120248080798210249",
+      "ad_name": "26-FL-003-02 - VC - SI - Rating",
+      "spend": 0.03,
+      "impressions": 2,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
     },
@@ -74883,9 +74905,9 @@
       "studio_code": "FL-003",
       "ad_id": "120248143128240249",
       "ad_name": "26-FL-003-02 - DR - DINKS - 4Classes",
-      "spend": 10.59,
-      "impressions": 364,
-      "clicks": 2,
+      "spend": 27.44,
+      "impressions": 777,
+      "clicks": 5,
       "leads": 0,
       "trials": 0
     },
@@ -74902,11 +74924,22 @@
     },
     {
       "date": "2026-05-15",
+      "studio_code": "FL-003",
+      "ad_id": "120248146277170249",
+      "ad_name": "26-FL-003-02 - PR - POC - NoPlateaus",
+      "spend": 0.31,
+      "impressions": 6,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
       "studio_code": "FL-004",
       "ad_id": "120248075197070249",
       "ad_name": "26-FL-004-02 - VC - PYC - Video - StillWondering",
-      "spend": 1.51,
-      "impressions": 40,
+      "spend": 1.85,
+      "impressions": 44,
       "clicks": 3,
       "leads": 0,
       "trials": 0
@@ -74916,9 +74949,9 @@
       "studio_code": "FL-004",
       "ad_id": "120248078632950249",
       "ad_name": "26-FL-004-02 - PS - SAHP - Judgment",
-      "spend": 11.88,
-      "impressions": 322,
-      "clicks": 3,
+      "spend": 28.07,
+      "impressions": 852,
+      "clicks": 7,
       "leads": 2,
       "trials": 1
     },
@@ -74936,10 +74969,21 @@
     {
       "date": "2026-05-15",
       "studio_code": "FL-004",
+      "ad_id": "120248080798120249",
+      "ad_name": "26-FL-004-02 - VC - SI - Rating",
+      "spend": 0.24,
+      "impressions": 14,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-004",
       "ad_id": "120248143128120249",
       "ad_name": "26-FL-004-02 - DR - DINKS - 4Classes",
-      "spend": 1.02,
-      "impressions": 9,
+      "spend": 1.05,
+      "impressions": 11,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -74949,8 +74993,8 @@
       "studio_code": "FL-004",
       "ad_id": "120248144936830249",
       "ad_name": "26-FL-004-02 - DR - DINKS - Video - Decisions",
-      "spend": 1.38,
-      "impressions": 23,
+      "spend": 1.62,
+      "impressions": 35,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -74971,8 +75015,8 @@
       "studio_code": "FL-005",
       "ad_id": "120248075197080249",
       "ad_name": "26-FL-005-02 - VC - PYC - Video - StillWondering",
-      "spend": 1.61,
-      "impressions": 51,
+      "spend": 2.0,
+      "impressions": 58,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -74982,10 +75026,21 @@
       "studio_code": "FL-005",
       "ad_id": "120248078632960249",
       "ad_name": "26-FL-005-02 - PS - SAHP - Judgment",
-      "spend": 10.78,
-      "impressions": 450,
-      "clicks": 6,
+      "spend": 24.82,
+      "impressions": 1056,
+      "clicks": 8,
       "leads": 2,
+      "trials": 1
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-005",
+      "ad_id": "120248078633000249",
+      "ad_name": "26-FL-005-02 - PS - SAHP - Handles",
+      "spend": 0.21,
+      "impressions": 16,
+      "clicks": 0,
+      "leads": 0,
       "trials": 0
     },
     {
@@ -74993,8 +75048,8 @@
       "studio_code": "FL-005",
       "ad_id": "120248080798130249",
       "ad_name": "26-FL-005-02 - VC - SI - Rating",
-      "spend": 0.05,
-      "impressions": 2,
+      "spend": 0.15,
+      "impressions": 11,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75015,8 +75070,8 @@
       "studio_code": "FL-005",
       "ad_id": "120248146277020249",
       "ad_name": "26-FL-005-02 - PR - POC - NoPlateaus",
-      "spend": 0.02,
-      "impressions": 1,
+      "spend": 0.03,
+      "impressions": 4,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75026,9 +75081,9 @@
       "studio_code": "FL-006",
       "ad_id": "120248075197150249",
       "ad_name": "26-FL-006-02 - VC - PYC - Video - StillWondering",
-      "spend": 5.95,
-      "impressions": 105,
-      "clicks": 2,
+      "spend": 8.48,
+      "impressions": 166,
+      "clicks": 5,
       "leads": 0,
       "trials": 0
     },
@@ -75037,8 +75092,8 @@
       "studio_code": "FL-006",
       "ad_id": "120248078632970249",
       "ad_name": "26-FL-006-02 - PS - SAHP - Judgment",
-      "spend": 4.02,
-      "impressions": 69,
+      "spend": 16.6,
+      "impressions": 396,
       "clicks": 2,
       "leads": 0,
       "trials": 0
@@ -75048,8 +75103,8 @@
       "studio_code": "FL-006",
       "ad_id": "120248146277030249",
       "ad_name": "26-FL-006-02 - PR - POC - NoPlateaus",
-      "spend": 2.1,
-      "impressions": 62,
+      "spend": 2.27,
+      "impressions": 65,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75059,9 +75114,9 @@
       "studio_code": "FL-007",
       "ad_id": "120248075197120249",
       "ad_name": "26-FL-007-02 - VC - PYC - Video - StillWondering",
-      "spend": 15.3,
-      "impressions": 152,
-      "clicks": 0,
+      "spend": 26.45,
+      "impressions": 337,
+      "clicks": 3,
       "leads": 0,
       "trials": 0
     },
@@ -75070,8 +75125,19 @@
       "studio_code": "FL-007",
       "ad_id": "120248078632980249",
       "ad_name": "26-FL-007-02 - PS - SAHP - Judgment",
-      "spend": 1.69,
-      "impressions": 52,
+      "spend": 2.44,
+      "impressions": 71,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-007",
+      "ad_id": "120248078633100249",
+      "ad_name": "26-FL-007-02 - PS - SAHP - Handles",
+      "spend": 1.77,
+      "impressions": 49,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75081,8 +75147,8 @@
       "studio_code": "FL-007",
       "ad_id": "120248143128110249",
       "ad_name": "26-FL-007-02 - DR - DINKS - 4Classes",
-      "spend": 5.7,
-      "impressions": 186,
+      "spend": 7.33,
+      "impressions": 214,
       "clicks": 2,
       "leads": 0,
       "trials": 0
@@ -75092,9 +75158,9 @@
       "studio_code": "FL-008",
       "ad_id": "120248075197100249",
       "ad_name": "26-FL-008-02 - VC - PYC - Video - StillWondering",
-      "spend": 3.7,
-      "impressions": 96,
-      "clicks": 2,
+      "spend": 6.4,
+      "impressions": 182,
+      "clicks": 3,
       "leads": 0,
       "trials": 0
     },
@@ -75103,9 +75169,9 @@
       "studio_code": "FL-008",
       "ad_id": "120248078633230249",
       "ad_name": "26-FL-008-02 - PS - SAHP - Judgment",
-      "spend": 2.58,
-      "impressions": 77,
-      "clicks": 0,
+      "spend": 11.93,
+      "impressions": 442,
+      "clicks": 1,
       "leads": 0,
       "trials": 0
     },
@@ -75136,8 +75202,8 @@
       "studio_code": "FL-009",
       "ad_id": "120248075197110249",
       "ad_name": "26-FL-009-02 - VC - PYC - Video - StillWondering",
-      "spend": 4.18,
-      "impressions": 61,
+      "spend": 4.75,
+      "impressions": 79,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75147,9 +75213,9 @@
       "studio_code": "FL-009",
       "ad_id": "120248078633320249",
       "ad_name": "26-FL-009-02 - PS - SAHP - Judgment",
-      "spend": 10.98,
-      "impressions": 319,
-      "clicks": 3,
+      "spend": 31.71,
+      "impressions": 972,
+      "clicks": 8,
       "leads": 0,
       "trials": 0
     },
@@ -75158,8 +75224,8 @@
       "studio_code": "FL-009",
       "ad_id": "120248080798350249",
       "ad_name": "26-FL-009-02 - VC - SI - Rating",
-      "spend": 0.13,
-      "impressions": 8,
+      "spend": 0.14,
+      "impressions": 11,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75169,9 +75235,9 @@
       "studio_code": "FL-009",
       "ad_id": "120248143128190249",
       "ad_name": "26-FL-009-02 - DR - DINKS - 4Classes",
-      "spend": 2.51,
-      "impressions": 104,
-      "clicks": 0,
+      "spend": 4.96,
+      "impressions": 233,
+      "clicks": 1,
       "leads": 0,
       "trials": 0
     },
@@ -75180,9 +75246,9 @@
       "studio_code": "FL-010",
       "ad_id": "120248075197140249",
       "ad_name": "26-FL-010-02 - VC - PYC - Video - StillWondering",
-      "spend": 7.3,
-      "impressions": 120,
-      "clicks": 1,
+      "spend": 10.82,
+      "impressions": 161,
+      "clicks": 2,
       "leads": 0,
       "trials": 0
     },
@@ -75191,19 +75257,19 @@
       "studio_code": "FL-010",
       "ad_id": "120248078633220249",
       "ad_name": "26-FL-010-02 - PS - SAHP - Judgment",
-      "spend": 4.92,
-      "impressions": 176,
-      "clicks": 0,
-      "leads": 0,
-      "trials": 0
+      "spend": 19.16,
+      "impressions": 666,
+      "clicks": 5,
+      "leads": 2,
+      "trials": 1
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-010",
       "ad_id": "120248080798310249",
       "ad_name": "26-FL-010-02 - VC - SI - Rating",
-      "spend": 1.65,
-      "impressions": 43,
+      "spend": 1.67,
+      "impressions": 45,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75213,8 +75279,19 @@
       "studio_code": "FL-010",
       "ad_id": "120248143128130249",
       "ad_name": "26-FL-010-02 - DR - DINKS - 4Classes",
-      "spend": 0.9,
-      "impressions": 40,
+      "spend": 2.37,
+      "impressions": 62,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-010",
+      "ad_id": "120248146277050249",
+      "ad_name": "26-FL-010-02 - PR - POC - NoPlateaus",
+      "spend": 0.17,
+      "impressions": 13,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75224,8 +75301,8 @@
       "studio_code": "FL-011",
       "ad_id": "120248075197130249",
       "ad_name": "26-FL-011-02 - VC - PYC - Video - StillWondering",
-      "spend": 6.08,
-      "impressions": 46,
+      "spend": 6.13,
+      "impressions": 47,
       "clicks": 1,
       "leads": 0,
       "trials": 0
@@ -75235,9 +75312,9 @@
       "studio_code": "FL-011",
       "ad_id": "120248078633240249",
       "ad_name": "26-FL-011-02 - PS - SAHP - Judgment",
-      "spend": 9.56,
-      "impressions": 275,
-      "clicks": 3,
+      "spend": 23.59,
+      "impressions": 774,
+      "clicks": 5,
       "leads": 2,
       "trials": 1
     },
@@ -75257,8 +75334,8 @@
       "studio_code": "FL-012",
       "ad_id": "120248075197160249",
       "ad_name": "26-FL-012-02 - VC - PYC - Video - StillWondering",
-      "spend": 10.59,
-      "impressions": 146,
+      "spend": 11.45,
+      "impressions": 158,
       "clicks": 2,
       "leads": 0,
       "trials": 0
@@ -75268,8 +75345,8 @@
       "studio_code": "FL-012",
       "ad_id": "120248078633060249",
       "ad_name": "26-FL-012-02 - PS - SAHP - Handles",
-      "spend": 0.77,
-      "impressions": 20,
+      "spend": 1.66,
+      "impressions": 22,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75279,19 +75356,19 @@
       "studio_code": "FL-012",
       "ad_id": "120248078633250249",
       "ad_name": "26-FL-012-02 - PS - SAHP - Judgment",
-      "spend": 14.91,
-      "impressions": 463,
-      "clicks": 7,
+      "spend": 37.24,
+      "impressions": 1032,
+      "clicks": 10,
       "leads": 2,
-      "trials": 1
+      "trials": 2
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-012",
       "ad_id": "120248080798300249",
       "ad_name": "26-FL-012-02 - VC - SI - Rating",
-      "spend": 8.52,
-      "impressions": 240,
+      "spend": 11.31,
+      "impressions": 373,
       "clicks": 2,
       "leads": 2,
       "trials": 1
@@ -75301,9 +75378,9 @@
       "studio_code": "FL-012",
       "ad_id": "120248143128160249",
       "ad_name": "26-FL-012-02 - DR - DINKS - 4Classes",
-      "spend": 2.92,
-      "impressions": 94,
-      "clicks": 0,
+      "spend": 4.96,
+      "impressions": 196,
+      "clicks": 1,
       "leads": 0,
       "trials": 0
     },
@@ -75312,8 +75389,8 @@
       "studio_code": "FL-012",
       "ad_id": "120248146277220249",
       "ad_name": "26-FL-012-02 - PR - POC - NoPlateaus",
-      "spend": 0.03,
-      "impressions": 2,
+      "spend": 0.18,
+      "impressions": 9,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75323,9 +75400,20 @@
       "studio_code": "FL-013",
       "ad_id": "120248075197180249",
       "ad_name": "26-FL-013-02 - VC - PYC - Video - StillWondering",
-      "spend": 1.77,
-      "impressions": 31,
+      "spend": 2.51,
+      "impressions": 41,
       "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-013",
+      "ad_id": "120248078633050249",
+      "ad_name": "26-FL-013-02 - PS - SAHP - Handles",
+      "spend": 0.02,
+      "impressions": 1,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
     },
@@ -75334,11 +75422,11 @@
       "studio_code": "FL-013",
       "ad_id": "120248078633260249",
       "ad_name": "26-FL-013-02 - PS - SAHP - Judgment",
-      "spend": 10.11,
-      "impressions": 263,
-      "clicks": 1,
-      "leads": 0,
-      "trials": 0
+      "spend": 24.8,
+      "impressions": 650,
+      "clicks": 6,
+      "leads": 2,
+      "trials": 1
     },
     {
       "date": "2026-05-15",
@@ -75356,8 +75444,8 @@
       "studio_code": "FL-013",
       "ad_id": "120248143128300249",
       "ad_name": "26-FL-013-02 - DR - DINKS - 4Classes",
-      "spend": 0.08,
-      "impressions": 2,
+      "spend": 0.37,
+      "impressions": 16,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75378,8 +75466,8 @@
       "studio_code": "FL-014",
       "ad_id": "120248075197170249",
       "ad_name": "26-FL-014-02 - VC - PYC - Video - StillWondering",
-      "spend": 8.13,
-      "impressions": 101,
+      "spend": 10.64,
+      "impressions": 141,
       "clicks": 2,
       "leads": 0,
       "trials": 0
@@ -75400,9 +75488,9 @@
       "studio_code": "FL-014",
       "ad_id": "120248078633280249",
       "ad_name": "26-FL-014-02 - PS - SAHP - Judgment",
-      "spend": 7.75,
-      "impressions": 232,
-      "clicks": 0,
+      "spend": 27.64,
+      "impressions": 941,
+      "clicks": 3,
       "leads": 0,
       "trials": 0
     },
@@ -75411,8 +75499,19 @@
       "studio_code": "FL-014",
       "ad_id": "120248143128290249",
       "ad_name": "26-FL-014-02 - DR - DINKS - 4Classes",
-      "spend": 1.0,
-      "impressions": 30,
+      "spend": 1.93,
+      "impressions": 51,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-014",
+      "ad_id": "120248144936890249",
+      "ad_name": "26-FL-014-02 - DR - DINKS - Video - Decisions",
+      "spend": 0.14,
+      "impressions": 1,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75433,9 +75532,9 @@
       "studio_code": "FL-015",
       "ad_id": "120248075197090249",
       "ad_name": "26-FL-015-02 - VC - PYC - Video - StillWondering",
-      "spend": 5.38,
-      "impressions": 93,
-      "clicks": 0,
+      "spend": 7.7,
+      "impressions": 143,
+      "clicks": 3,
       "leads": 0,
       "trials": 0
     },
@@ -75455,8 +75554,8 @@
       "studio_code": "FL-015",
       "ad_id": "120248078633310249",
       "ad_name": "26-FL-015-02 - PS - SAHP - Judgment",
-      "spend": 3.89,
-      "impressions": 111,
+      "spend": 5.35,
+      "impressions": 123,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75477,9 +75576,31 @@
       "studio_code": "FL-015",
       "ad_id": "120248143128150249",
       "ad_name": "26-FL-015-02 - DR - DINKS - 4Classes",
-      "spend": 6.87,
-      "impressions": 254,
-      "clicks": 1,
+      "spend": 24.07,
+      "impressions": 890,
+      "clicks": 2,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-015",
+      "ad_id": "120248144937020249",
+      "ad_name": "26-FL-015-02 - DR - DINKS - Video - Decisions",
+      "spend": 0.2,
+      "impressions": 4,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "FL-015",
+      "ad_id": "120248146277090249",
+      "ad_name": "26-FL-015-02 - PR - POC - NoPlateaus",
+      "spend": 0.16,
+      "impressions": 8,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
     },
@@ -75488,9 +75609,9 @@
       "studio_code": "FL-016",
       "ad_id": "120248075197210249",
       "ad_name": "26-FL-016-02 - VC - PYC - Video - StillWondering",
-      "spend": 7.38,
-      "impressions": 93,
-      "clicks": 1,
+      "spend": 13.78,
+      "impressions": 132,
+      "clicks": 2,
       "leads": 0,
       "trials": 0
     },
@@ -75499,9 +75620,9 @@
       "studio_code": "FL-016",
       "ad_id": "120248078633270249",
       "ad_name": "26-FL-016-02 - PS - SAHP - Judgment",
-      "spend": 11.65,
-      "impressions": 350,
-      "clicks": 4,
+      "spend": 29.94,
+      "impressions": 952,
+      "clicks": 9,
       "leads": 0,
       "trials": 0
     },
@@ -75521,8 +75642,8 @@
       "studio_code": "FL-016",
       "ad_id": "120248143128260249",
       "ad_name": "26-FL-016-02 - DR - DINKS - 4Classes",
-      "spend": 1.64,
-      "impressions": 56,
+      "spend": 2.3,
+      "impressions": 72,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75532,8 +75653,8 @@
       "studio_code": "NC-001",
       "ad_id": "120248075197190249",
       "ad_name": "26-NC-001-02 - VC - PYC - Video - StillWondering",
-      "spend": 4.54,
-      "impressions": 46,
+      "spend": 4.87,
+      "impressions": 53,
       "clicks": 1,
       "leads": 0,
       "trials": 0
@@ -75565,9 +75686,9 @@
       "studio_code": "NC-001",
       "ad_id": "120248080798170249",
       "ad_name": "26-NC-001-02 - VC - SI - Rating",
-      "spend": 10.03,
-      "impressions": 456,
-      "clicks": 0,
+      "spend": 26.28,
+      "impressions": 1293,
+      "clicks": 4,
       "leads": 0,
       "trials": 0
     },
@@ -75576,8 +75697,8 @@
       "studio_code": "NC-001",
       "ad_id": "120248143128310249",
       "ad_name": "26-NC-001-02 - DR - DINKS - 4Classes",
-      "spend": 4.25,
-      "impressions": 166,
+      "spend": 8.08,
+      "impressions": 375,
       "clicks": 1,
       "leads": 0,
       "trials": 0
@@ -75595,12 +75716,23 @@
     },
     {
       "date": "2026-05-15",
+      "studio_code": "NC-001",
+      "ad_id": "120248146277230249",
+      "ad_name": "26-NC-001-02 - PR - POC - NoPlateaus",
+      "spend": 0.16,
+      "impressions": 13,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
       "studio_code": "NJ-001",
       "ad_id": "120248075197220249",
       "ad_name": "26-NJ-001-02 - VC - PYC - Video - StillWondering",
-      "spend": 4.49,
-      "impressions": 154,
-      "clicks": 0,
+      "spend": 5.47,
+      "impressions": 187,
+      "clicks": 2,
       "leads": 0,
       "trials": 0
     },
@@ -75620,10 +75752,10 @@
       "studio_code": "NJ-001",
       "ad_id": "120248078633300249",
       "ad_name": "26-NJ-001-02 - PS - SAHP - Judgment",
-      "spend": 15.25,
-      "impressions": 596,
-      "clicks": 4,
-      "leads": 0,
+      "spend": 30.73,
+      "impressions": 1434,
+      "clicks": 10,
+      "leads": 2,
       "trials": 0
     },
     {
@@ -75631,8 +75763,8 @@
       "studio_code": "NJ-001",
       "ad_id": "120248080798290249",
       "ad_name": "26-NJ-001-02 - VC - SI - Rating",
-      "spend": 0.49,
-      "impressions": 34,
+      "spend": 0.51,
+      "impressions": 35,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75650,12 +75782,34 @@
     },
     {
       "date": "2026-05-15",
+      "studio_code": "NJ-001",
+      "ad_id": "120248144937010249",
+      "ad_name": "26-NJ-001-02 - DR - DINKS - Video - Decisions",
+      "spend": 0.02,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NJ-001",
+      "ad_id": "120248146277100249",
+      "ad_name": "26-NJ-001-02 - PR - POC - NoPlateaus",
+      "spend": 0.21,
+      "impressions": 9,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
       "studio_code": "NJ-002",
       "ad_id": "120248075197230249",
       "ad_name": "26-NJ-002-02 - VC - PYC - Video - StillWondering",
-      "spend": 5.1,
-      "impressions": 121,
-      "clicks": 0,
+      "spend": 6.87,
+      "impressions": 161,
+      "clicks": 1,
       "leads": 0,
       "trials": 0
     },
@@ -75664,8 +75818,8 @@
       "studio_code": "NJ-002",
       "ad_id": "120248078633120249",
       "ad_name": "26-NJ-002-02 - PS - SAHP - Handles",
-      "spend": 0.78,
-      "impressions": 23,
+      "spend": 1.25,
+      "impressions": 43,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75675,8 +75829,8 @@
       "studio_code": "NJ-002",
       "ad_id": "120248078633210249",
       "ad_name": "26-NJ-002-02 - PS - SAHP - Judgment",
-      "spend": 1.65,
-      "impressions": 29,
+      "spend": 1.69,
+      "impressions": 32,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75697,9 +75851,9 @@
       "studio_code": "NJ-002",
       "ad_id": "120248143128180249",
       "ad_name": "26-NJ-002-02 - DR - DINKS - 4Classes",
-      "spend": 11.05,
-      "impressions": 498,
-      "clicks": 0,
+      "spend": 34.21,
+      "impressions": 1663,
+      "clicks": 8,
       "leads": 0,
       "trials": 0
     },
@@ -75708,9 +75862,20 @@
       "studio_code": "NJ-003",
       "ad_id": "120248075197200249",
       "ad_name": "26-NJ-003-02 - VC - PYC - Video - StillWondering",
-      "spend": 12.5,
-      "impressions": 298,
-      "clicks": 3,
+      "spend": 32.28,
+      "impressions": 886,
+      "clicks": 9,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NJ-003",
+      "ad_id": "120248078633150249",
+      "ad_name": "26-NJ-003-02 - PS - SAHP - Handles",
+      "spend": 2.44,
+      "impressions": 83,
+      "clicks": 1,
       "leads": 0,
       "trials": 0
     },
@@ -75728,13 +75893,24 @@
     {
       "date": "2026-05-15",
       "studio_code": "NJ-003",
-      "ad_id": "120248143128330249",
-      "ad_name": "26-NJ-003-02 - DR - DINKS - 4Classes",
-      "spend": 1.71,
-      "impressions": 90,
-      "clicks": 1,
+      "ad_id": "120248080798160249",
+      "ad_name": "26-NJ-003-02 - VC - SI - Rating",
+      "spend": 1.23,
+      "impressions": 44,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NJ-003",
+      "ad_id": "120248143128330249",
+      "ad_name": "26-NJ-003-02 - DR - DINKS - 4Classes",
+      "spend": 4.29,
+      "impressions": 199,
+      "clicks": 3,
+      "leads": 2,
+      "trials": 1
     },
     {
       "date": "2026-05-15",
@@ -75752,8 +75928,8 @@
       "studio_code": "NY-002",
       "ad_id": "120248075197240249",
       "ad_name": "26-NY-002-02 - VC - PYC - Video - StillWondering",
-      "spend": 0.87,
-      "impressions": 17,
+      "spend": 1.35,
+      "impressions": 25,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75763,8 +75939,19 @@
       "studio_code": "NY-002",
       "ad_id": "120248078633370249",
       "ad_name": "26-NY-002-02 - PS - SAHP - Judgment",
-      "spend": 9.04,
-      "impressions": 234,
+      "spend": 12.99,
+      "impressions": 364,
+      "clicks": 2,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NY-002",
+      "ad_id": "120248080798150249",
+      "ad_name": "26-NY-002-02 - VC - SI - Rating",
+      "spend": 1.43,
+      "impressions": 49,
       "clicks": 1,
       "leads": 0,
       "trials": 0
@@ -75774,9 +75961,20 @@
       "studio_code": "NY-002",
       "ad_id": "120248143128320249",
       "ad_name": "26-NY-002-02 - DR - DINKS - 4Classes",
-      "spend": 12.84,
-      "impressions": 454,
-      "clicks": 3,
+      "spend": 27.36,
+      "impressions": 997,
+      "clicks": 8,
+      "leads": 2,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NY-002",
+      "ad_id": "120248146277120249",
+      "ad_name": "26-NY-002-02 - PR - POC - NoPlateaus",
+      "spend": 0.13,
+      "impressions": 4,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
     },
@@ -75785,8 +75983,8 @@
       "studio_code": "NY-003",
       "ad_id": "120248075197250249",
       "ad_name": "26-NY-003-02 - VC - PYC - Video - StillWondering",
-      "spend": 3.48,
-      "impressions": 59,
+      "spend": 8.76,
+      "impressions": 88,
       "clicks": 3,
       "leads": 2,
       "trials": 0
@@ -75796,8 +75994,8 @@
       "studio_code": "NY-003",
       "ad_id": "120248078633170249",
       "ad_name": "26-NY-003-02 - PS - SAHP - Handles",
-      "spend": 0.04,
-      "impressions": 6,
+      "spend": 0.23,
+      "impressions": 13,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75807,9 +76005,20 @@
       "studio_code": "NY-003",
       "ad_id": "120248078633340249",
       "ad_name": "26-NY-003-02 - PS - SAHP - Judgment",
-      "spend": 4.83,
-      "impressions": 146,
+      "spend": 9.66,
+      "impressions": 272,
       "clicks": 2,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NY-003",
+      "ad_id": "120248080798260249",
+      "ad_name": "26-NY-003-02 - VC - SI - Rating",
+      "spend": 0.37,
+      "impressions": 16,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
     },
@@ -75818,9 +76027,20 @@
       "studio_code": "NY-003",
       "ad_id": "120248143128210249",
       "ad_name": "26-NY-003-02 - DR - DINKS - 4Classes",
-      "spend": 11.64,
-      "impressions": 499,
-      "clicks": 7,
+      "spend": 28.34,
+      "impressions": 1147,
+      "clicks": 9,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NY-003",
+      "ad_id": "120248144936920249",
+      "ad_name": "26-NY-003-02 - DR - DINKS - Video - Decisions",
+      "spend": 0.03,
+      "impressions": 1,
+      "clicks": 0,
       "leads": 0,
       "trials": 0
     },
@@ -75840,8 +76060,8 @@
       "studio_code": "NY-004",
       "ad_id": "120248075197260249",
       "ad_name": "26-NY-004-02 - VC - PYC - Video - StillWondering",
-      "spend": 6.51,
-      "impressions": 105,
+      "spend": 8.0,
+      "impressions": 135,
       "clicks": 2,
       "leads": 0,
       "trials": 0
@@ -75862,8 +76082,8 @@
       "studio_code": "NY-004",
       "ad_id": "120248078633390249",
       "ad_name": "26-NY-004-02 - PS - SAHP - Judgment",
-      "spend": 2.96,
-      "impressions": 56,
+      "spend": 6.8,
+      "impressions": 164,
       "clicks": 3,
       "leads": 0,
       "trials": 0
@@ -75873,8 +76093,8 @@
       "studio_code": "NY-004",
       "ad_id": "120248080798140249",
       "ad_name": "26-NY-004-02 - VC - SI - Rating",
-      "spend": 0.49,
-      "impressions": 19,
+      "spend": 1.59,
+      "impressions": 47,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75884,9 +76104,9 @@
       "studio_code": "NY-004",
       "ad_id": "120248143128220249",
       "ad_name": "26-NY-004-02 - DR - DINKS - 4Classes",
-      "spend": 8.11,
-      "impressions": 337,
-      "clicks": 1,
+      "spend": 28.98,
+      "impressions": 1112,
+      "clicks": 6,
       "leads": 0,
       "trials": 0
     },
@@ -75895,8 +76115,8 @@
       "studio_code": "TX-001",
       "ad_id": "120248075197270249",
       "ad_name": "26-TX-001-02 - VC - PYC - Video - StillWondering",
-      "spend": 2.73,
-      "impressions": 34,
+      "spend": 2.78,
+      "impressions": 35,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75906,8 +76126,8 @@
       "studio_code": "TX-001",
       "ad_id": "120248078633410249",
       "ad_name": "26-TX-001-02 - PS - SAHP - Judgment",
-      "spend": 7.41,
-      "impressions": 232,
+      "spend": 13.48,
+      "impressions": 405,
       "clicks": 1,
       "leads": 0,
       "trials": 0
@@ -75928,10 +76148,10 @@
       "studio_code": "TX-001",
       "ad_id": "120248143128270249",
       "ad_name": "26-TX-001-02 - DR - DINKS - 4Classes",
-      "spend": 5.73,
-      "impressions": 174,
-      "clicks": 4,
-      "leads": 0,
+      "spend": 11.34,
+      "impressions": 427,
+      "clicks": 6,
+      "leads": 2,
       "trials": 0
     },
     {
@@ -75950,8 +76170,8 @@
       "studio_code": "TX-002",
       "ad_id": "120248075197300249",
       "ad_name": "26-TX-002-02 - VC - PYC - Video - StillWondering",
-      "spend": 6.41,
-      "impressions": 80,
+      "spend": 7.13,
+      "impressions": 94,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75972,8 +76192,19 @@
       "studio_code": "TX-002",
       "ad_id": "120248078633330249",
       "ad_name": "26-TX-002-02 - PS - SAHP - Judgment",
-      "spend": 1.95,
-      "impressions": 64,
+      "spend": 2.05,
+      "impressions": 68,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "TX-002",
+      "ad_id": "120248080798230249",
+      "ad_name": "26-TX-002-02 - VC - SI - Rating",
+      "spend": 0.02,
+      "impressions": 2,
       "clicks": 0,
       "leads": 0,
       "trials": 0
@@ -75983,9 +76214,988 @@
       "studio_code": "TX-002",
       "ad_id": "120248143128230249",
       "ad_name": "26-TX-002-02 - DR - DINKS - 4Classes",
-      "spend": 11.24,
-      "impressions": 423,
-      "clicks": 8,
+      "spend": 23.48,
+      "impressions": 869,
+      "clicks": 11,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "TX-002",
+      "ad_id": "120248146277150249",
+      "ad_name": "26-TX-002-02 - PR - POC - NoPlateaus",
+      "spend": 0.01,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-001",
+      "ad_id": "120248073278510249",
+      "ad_name": "26-FL-001-02 - VC - PYC - Video - StillWondering",
+      "spend": 3.44,
+      "impressions": 61,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-001",
+      "ad_id": "120248079588420249",
+      "ad_name": "26-FL-001-02 - VC - SI - Rating",
+      "spend": 1.31,
+      "impressions": 13,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-001",
+      "ad_id": "120248145550050249",
+      "ad_name": "26-FL-001-02 - PR - POC - NoPlateaus",
+      "spend": 1.59,
+      "impressions": 29,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-002",
+      "ad_id": "120248078633200249",
+      "ad_name": "26-FL-002-02 - PS - SAHP - Judgment",
+      "spend": 0.13,
+      "impressions": 7,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-002",
+      "ad_id": "120248080798200249",
+      "ad_name": "26-FL-002-02 - VC - SI - Rating",
+      "spend": 0.01,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-002",
+      "ad_id": "120248143128100249",
+      "ad_name": "26-FL-002-02 - DR - DINKS - 4Classes",
+      "spend": 4.07,
+      "impressions": 120,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-003",
+      "ad_id": "120248075197290249",
+      "ad_name": "26-FL-003-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.09,
+      "impressions": 3,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-003",
+      "ad_id": "120248080798210249",
+      "ad_name": "26-FL-003-02 - VC - SI - Rating",
+      "spend": 0.08,
+      "impressions": 4,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-003",
+      "ad_id": "120248143128240249",
+      "ad_name": "26-FL-003-02 - DR - DINKS - 4Classes",
+      "spend": 2.08,
+      "impressions": 55,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-003",
+      "ad_id": "120248146277170249",
+      "ad_name": "26-FL-003-02 - PR - POC - NoPlateaus",
+      "spend": 0.02,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-004",
+      "ad_id": "120248075197070249",
+      "ad_name": "26-FL-004-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.04,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-004",
+      "ad_id": "120248078632950249",
+      "ad_name": "26-FL-004-02 - PS - SAHP - Judgment",
+      "spend": 2.05,
+      "impressions": 58,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-004",
+      "ad_id": "120248080798120249",
+      "ad_name": "26-FL-004-02 - VC - SI - Rating",
+      "spend": 0.09,
+      "impressions": 7,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-004",
+      "ad_id": "120248144936830249",
+      "ad_name": "26-FL-004-02 - DR - DINKS - Video - Decisions",
+      "spend": 0.03,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-005",
+      "ad_id": "120248078632960249",
+      "ad_name": "26-FL-005-02 - PS - SAHP - Judgment",
+      "spend": 2.25,
+      "impressions": 88,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-006",
+      "ad_id": "120248078632970249",
+      "ad_name": "26-FL-006-02 - PS - SAHP - Judgment",
+      "spend": 3.93,
+      "impressions": 75,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-006",
+      "ad_id": "120248080798250249",
+      "ad_name": "26-FL-006-02 - VC - SI - Rating",
+      "spend": 0.06,
+      "impressions": 2,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-006",
+      "ad_id": "120248143128170249",
+      "ad_name": "26-FL-006-02 - DR - DINKS - 4Classes",
+      "spend": 0.19,
+      "impressions": 10,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-007",
+      "ad_id": "120248075197120249",
+      "ad_name": "26-FL-007-02 - VC - PYC - Video - StillWondering",
+      "spend": 1.97,
+      "impressions": 19,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-007",
+      "ad_id": "120248078632980249",
+      "ad_name": "26-FL-007-02 - PS - SAHP - Judgment",
+      "spend": 0.11,
+      "impressions": 5,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-007",
+      "ad_id": "120248080798330249",
+      "ad_name": "26-FL-007-02 - VC - SI - Rating",
+      "spend": 1.36,
+      "impressions": 14,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-007",
+      "ad_id": "120248143128110249",
+      "ad_name": "26-FL-007-02 - DR - DINKS - 4Classes",
+      "spend": 0.25,
+      "impressions": 13,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-007",
+      "ad_id": "120248146277040249",
+      "ad_name": "26-FL-007-02 - PR - POC - NoPlateaus",
+      "spend": 0.06,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-008",
+      "ad_id": "120248078633230249",
+      "ad_name": "26-FL-008-02 - PS - SAHP - Judgment",
+      "spend": 1.86,
+      "impressions": 73,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-008",
+      "ad_id": "120248080798320249",
+      "ad_name": "26-FL-008-02 - VC - SI - Rating",
+      "spend": 0.02,
+      "impressions": 2,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-008",
+      "ad_id": "120248144936970249",
+      "ad_name": "26-FL-008-02 - DR - DINKS - Video - Decisions",
+      "spend": 0.01,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-009",
+      "ad_id": "120248078633040249",
+      "ad_name": "26-FL-009-02 - PS - SAHP - Handles",
+      "spend": 0.04,
+      "impressions": 3,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-009",
+      "ad_id": "120248078633320249",
+      "ad_name": "26-FL-009-02 - PS - SAHP - Judgment",
+      "spend": 5.57,
+      "impressions": 82,
+      "clicks": 3,
+      "leads": 2,
+      "trials": 1
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-009",
+      "ad_id": "120248080798350249",
+      "ad_name": "26-FL-009-02 - VC - SI - Rating",
+      "spend": 0.02,
+      "impressions": 2,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-009",
+      "ad_id": "120248143128190249",
+      "ad_name": "26-FL-009-02 - DR - DINKS - 4Classes",
+      "spend": 1.13,
+      "impressions": 31,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-010",
+      "ad_id": "120248075197140249",
+      "ad_name": "26-FL-010-02 - VC - PYC - Video - StillWondering",
+      "spend": 1.0,
+      "impressions": 3,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-010",
+      "ad_id": "120248078633220249",
+      "ad_name": "26-FL-010-02 - PS - SAHP - Judgment",
+      "spend": 5.54,
+      "impressions": 196,
+      "clicks": 2,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-010",
+      "ad_id": "120248143128130249",
+      "ad_name": "26-FL-010-02 - DR - DINKS - 4Classes",
+      "spend": 0.15,
+      "impressions": 5,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-010",
+      "ad_id": "120248146277050249",
+      "ad_name": "26-FL-010-02 - PR - POC - NoPlateaus",
+      "spend": 0.17,
+      "impressions": 13,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-011",
+      "ad_id": "120248078633240249",
+      "ad_name": "26-FL-011-02 - PS - SAHP - Judgment",
+      "spend": 2.41,
+      "impressions": 72,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-012",
+      "ad_id": "120248078633060249",
+      "ad_name": "26-FL-012-02 - PS - SAHP - Handles",
+      "spend": 0.05,
+      "impressions": 4,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-012",
+      "ad_id": "120248078633250249",
+      "ad_name": "26-FL-012-02 - PS - SAHP - Judgment",
+      "spend": 5.47,
+      "impressions": 144,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-012",
+      "ad_id": "120248080798300249",
+      "ad_name": "26-FL-012-02 - VC - SI - Rating",
+      "spend": 0.31,
+      "impressions": 8,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-012",
+      "ad_id": "120248143128160249",
+      "ad_name": "26-FL-012-02 - DR - DINKS - 4Classes",
+      "spend": 0.41,
+      "impressions": 16,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-013",
+      "ad_id": "120248078633050249",
+      "ad_name": "26-FL-013-02 - PS - SAHP - Handles",
+      "spend": 0.24,
+      "impressions": 1,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-013",
+      "ad_id": "120248078633260249",
+      "ad_name": "26-FL-013-02 - PS - SAHP - Judgment",
+      "spend": 2.27,
+      "impressions": 69,
+      "clicks": 2,
+      "leads": 2,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-014",
+      "ad_id": "120248075197170249",
+      "ad_name": "26-FL-014-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.07,
+      "impressions": 2,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-014",
+      "ad_id": "120248078633070249",
+      "ad_name": "26-FL-014-02 - PS - SAHP - Handles",
+      "spend": 0.05,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-014",
+      "ad_id": "120248078633280249",
+      "ad_name": "26-FL-014-02 - PS - SAHP - Judgment",
+      "spend": 1.65,
+      "impressions": 84,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-014",
+      "ad_id": "120248080798180249",
+      "ad_name": "26-FL-014-02 - VC - SI - Rating",
+      "spend": 0.09,
+      "impressions": 2,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-014",
+      "ad_id": "120248143128290249",
+      "ad_name": "26-FL-014-02 - DR - DINKS - 4Classes",
+      "spend": 0.04,
+      "impressions": 5,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-014",
+      "ad_id": "120248146277070249",
+      "ad_name": "26-FL-014-02 - PR - POC - NoPlateaus",
+      "spend": 0.02,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-015",
+      "ad_id": "120248075197090249",
+      "ad_name": "26-FL-015-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.17,
+      "impressions": 8,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-015",
+      "ad_id": "120248078633310249",
+      "ad_name": "26-FL-015-02 - PS - SAHP - Judgment",
+      "spend": 0.16,
+      "impressions": 4,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-015",
+      "ad_id": "120248143128150249",
+      "ad_name": "26-FL-015-02 - DR - DINKS - 4Classes",
+      "spend": 2.57,
+      "impressions": 90,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-016",
+      "ad_id": "120248075197210249",
+      "ad_name": "26-FL-016-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.02,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-016",
+      "ad_id": "120248078633270249",
+      "ad_name": "26-FL-016-02 - PS - SAHP - Judgment",
+      "spend": 1.69,
+      "impressions": 39,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-016",
+      "ad_id": "120248143128260249",
+      "ad_name": "26-FL-016-02 - DR - DINKS - 4Classes",
+      "spend": 0.11,
+      "impressions": 13,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-016",
+      "ad_id": "120248146277080249",
+      "ad_name": "26-FL-016-02 - PR - POC - NoPlateaus",
+      "spend": 0.01,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NC-001",
+      "ad_id": "120248080798170249",
+      "ad_name": "26-NC-001-02 - VC - SI - Rating",
+      "spend": 3.91,
+      "impressions": 130,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NC-001",
+      "ad_id": "120248143128310249",
+      "ad_name": "26-NC-001-02 - DR - DINKS - 4Classes",
+      "spend": 0.32,
+      "impressions": 9,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-001",
+      "ad_id": "120248075197220249",
+      "ad_name": "26-NJ-001-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.27,
+      "impressions": 9,
+      "clicks": 2,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-001",
+      "ad_id": "120248078633300249",
+      "ad_name": "26-NJ-001-02 - PS - SAHP - Judgment",
+      "spend": 1.82,
+      "impressions": 78,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-001",
+      "ad_id": "120248080798290249",
+      "ad_name": "26-NJ-001-02 - VC - SI - Rating",
+      "spend": 0.04,
+      "impressions": 2,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-001",
+      "ad_id": "120248146277100249",
+      "ad_name": "26-NJ-001-02 - PR - POC - NoPlateaus",
+      "spend": 0.18,
+      "impressions": 7,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-002",
+      "ad_id": "120248075197230249",
+      "ad_name": "26-NJ-002-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.06,
+      "impressions": 2,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-002",
+      "ad_id": "120248078633120249",
+      "ad_name": "26-NJ-002-02 - PS - SAHP - Handles",
+      "spend": 0.55,
+      "impressions": 13,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-002",
+      "ad_id": "120248078633210249",
+      "ad_name": "26-NJ-002-02 - PS - SAHP - Judgment",
+      "spend": 0.15,
+      "impressions": 3,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-002",
+      "ad_id": "120248143128180249",
+      "ad_name": "26-NJ-002-02 - DR - DINKS - 4Classes",
+      "spend": 2.58,
+      "impressions": 89,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-002",
+      "ad_id": "120248146277130249",
+      "ad_name": "26-NJ-002-02 - PR - POC - NoPlateaus",
+      "spend": 1.06,
+      "impressions": 13,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-003",
+      "ad_id": "120248075197200249",
+      "ad_name": "26-NJ-003-02 - VC - PYC - Video - StillWondering",
+      "spend": 2.63,
+      "impressions": 40,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-003",
+      "ad_id": "120248078633150249",
+      "ad_name": "26-NJ-003-02 - PS - SAHP - Handles",
+      "spend": 0.94,
+      "impressions": 31,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-003",
+      "ad_id": "120248080798160249",
+      "ad_name": "26-NJ-003-02 - VC - SI - Rating",
+      "spend": 0.18,
+      "impressions": 16,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-003",
+      "ad_id": "120248143128330249",
+      "ad_name": "26-NJ-003-02 - DR - DINKS - 4Classes",
+      "spend": 1.6,
+      "impressions": 58,
+      "clicks": 2,
+      "leads": 2,
+      "trials": 1
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-002",
+      "ad_id": "120248078633370249",
+      "ad_name": "26-NY-002-02 - PS - SAHP - Judgment",
+      "spend": 0.14,
+      "impressions": 8,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-002",
+      "ad_id": "120248080798150249",
+      "ad_name": "26-NY-002-02 - VC - SI - Rating",
+      "spend": 0.02,
+      "impressions": 1,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-002",
+      "ad_id": "120248143128320249",
+      "ad_name": "26-NY-002-02 - DR - DINKS - 4Classes",
+      "spend": 4.47,
+      "impressions": 133,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-002",
+      "ad_id": "120248146277120249",
+      "ad_name": "26-NY-002-02 - PR - POC - NoPlateaus",
+      "spend": 0.55,
+      "impressions": 7,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-003",
+      "ad_id": "120248075197250249",
+      "ad_name": "26-NY-003-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.05,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-003",
+      "ad_id": "120248078633340249",
+      "ad_name": "26-NY-003-02 - PS - SAHP - Judgment",
+      "spend": 0.16,
+      "impressions": 8,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-003",
+      "ad_id": "120248143128210249",
+      "ad_name": "26-NY-003-02 - DR - DINKS - 4Classes",
+      "spend": 3.4,
+      "impressions": 84,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-003",
+      "ad_id": "120248144936920249",
+      "ad_name": "26-NY-003-02 - DR - DINKS - Video - Decisions",
+      "spend": 0.01,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-004",
+      "ad_id": "120248075197260249",
+      "ad_name": "26-NY-004-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.16,
+      "impressions": 4,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-004",
+      "ad_id": "120248078633390249",
+      "ad_name": "26-NY-004-02 - PS - SAHP - Judgment",
+      "spend": 0.21,
+      "impressions": 5,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-004",
+      "ad_id": "120248080798140249",
+      "ad_name": "26-NY-004-02 - VC - SI - Rating",
+      "spend": 0.04,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-004",
+      "ad_id": "120248143128220249",
+      "ad_name": "26-NY-004-02 - DR - DINKS - 4Classes",
+      "spend": 2.24,
+      "impressions": 52,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-001",
+      "ad_id": "120248078633410249",
+      "ad_name": "26-TX-001-02 - PS - SAHP - Judgment",
+      "spend": 3.96,
+      "impressions": 116,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-001",
+      "ad_id": "120248080798220249",
+      "ad_name": "26-TX-001-02 - VC - SI - Rating",
+      "spend": 0.01,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-001",
+      "ad_id": "120248143128270249",
+      "ad_name": "26-TX-001-02 - DR - DINKS - 4Classes",
+      "spend": 0.34,
+      "impressions": 21,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-002",
+      "ad_id": "120248075197300249",
+      "ad_name": "26-TX-002-02 - VC - PYC - Video - StillWondering",
+      "spend": 0.06,
+      "impressions": 1,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-002",
+      "ad_id": "120248078633330249",
+      "ad_name": "26-TX-002-02 - PS - SAHP - Judgment",
+      "spend": 0.27,
+      "impressions": 11,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-002",
+      "ad_id": "120248080798230249",
+      "ad_name": "26-TX-002-02 - VC - SI - Rating",
+      "spend": 0.08,
+      "impressions": 7,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-002",
+      "ad_id": "120248143128230249",
+      "ad_name": "26-TX-002-02 - DR - DINKS - 4Classes",
+      "spend": 1.75,
+      "impressions": 98,
+      "clicks": 2,
       "leads": 0,
       "trials": 0
     }
@@ -85732,8 +86942,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "FL-008",
-      "spend": 17.21,
-      "impressions": 502,
+      "spend": 17.22,
+      "impressions": 503,
       "clicks": 10,
       "leads": 2,
       "trials": 1
@@ -85741,8 +86951,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "FL-009",
-      "spend": 36.64,
-      "impressions": 1231,
+      "spend": 36.65,
+      "impressions": 1232,
       "clicks": 9,
       "leads": 0,
       "trials": 0
@@ -85750,8 +86960,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "FL-010",
-      "spend": 24.8,
-      "impressions": 655,
+      "spend": 24.82,
+      "impressions": 656,
       "clicks": 6,
       "leads": 0,
       "trials": 0
@@ -85768,8 +86978,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "FL-012",
-      "spend": 60.69,
-      "impressions": 1808,
+      "spend": 60.7,
+      "impressions": 1809,
       "clicks": 22,
       "leads": 2,
       "trials": 1
@@ -85786,8 +86996,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "FL-014",
-      "spend": 30.81,
-      "impressions": 854,
+      "spend": 30.82,
+      "impressions": 855,
       "clicks": 11,
       "leads": 2,
       "trials": 1
@@ -85795,9 +87005,9 @@
     {
       "date": "2026-05-14",
       "studio_code": "FL-015",
-      "spend": 31.68,
-      "impressions": 1044,
-      "clicks": 6,
+      "spend": 31.72,
+      "impressions": 1046,
+      "clicks": 7,
       "leads": 0,
       "trials": 0
     },
@@ -85831,8 +87041,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "NJ-002",
-      "spend": 37.14,
-      "impressions": 1427,
+      "spend": 37.17,
+      "impressions": 1429,
       "clicks": 16,
       "leads": 0,
       "trials": 0
@@ -85840,8 +87050,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "NJ-003",
-      "spend": 31.26,
-      "impressions": 986,
+      "spend": 31.3,
+      "impressions": 987,
       "clicks": 9,
       "leads": 0,
       "trials": 0
@@ -85858,8 +87068,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "NY-003",
-      "spend": 40.77,
-      "impressions": 1264,
+      "spend": 40.78,
+      "impressions": 1265,
       "clicks": 12,
       "leads": 4,
       "trials": 1
@@ -85867,8 +87077,8 @@
     {
       "date": "2026-05-14",
       "studio_code": "NY-004",
-      "spend": 43.59,
-      "impressions": 1433,
+      "spend": 43.68,
+      "impressions": 1435,
       "clicks": 12,
       "leads": 2,
       "trials": 0
@@ -85894,225 +87104,450 @@
     {
       "date": "2026-05-15",
       "studio_code": "FL-001",
-      "spend": 16.96,
-      "impressions": 364,
-      "clicks": 7,
+      "spend": 37.16,
+      "impressions": 793,
+      "clicks": 9,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-002",
-      "spend": 20.32,
-      "impressions": 615,
-      "clicks": 6,
+      "spend": 39.19,
+      "impressions": 1266,
+      "clicks": 10,
       "leads": 2,
       "trials": 2
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-003",
-      "spend": 15.56,
-      "impressions": 447,
-      "clicks": 4,
+      "spend": 33.33,
+      "impressions": 882,
+      "clicks": 7,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-004",
-      "spend": 16.27,
-      "impressions": 406,
-      "clicks": 6,
+      "spend": 33.31,
+      "impressions": 968,
+      "clicks": 10,
       "leads": 2,
       "trials": 1
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-005",
-      "spend": 12.62,
-      "impressions": 510,
-      "clicks": 7,
+      "spend": 27.37,
+      "impressions": 1151,
+      "clicks": 9,
       "leads": 2,
-      "trials": 0
+      "trials": 1
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-006",
-      "spend": 12.07,
-      "impressions": 236,
-      "clicks": 4,
+      "spend": 27.35,
+      "impressions": 627,
+      "clicks": 7,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-007",
-      "spend": 22.69,
-      "impressions": 390,
-      "clicks": 2,
+      "spend": 37.99,
+      "impressions": 671,
+      "clicks": 5,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-008",
-      "spend": 8.18,
-      "impressions": 277,
-      "clicks": 2,
+      "spend": 20.23,
+      "impressions": 728,
+      "clicks": 4,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-009",
-      "spend": 17.8,
-      "impressions": 492,
-      "clicks": 3,
+      "spend": 41.56,
+      "impressions": 1295,
+      "clicks": 9,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-010",
-      "spend": 14.77,
-      "impressions": 379,
-      "clicks": 1,
-      "leads": 0,
-      "trials": 0
+      "spend": 34.19,
+      "impressions": 947,
+      "clicks": 7,
+      "leads": 2,
+      "trials": 1
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-011",
-      "spend": 15.77,
-      "impressions": 325,
-      "clicks": 4,
+      "spend": 29.85,
+      "impressions": 825,
+      "clicks": 6,
       "leads": 2,
       "trials": 1
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-012",
-      "spend": 37.74,
-      "impressions": 965,
-      "clicks": 11,
+      "spend": 66.8,
+      "impressions": 1790,
+      "clicks": 15,
       "leads": 4,
-      "trials": 2
+      "trials": 3
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-013",
-      "spend": 12.61,
-      "impressions": 308,
-      "clicks": 2,
-      "leads": 0,
-      "trials": 0
+      "spend": 28.35,
+      "impressions": 720,
+      "clicks": 7,
+      "leads": 2,
+      "trials": 1
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-014",
-      "spend": 18.39,
-      "impressions": 398,
-      "clicks": 2,
+      "spend": 41.86,
+      "impressions": 1169,
+      "clicks": 5,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-015",
-      "spend": 16.32,
-      "impressions": 471,
-      "clicks": 1,
+      "spend": 37.66,
+      "impressions": 1181,
+      "clicks": 5,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "FL-016",
-      "spend": 21.13,
-      "impressions": 515,
-      "clicks": 6,
+      "spend": 46.48,
+      "impressions": 1172,
+      "clicks": 12,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "NC-001",
-      "spend": 19.6,
-      "impressions": 700,
-      "clicks": 3,
+      "spend": 40.17,
+      "impressions": 1766,
+      "clicks": 7,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "NJ-001",
-      "spend": 21.04,
-      "impressions": 813,
-      "clicks": 4,
-      "leads": 0,
-      "trials": 0
-    },
-    {
-      "date": "2026-05-15",
-      "studio_code": "NJ-002",
-      "spend": 18.59,
-      "impressions": 672,
-      "clicks": 0,
-      "leads": 0,
-      "trials": 0
-    },
-    {
-      "date": "2026-05-15",
-      "studio_code": "NJ-003",
-      "spend": 17.02,
-      "impressions": 449,
-      "clicks": 5,
-      "leads": 0,
-      "trials": 0
-    },
-    {
-      "date": "2026-05-15",
-      "studio_code": "NY-002",
-      "spend": 22.75,
-      "impressions": 705,
-      "clicks": 4,
-      "leads": 0,
-      "trials": 0
-    },
-    {
-      "date": "2026-05-15",
-      "studio_code": "NY-003",
-      "spend": 20.73,
-      "impressions": 719,
+      "spend": 37.75,
+      "impressions": 1695,
       "clicks": 12,
       "leads": 2,
       "trials": 0
     },
     {
       "date": "2026-05-15",
+      "studio_code": "NJ-002",
+      "spend": 44.03,
+      "impressions": 1900,
+      "clicks": 9,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NJ-003",
+      "spend": 43.05,
+      "impressions": 1273,
+      "clicks": 14,
+      "leads": 2,
+      "trials": 1
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NY-002",
+      "spend": 43.26,
+      "impressions": 1439,
+      "clicks": 11,
+      "leads": 2,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
+      "studio_code": "NY-003",
+      "spend": 48.13,
+      "impressions": 1546,
+      "clicks": 14,
+      "leads": 2,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-15",
       "studio_code": "NY-004",
-      "spend": 20.33,
-      "impressions": 574,
-      "clicks": 6,
+      "spend": 47.63,
+      "impressions": 1515,
+      "clicks": 11,
       "leads": 0,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "TX-001",
-      "spend": 16.43,
-      "impressions": 452,
-      "clicks": 5,
-      "leads": 0,
+      "spend": 28.16,
+      "impressions": 879,
+      "clicks": 7,
+      "leads": 2,
       "trials": 0
     },
     {
       "date": "2026-05-15",
       "studio_code": "TX-002",
-      "spend": 20.68,
-      "impressions": 623,
-      "clicks": 8,
+      "spend": 33.77,
+      "impressions": 1090,
+      "clicks": 11,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-001",
+      "spend": 6.34,
+      "impressions": 103,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-002",
+      "spend": 4.21,
+      "impressions": 128,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-003",
+      "spend": 2.27,
+      "impressions": 63,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-004",
+      "spend": 2.21,
+      "impressions": 67,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-005",
+      "spend": 2.25,
+      "impressions": 88,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-006",
+      "spend": 4.18,
+      "impressions": 87,
+      "clicks": 2,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-007",
+      "spend": 3.75,
+      "impressions": 52,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-008",
+      "spend": 1.89,
+      "impressions": 76,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-009",
+      "spend": 6.76,
+      "impressions": 118,
+      "clicks": 3,
+      "leads": 2,
+      "trials": 1
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-010",
+      "spend": 6.86,
+      "impressions": 217,
+      "clicks": 3,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-011",
+      "spend": 2.41,
+      "impressions": 72,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-012",
+      "spend": 6.24,
+      "impressions": 172,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-013",
+      "spend": 2.51,
+      "impressions": 70,
+      "clicks": 3,
+      "leads": 2,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-014",
+      "spend": 1.92,
+      "impressions": 95,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-015",
+      "spend": 2.9,
+      "impressions": 102,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "FL-016",
+      "spend": 1.83,
+      "impressions": 54,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NC-001",
+      "spend": 4.23,
+      "impressions": 139,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-001",
+      "spend": 2.31,
+      "impressions": 96,
+      "clicks": 3,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-002",
+      "spend": 4.4,
+      "impressions": 120,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NJ-003",
+      "spend": 5.35,
+      "impressions": 145,
+      "clicks": 3,
+      "leads": 2,
+      "trials": 1
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-002",
+      "spend": 5.18,
+      "impressions": 149,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-003",
+      "spend": 3.62,
+      "impressions": 94,
+      "clicks": 0,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "NY-004",
+      "spend": 2.65,
+      "impressions": 62,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-001",
+      "spend": 4.31,
+      "impressions": 138,
+      "clicks": 1,
+      "leads": 0,
+      "trials": 0
+    },
+    {
+      "date": "2026-05-16",
+      "studio_code": "TX-002",
+      "spend": 2.16,
+      "impressions": 117,
+      "clicks": 2,
       "leads": 0,
       "trials": 0
     }
@@ -88076,127 +89511,127 @@
     {
       "month": "2026-05",
       "studio_code": "FL-001",
-      "spend": 485.39
+      "spend": 511.93
     },
     {
       "month": "2026-05",
       "studio_code": "FL-002",
-      "spend": 535.12
+      "spend": 558.2
     },
     {
       "month": "2026-05",
       "studio_code": "FL-003",
-      "spend": 395.07
+      "spend": 415.11
     },
     {
       "month": "2026-05",
       "studio_code": "FL-004",
-      "spend": 391.26
+      "spend": 410.51
     },
     {
       "month": "2026-05",
       "studio_code": "FL-005",
-      "spend": 390.18
+      "spend": 407.18
     },
     {
       "month": "2026-05",
       "studio_code": "FL-006",
-      "spend": 251.39
+      "spend": 270.85
     },
     {
       "month": "2026-05",
       "studio_code": "FL-007",
-      "spend": 377.09
+      "spend": 396.14
     },
     {
       "month": "2026-05",
       "studio_code": "FL-008",
-      "spend": 251.13
+      "spend": 265.08
     },
     {
       "month": "2026-05",
       "studio_code": "FL-009",
-      "spend": 553.21
+      "spend": 583.74
     },
     {
       "month": "2026-05",
       "studio_code": "FL-010",
-      "spend": 398.12
+      "spend": 424.42
     },
     {
       "month": "2026-05",
       "studio_code": "FL-011",
-      "spend": 340.74
+      "spend": 357.23
     },
     {
       "month": "2026-05",
       "studio_code": "FL-012",
-      "spend": 941.95
+      "spend": 977.26
     },
     {
       "month": "2026-05",
       "studio_code": "FL-013",
-      "spend": 376.41
+      "spend": 394.66
     },
     {
       "month": "2026-05",
       "studio_code": "FL-014",
-      "spend": 473.45
+      "spend": 498.85
     },
     {
       "month": "2026-05",
       "studio_code": "FL-015",
-      "spend": 506.79
+      "spend": 531.07
     },
     {
       "month": "2026-05",
       "studio_code": "FL-016",
-      "spend": 520.82
+      "spend": 548.0
     },
     {
       "month": "2026-05",
       "studio_code": "NC-001",
-      "spend": 489.69
+      "spend": 514.49
     },
     {
       "month": "2026-05",
       "studio_code": "NJ-001",
-      "spend": 482.99
+      "spend": 502.01
     },
     {
       "month": "2026-05",
       "studio_code": "NJ-002",
-      "spend": 601.25
+      "spend": 631.12
     },
     {
       "month": "2026-05",
       "studio_code": "NJ-003",
-      "spend": 505.82
+      "spend": 537.24
     },
     {
       "month": "2026-05",
       "studio_code": "NY-002",
-      "spend": 596.14
+      "spend": 621.83
     },
     {
       "month": "2026-05",
       "studio_code": "NY-003",
-      "spend": 602.96
+      "spend": 633.99
     },
     {
       "month": "2026-05",
       "studio_code": "NY-004",
-      "spend": 688.17
+      "spend": 718.21
     },
     {
       "month": "2026-05",
       "studio_code": "TX-001",
-      "spend": 510.44
+      "spend": 526.48
     },
     {
       "month": "2026-05",
       "studio_code": "TX-002",
-      "spend": 501.42
+      "spend": 516.67
     }
   ],
   "ad_meta": {
@@ -97671,6 +99106,22 @@
       "studio_code": "FL-008",
       "thumbnail_url": "",
       "library_url": "https://www.facebook.com/ads/library/?id=120244154962090249&country=US"
+    },
+    "120248448632860249": {
+      "name": "",
+      "status": "ACTIVE",
+      "media_type": "Other",
+      "studio_code": null,
+      "thumbnail_url": "",
+      "library_url": "https://www.facebook.com/ads/library/?id=120248448632860249&country=US"
+    },
+    "120248446405140249": {
+      "name": "",
+      "status": "ACTIVE",
+      "media_type": "Other",
+      "studio_code": null,
+      "thumbnail_url": "",
+      "library_url": "https://www.facebook.com/ads/library/?id=120248446405140249&country=US"
     }
   }
 }
