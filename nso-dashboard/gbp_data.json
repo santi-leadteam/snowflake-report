@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T11:59:09",
+  "generated_at": "2026-05-18T14:29:55",
   "date_range": {
     "start": "2025-01-01",
     "end": "2026-05-10"
@@ -5512,6 +5512,17 @@
         },
         {
           "date": "2026-05-16",
+          "total_views": 0,
+          "desktop_maps": 0,
+          "desktop_search": 0,
+          "mobile_maps": 0,
+          "mobile_search": 0,
+          "calls": 0,
+          "website_clicks": 0,
+          "direction_requests": 0
+        },
+        {
+          "date": "2026-05-17",
           "total_views": 0,
           "desktop_maps": 0,
           "desktop_search": 0,
@@ -11039,6 +11050,17 @@
           "calls": 0,
           "website_clicks": 0,
           "direction_requests": 0
+        },
+        {
+          "date": "2026-05-17",
+          "total_views": 0,
+          "desktop_maps": 0,
+          "desktop_search": 0,
+          "mobile_maps": 0,
+          "mobile_search": 0,
+          "calls": 0,
+          "website_clicks": 0,
+          "direction_requests": 0
         }
       ],
       "reviews": null
@@ -16550,6 +16572,17 @@
         },
         {
           "date": "2026-05-16",
+          "total_views": 0,
+          "desktop_maps": 0,
+          "desktop_search": 0,
+          "mobile_maps": 0,
+          "mobile_search": 0,
+          "calls": 0,
+          "website_clicks": 0,
+          "direction_requests": 0
+        },
+        {
+          "date": "2026-05-17",
           "total_views": 0,
           "desktop_maps": 0,
           "desktop_search": 0,
@@ -22077,6 +22110,17 @@
           "calls": 0,
           "website_clicks": 0,
           "direction_requests": 0
+        },
+        {
+          "date": "2026-05-17",
+          "total_views": 0,
+          "desktop_maps": 0,
+          "desktop_search": 0,
+          "mobile_maps": 0,
+          "mobile_search": 0,
+          "calls": 0,
+          "website_clicks": 0,
+          "direction_requests": 0
         }
       ],
       "reviews": null
@@ -27588,6 +27632,17 @@
         },
         {
           "date": "2026-05-16",
+          "total_views": 0,
+          "desktop_maps": 0,
+          "desktop_search": 0,
+          "mobile_maps": 0,
+          "mobile_search": 0,
+          "calls": 0,
+          "website_clicks": 0,
+          "direction_requests": 0
+        },
+        {
+          "date": "2026-05-17",
           "total_views": 0,
           "desktop_maps": 0,
           "desktop_search": 0,
